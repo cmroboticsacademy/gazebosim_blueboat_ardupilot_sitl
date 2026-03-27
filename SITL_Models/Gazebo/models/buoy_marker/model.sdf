@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <model name="buoy_marker">
+    <static>true</static>
+
+    <link name="base_link">
+      <!-- Keep collision tiny so it doesn't matter physically -->
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.18</radius>
+            <length>1.2</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <visual name="float_visual">
+        <pose>0 0 0.35 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.22</radius>
+            <length>0.7</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>1.0 0.2 0.1 1.0</ambient>
+          <diffuse>1.0 0.2 0.1 1.0</diffuse>
+        </material>
+      </visual>
+
+      <visual name="mast_visual">
+        <pose>0 0 1.0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.03</radius>
+            <length>0.8</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.9 0.9 0.9 1.0</ambient>
+          <diffuse>0.9 0.9 0.9 1.0</diffuse>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

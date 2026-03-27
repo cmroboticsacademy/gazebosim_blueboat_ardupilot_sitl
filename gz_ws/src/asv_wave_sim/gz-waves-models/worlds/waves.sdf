@@ -68,6 +68,24 @@
       <uri>model://waves</uri>
     </include>
 
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>buoy_1</name>
+      <pose>15 10 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>buoy_2</name>
+      <pose>-20 5 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>buoy_3</name>
+      <pose>30 -12 0 0 0 0</pose>
+    </include>
+
     <!-- ENU axes -->
     <model name="axes">
       <static>1</static>
