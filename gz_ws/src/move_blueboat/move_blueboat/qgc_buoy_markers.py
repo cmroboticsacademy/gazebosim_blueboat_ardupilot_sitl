@@ -16,8 +16,8 @@ class QGCBuoyGeofenceUploader(Node):
         self.declare_parameter('vehicle_connection', 'udpin:0.0.0.0:14551')
 
         # Must match sim_vehicle.py -l LAT,LON,ALT,HDG
-        self.declare_parameter('origin_lat_deg', 40.473819,)
-        self.declare_parameter('origin_lon_deg', -79.966495)
+        self.declare_parameter('origin_lat_deg', 55.99541530863445)
+        self.declare_parameter('origin_lon_deg', -3.3010225004910683)
 
         # Fence radius for each buoy in meters
         self.declare_parameter('buoy_radius_m', 5.0)

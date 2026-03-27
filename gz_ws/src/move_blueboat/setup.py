@@ -45,7 +45,7 @@ setup(
             'pid_controller_for_boat_mission = move_blueboat.pid_controller_for_boat_mission:main',
             'mpc_controller_for_boat_mission = move_blueboat.mpc_controller_for_boat_mission:main',
             'dp_beacon_dvl_run_boat_waypoint = move_blueboat.dp_beacon_dvl_run_boat_waypoint:main',
-
+            'qgc_buoy_markers = move_blueboat.qgc_buoy_markers:main',
         ],
     },
 )
