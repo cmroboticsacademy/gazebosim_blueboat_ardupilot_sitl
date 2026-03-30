@@ -103,7 +103,7 @@ Follow this order exactly.
 3. <b>IMPORTANT</b> - Press play and confirm simulation is running before moving on
 
 ### Launch ArduPilot
-The launch command needs to match the level that you opened in the simulation. There is a folder containing all the levels’ launch commands. You can find them in cmra_sim/Location ArduLaunchCommands. I have also provided a list of launch commands for each level at the bottom of this document. These instructions will load the first level.
+The launch command needs to match the level that you opened in the simulation. There is a folder containing all the levels’ launch commands. You can find them in `cmra_sim/ArduLaunchCommands`. I have also provided a list of launch commands for each level at the bottom of this document. These instructions will load the first level.
 1. In <b>T2</b> run the launch command
    ```
    sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
