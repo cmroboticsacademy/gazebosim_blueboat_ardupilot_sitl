@@ -17,7 +17,7 @@ Follow these steps to build the project. First, you will launch the Docker conta
 
 ### Launching the Docker container
 Perform these steps in <b>T1</b>.
-1. Navigate to <b>T1</b> to the projects docker folder. <br />
+1. In <b>T1> navigate to the project's Docker folder. <br />
    ** Triple-click the command below to highlight it. `Ctrl + c` to copy. In <b>T1</b> use `ctl + shift + v to paste`. You must use the `shift` key for copying and pasting inside terminals. </br>
     ```bash
     cd cmra_sim/gazebosim_blueboat_ardupilot_sitl/blueboat_sitl/docker/
@@ -38,7 +38,7 @@ In this section, you will use Colcon to build ROS 2 packages. <br/>
 
 The build command will:<br/>
 - compile and install the ROS 2 packages fetched from the .repos file
-- Create the install/setup. bash overlay that gets sourced
+- create the install/setup. bash overlay that gets sourced
 - make Gazebo/ROS bridge packages available to the rest of the system.
 
 1. In <b>T1</b> run the build command.
@@ -54,7 +54,7 @@ The build command will:<br/>
 - install the local ROS 2 packages in gz_ws/src
 - make launch files like ros2 launch move_blueboat launch_robot_simulation.launch.py work
 - place built outputs into gz_ws/install, which is then sourced
-- place libraries into locations referenced by gazebo_exports.sh, such as $HOME/gz_ws/install/lib
+- place libraries into locations referenced by gazebo_exports.sh
 1. In <b>T1</b> navigate to the `gz_ws` folder
    ```bash
    cd ../gz_ws
@@ -93,7 +93,7 @@ When running the simulation, you must follow these steps in order. If these step
 Follow this order exactly.
 1. Launch the gazebo simulation
 2. Start the simulation inside Gazebo
-3. Launch Ardupilot
+3. Launch ArduPilot
 
 ### Launch and run Gazebo Simulation
 1. Launch Gazebo
