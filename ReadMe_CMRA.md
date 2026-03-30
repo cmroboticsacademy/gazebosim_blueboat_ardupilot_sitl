@@ -1,7 +1,9 @@
-### Wrokstaion preperation
-Perpare your work envirionment.
-1. Open 4 terminal windows. Press `win_key` start typing `terminal`. Open the application when it appears. To open anoter terminal window, right click ther terminal app icon one the left toolbar. Select `New Window`.
-2. Recommended: use the layout below
+Review
+
+### Workstation preparation
+Prepare your work environment.
+1. Open 4 terminal windows. Press `win_key`, start typing `terminal`. Open the application when it appears. To open another terminal window, right-click the terminal app icon on the left toolbar. Select `New Window`.
+2. Recommended: Use the layout below
    ![Alt text](./cmra_images/TerminalLayout.png)
     <b>T1</b> Simulation terminal <br/>
     <b>T2</b> ArduPilot terminal <br />
@@ -11,16 +13,16 @@ Perpare your work envirionment.
 
 
 ## Building
-Follow these steps to build the project. First you will launch the docker container, and then build the project inside of it.
+Follow these steps to build the project. First, you will launch the Docker container, and then build the project inside of it.
 
-### Launching the docker container
+### Launching the Docker container
 Perform these steps in <b>T1</b>.
 1. Navigate to <b>T1</b> to the projects docker folder. <br />
-   ** Tripple click the command bellow to highlight it. `ctl + c` to copy. In <b>T1</b> use `ctl + shift + v to paste`. You must use `shift` key for copying and pasting inside of terminals. </br>
+   ** Triple-click the command below to highlight it. `Ctrl + c` to copy. In <b>T1</b> use `ctl + shift + v to paste`. You must use the `shift` key for copying and pasting inside terminals. </br>
     ```bash
     cd cmra_sim/gazebosim_blueboat_ardupilot_sitl/blueboat_sitl/docker/
     ```
-2. In <b>T1</b> start the docker container by executing the run script. <b>This command will promopt you for a password. Ask instructor for the password to continue.</b>
+2. In <b>T1</b> start the docker container by executing the run script. <b>This command will prompt you for a password. Ask the instructor for the password to continue.</b>
     ```bash
     sudo ./run.sh
     ```
@@ -32,11 +34,11 @@ Perform these steps in <b>T1</b>.
     blueboat_sitl@cmra-LOQ-15IRX9:~/colcon_ws$
     ```
 ### Building the general ROS 2 / Gazebo integration dependencies
-In this section you will use the colcon to build ROS 2 packages. <br/>
+In this section, you will use Colcon to build ROS 2 packages. <br/>
 
 The build command will:<br/>
 - compile and install the ROS 2 packages fetched from the .repos file
-- create the install/setup.bash overlay that gets sourced
+- Create the install/setup. bash overlay that gets sourced
 - make Gazebo/ROS bridge packages available to the rest of the system.
 
 1. In <b>T1</b> run the build command.
@@ -73,7 +75,7 @@ The build command will:<br/>
 <b>T1</b> is now ready to start Gazebo.
 
 ### Prepare ArduPilot terminal
-In this secion you will enter the docker container in <b>T2</b>
+In this section, you will enter the Docker container in <b>T2</b>
 
 1. In <b>T2</b> enter the docker container.
    ```bash
@@ -86,11 +88,11 @@ In this secion you will enter the docker container in <b>T2</b>
 <b>T2</b> is now ready to start ArduPilot
 
 ## Running the simulation
-When running the simulation you must follow these steps in order. If the these steps do not work, see the restarting the simulation section.
+When running the simulation, you must follow these steps in order. If these steps do not work, see the "Restarting the simulation" section.
 
 Follow this order exactly.
 1. Launch the gazebo simulation
-2. Start the simulation inside of gazebo
+2. Start the simulation inside Gazebo
 3. Launch Ardupilot
 
 ### Launch and run Gazebo Simulation
@@ -103,7 +105,7 @@ Follow this order exactly.
 3. <b>IMPORTANT</b> - Press play and confirm simulation is running before moving on
 
 ### Launch ArduPilot
-The launch command needs to match the level that you opened in the simulation. There is a folder that contains all of the levels launch commands. You can find them cmra_sim/Location ArduLaunchCommands. I have also provided a list of launch commands for each level at the bottom of this document. These insructions will load the first level.
+The launch command needs to match the level that you opened in the simulation. There is a folder containing all the levels’ launch commands. You can find them in cmra_sim/Location ArduLaunchCommands. I have also provided a list of launch commands for each level at the bottom of this document. These instructions will load the first level.
 1. In <b>T2</b> run the launch command
    ```
    sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
@@ -124,26 +126,26 @@ In <b>T3</b> launch QGroundControl
 You are now running the full simulation stack.
 
 ### Confirming your tech stack is running.
-To confirm your tech stack is running you should see the following:
+To confirm your tech stack is running, you should see the following:
 1. Gazebo sim is running
 2. ArduPilot messages are streaming in <b>T2</b>
 3. QGroundControl is connected and shows your robot on the map.
 
 ## Resetting the simulation
-There are often times you may need to restart the simulation<. Most of the time you do not have to rebuild.
+You may often need to restart the simulation<. Most of the time, you do not have to rebuild.
 
 1. Click into <b>T1</b> and press `ctl + c`. This will stop the gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
 2. Do the same for <b>T2</b>
-3. After both terminals are stopped, Re run the launch commands. Click into <b>T1</b>. Use the up arrow on your keyboard to load the last executed command. Check to make sure that it is the correct launch command and press enter.
+3. After both terminals are stopped, re-run the launch commands. Click into <b>T1</b>. Use the up arrow on your keyboard to load the last executed command. Check that it is the correct launch command, then press Enter.
 4. Do the same for <b>T2</b>
 
-Most of the time you will not have to reset QGroundControl in <b>T3</b>. Follow these steps if needed:
-1. Close QGroundControl Application
+Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow these steps if needed:
+1. Close the QGroundControl Application
 2. Click into <b>T3</b>, and press `ctl + c`.
-3. Press up to load the last executed command. Confirm its correct and press enter.
+3. Press up to load the last executed command. Confirm it’s correct and press enter.
 
 ## Closing the simulation tech stack.
-1. Close out of QGroundControl application
+1. Close out of the QGroundControl application
 2. Click into <b>T1</b>, and press `ctl + c`.
 3. Do this for all <b>T2</b> and <b>T3</b>.
 4. In <b>T1</b> run the exit command
@@ -158,22 +160,22 @@ Most of the time you will not have to reset QGroundControl in <b>T3</b>. Follow 
 
 ### Manuel Drive in QGroundControl
 Instruction
-1. Arm your robot by clicking on the message icon (upper left). This will expand and you will see an Arm button.
+1. Arm your robot by clicking on the message icon (upper left). This will expand, and you will see an Arm button.
 2. Click the Arm button.
-3. Confirm Arm command by holding space or sliding the actuator in the center of the screen.
+3. Confirm the Arm command by holding space or sliding the actuator in the center of the screen.
 4. Use the left virtual joystick to drive the boat forward and backward. Use the right virtual joystick to steer.
-5. Drive the boat, monitor the battery, and take note of the expereince.
+5. Drive the boat, monitor the battery, and take note of the experience.
 
-### Simple Waypoint mMssion in QGroundControl
+### Simple Waypoint Mission in QGroundControl
 QGroundControl can send a waypoint plan to ArduPilot. ArduPilot uses that plan to navigate the boat to each waypoint.
 1. Click the top left icon in QGroundControl (looks like a Q)
-2. Selct Plan Flight
+2. Select Plan Flight
 3. Select Empty Plan
-4. Click Waypoint button on the left menu bar
+4. Click the Waypoint button on the left menu bar
 5. Add waypoints by clicking on the map.
-6. When you add waypoints they will appear on the right menu bar next to the map. If you need to edit or delete waypoints, select them there by clicking on them.
-7. Adjust the launch / RTL location by selcting the Mission Start node in the left menu above your waypoints.
-8. Once selected click and drag the "lauch" pin on the map to the desiered launch / rtl position.
-9. When ready to execute plan, click Upload or Upload Required in the top left of the application. 
-10. After the plan is uploaded, click exit plan.
+6. When you add waypoints, they will appear on the right menu bar next to the map. If you need to edit or delete waypoints, select them by clicking on them.
+7. Adjust the launch / RTL location by selecting the Mission Start node in the left menu above your waypoints.
+8. Once selected, click and drag the "launch" pin on the map to the desired launch / RTL position.
+9. When ready to execute the plan, click Upload or Upload Required in the top left of the application. 
+10. After the plan is uploaded, click Exit Plan.
 11. Hold space or slide the actuator to start the waypoint plan.
