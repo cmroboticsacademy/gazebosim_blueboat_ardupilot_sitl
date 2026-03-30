@@ -120,9 +120,9 @@ In <b>T3</b> launch QGroundControl
    cd QGroundControl/
    ```
 2. Start QGroundControl
-```bash
+   ```bash
    ./QGroundControl-x86_64.AppImage
-```
+   ```
 You are now running the full simulation stack.
 
 ### Confirming your tech stack is running.
@@ -147,14 +147,15 @@ Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow
 ## Closing the simulation tech stack.
 1. Close out of the QGroundControl application
 2. Click into <b>T1</b>, and press `ctl + c`.
-3. Do this for all <b>T2</b> and <b>T3</b>.
+3. Do this for <b>T2</b> and <b>T3</b>.
 4. In <b>T1</b> run the exit command
    ```bash
    exit
    ```
+5. Do this for <b?>T2<b> and if needed <b>T4</b>
 
 ## Level 1
-1. Follow the build instructions to get the tech stack started.
+1. Follow the build instructions above to get the tech stack started.
 2. Complete Manual Drive in QGroundControl
 3. Complete Simple Waypoint Mission in QGroundControl
 
