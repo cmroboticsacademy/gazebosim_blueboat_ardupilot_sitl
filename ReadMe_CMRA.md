@@ -16,7 +16,7 @@ Follow these steps to build the project. First, you will launch the Docker conta
 ### Launching the Docker container
 Perform these steps in <b>T1</b>.
 1. In <b>T1</b> navigate to the project's Docker folder. <br />
-   ** Triple-click the command below to highlight it. `Ctrl + c` to copy. In <b>T1</b> use `ctl + shift + v to paste`. You must use the `shift` key for copying and pasting inside terminals. </br>
+   ** Triple-click the command below to highlight it. `Ctrl + c` to copy. In <b>T1</b> use `ctl + shift + v` to paste. You must use the `shift` key for copying and pasting inside terminals. </br>
     ```bash
     cd cmra_sim/gazebosim_blueboat_ardupilot_sitl/blueboat_sitl/docker/
     ```
