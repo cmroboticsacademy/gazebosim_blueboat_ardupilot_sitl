@@ -1,5 +1,3 @@
-Review
-
 ### Workstation preparation
 Prepare your work environment.
 1. Open 4 terminal windows. Press `win_key`, start typing `terminal`. Open the application when it appears. To open another terminal window, right-click the terminal app icon on the left toolbar. Select `New Window`.
