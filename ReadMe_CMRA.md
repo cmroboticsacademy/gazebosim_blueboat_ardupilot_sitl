@@ -202,8 +202,7 @@ Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow
 2. Complete Manual Drive in QGroundControl
 3. Complete Simple Waypoint Mission in QGroundControl
 
-### Manuel Drive in QGroundControl
-Instruction
+### Manual Drive in QGroundControl
 1. Arm your robot by clicking on the message icon (upper left). This will expand, and you will see an Arm button.
 2. Click the Arm button.
 3. Confirm the Arm command by holding space or sliding the actuator in the center of the screen.
