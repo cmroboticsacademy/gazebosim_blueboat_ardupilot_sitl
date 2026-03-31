@@ -152,10 +152,13 @@ RUN [ "/bin/bash" , "-c" , "\
 
 # Set up the environment
 WORKDIR /home/$USERNAME/colcon_ws
-RUN echo "export PATH=/home/$USERNAME/.local/bin:\$PATH" >> /home/$USERNAME/.bashrc \
-  && echo "export PATH=/home/$USERNAME/.local/lib/python3.10/site-packages:\$PATH" >> /home/$USERNAME/.bashrc \
-  && echo "source /home/$USERNAME/colcon_ws/src/blueboat_sitl/setup.bash" >> /home/$USERNAME/.bashrc
 
+RUN echo "export PATH=/home/$USERNAME/.local/bin:\$PATH" >> /home/$USERNAME/.bashrc \
+ && echo "export PYTHONPATH=/home/$USERNAME/.local/lib/python3.10/site-packages:\$PYTHONPATH" >> /home/$USERNAME/.bashrc \
+ && echo "source /home/$USERNAME/colcon_ws/src/blueboat_sitl/setup.bash" >> /home/$USERNAME/.bashrc \
+ && echo '[ -f /home/'"$USERNAME"'/gz_ws/install/setup.bash ] && source /home/'"$USERNAME"'/gz_ws/install/setup.bash' >> /home/$USERNAME/.bashrc \
+ && echo '[ -f /home/'"$USERNAME"'/gz_ws/gazebo_exports.sh ] && source /home/'"$USERNAME"'/gz_ws/gazebo_exports.sh' >> /home/$USERNAME/.bashrc
+ 
 USER root
 RUN apt-get update && apt-get install -y nano
 RUN apt-get -y --quiet --no-install-recommends install \

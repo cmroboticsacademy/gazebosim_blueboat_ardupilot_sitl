@@ -1,4 +1,4 @@
 sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
--l 21.286722,-157.963594,0,0 \
+-l 40.594988,-79.999149,0,0 \
 --out=udp:127.0.0.1:14550 \
 --out=udp:127.0.0.1:14551

@@ -1,23 +1,34 @@
-### Workstation preparation
-Prepare your work environment.
+# About this project
+TODO: ADD BREIF SUMMARY OF THE PROJECT.
+
+## Docker
+![Alt text](./cmra_images/docker.png)
+Docker is a tool that packages software and everything it needs to run (code, libraries, and settings) into a single unit called a container. This allows the software to run the same way on any computer, avoiding issues caused by differences between systems.
+
+In this Gazebo + ArduPilot project, Docker provides a complete simulation environment with all dependencies already installed. Instead of manually configuring each tool, the container can be run to immediately access a working setup, ensuring consistency and reducing setup errors.
+
+# How to run this project
+
+## Workstation preparation
 1. Open 4 terminal windows. Press `win_key`, start typing `terminal`. Open the application when it appears. To open another terminal window, right-click the terminal app icon on the left toolbar. Select `New Window`.
 2. Recommended: Use the layout below
    ![Alt text](./cmra_images/TerminalLayout.png)
-    <b>T1</b> Simulation terminal <br/>
+    <b>T1</b> Gazebo terminal <br/>
     <b>T2</b> ArduPilot terminal <br />
     <b>T3</b> QGroundControl terminal <br />
     <b>T4</b> Misson Uploader terminal <br />
 
 
-
-## Building
-Follow these steps to build the project. First, you will launch the Docker container, and then build the project inside of it.
-
-### Launching the Docker container
+## Starting the Docker container
 Perform these steps in <b>T1</b>.
 1. In <b>T1</b> navigate to the project's Docker folder. <br />
-   ** Triple-click the command below to highlight it. `Ctrl + c` to copy. In <b>T1</b> use `ctl + shift + v` to paste. You must use the `shift` key for copying and pasting inside terminals. </br>
-    ```bash
+   <details>
+   <summary>Linux Tip!</summary>
+   
+   Triple-click the command below to highlight it. `ctrl + c` to copy. In <b>T1</b> use `ctl + shift + v` to paste. You must use the `shift` key for copying and pasting inside terminals. </details>
+   </br>
+   
+   ```bash
     cd cmra_sim/gazebosim_blueboat_ardupilot_sitl/blueboat_sitl/docker/
     ```
 2. In <b>T1</b> start the docker container by executing the run script. <b>This command will prompt you for a password. Ask the instructor for the password to continue.</b>
@@ -31,46 +42,31 @@ Perform these steps in <b>T1</b>.
     xauth:  file /tmp/.docker.xauth does not exist
     blueboat_sitl@cmra-LOQ-15IRX9:~/colcon_ws$
     ```
-### Building the general ROS 2 / Gazebo integration dependencies
-In this section, you will use Colcon to build ROS 2 packages. <br/>
+   <details>
+   <summary>What is the cd command?</summary>
+   The cd (change directory) command is used in a terminal or command prompt to navigate between folders in a file system. It lets you move into a specific directory, go back to a previous one, or return to your home directory depending on the path you provide.
+   </details>
+   <details>
+   <summary>What is the sudo ./run command?</summary>
+   
+   `sudo ./run.sh` means “run the `run.sh` shell script as the superuser.” `sudo` gives the command elevated privileges, which this repo likely needs because `run.sh` launches Docker with privileged options, host networking, GPU access, device mounts, and X11 display forwarding for Gazebo, all of which often require admin-level access on Linux.
 
-The build command will:<br/>
-- compile and install the ROS 2 packages fetched from the .repos file
-- create the install/setup. bash overlay that gets sourced
-- make Gazebo/ROS bridge packages available to the rest of the system.
+   A `.sh` file is a shell script: a text file full of terminal commands. When you run `./run.sh`, the `./` tells the shell to execute the script from the current folder, and this particular script is set up to run with Bash because it starts with the shebang `#!/usr/bin/env bash`. 
 
-1. In <b>T1</b> run the build command.
-   ```bash
-    colcon build
-    ```
-2. In <b>T1</b> source the setup file
-   ```bash
-   source install/setup.bash
-   ```
-### Build BlueBoat simulation workspace
-The build command will:<br/>
-- install the local ROS 2 packages in gz_ws/src
-- make launch files like ros2 launch move_blueboat launch_robot_simulation.launch.py work
-- place built outputs into gz_ws/install, which is then sourced
-- place libraries into locations referenced by gazebo_exports.sh
+   In this repo specifically, `run.sh` prepares X11 authentication, sets local paths for `gz_ws` and `SITL_Models`, and then starts a Docker container named `blueboat_sitl` with mounted volumes, host networking, NVIDIA GPU support, and the image `blueboat_sitl:latest`.
+   </details>
+
+
+### Prepare Gazebo terminal
 1. In <b>T1</b> navigate to the `gz_ws` folder
    ```bash
    cd ../gz_ws
    ```
-   ** `../` is shorthand for 'go back one folder'
-2. In <b>T1</b> run the build command
-   ```bash
-   colcon build --symlink-install --merge-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DCMAKE_CXX_STANDARD=17
-   ```
-3. In <b>T1</b> Source the setup file
-   ```bash
-   source install/setup.bash
-   ```
-4. In <b>T1</b> source the gazebo exports
-   ```bash
-   source gazebo_exports.sh
-   ```
-<b>T1</b> is now ready to start Gazebo.
+   <details>
+   <summary>What does ../ mean?</summary>
+   
+   `../` is shorthand for 'go back one folder'
+   </details>
 
 ### Prepare ArduPilot terminal
 In this section, you will enter the Docker container in <b>T2</b>
@@ -83,7 +79,13 @@ In this section, you will enter the Docker container in <b>T2</b>
    ```bash
    cd ../ardupilot
    ```
-<b>T2</b> is now ready to start ArduPilot
+   <details>
+   <summary>What is the sudo docker exec -it blueboat_sitl /bin/bash command?</summary>
+
+   `sudo docker exec -it blueboat_sitl /bin/bash` runs a command inside an already running Docker container with elevated privileges. The `sudo` ensures you have permission to interact with Docker, while `docker exec` tells Docker to execute the `blueboat_sitl` container environment.
+
+   The `-it` flags make the session interactive (so you can type commands), and `/bin/bash` starts a Bash shell inside the container. In this repo’s context, this lets you “enter” the running `blueboat_sitl` simulation container to inspect files, run commands, or debug the Gazebo/ArduPilot SITL environment from the inside.
+   </details>
 
 ## Running the simulation
 When running the simulation, you must follow these steps in order. If these steps do not work, see the "Restarting the simulation" section.
@@ -98,61 +100,101 @@ Follow this order exactly.
    ```bash
    ros2 launch move_blueboat level1_sim.launch.py
    ```
-   ** To change levels, change level1 to perfered level.
 2. This will open the simulation window. Allow it to open and load
 3. <b>IMPORTANT</b> - Press play and confirm simulation is running before moving on
+   <details>
+   <summary>What is the ros2 launch move_blueboat level1_sim.launch.py command?</summary>
+
+   `ros2 launch move_blueboat level1_sim.launch.py` is a ROS 2 command used to start a predefined launch configuration for a robot or simulation. The `ros2 launch` part tells ROS 2 to run a launch file, `move_blueboat` is the ROS 2 package name, and `level1_sim.launch.py` is the specific Python-based launch file that defines what nodes, parameters, and processes to start.
+
+   In this project, running this command starts the BlueBoat Gazebo simulation for “level 1,” launching components like Gazebo, robot controllers, and any necessary ROS 2 nodes defined in that launch file so the simulation environment is fully set up and ready to run.
+   </details>
 
 ### Launch ArduPilot
-The launch command needs to match the level that you opened in the simulation. There is a folder containing all the levels’ launch commands. You can find them in `cmra_sim/gazebosim_blueboat_ardupilot_sitl/ArduLaunchCommands`. I have also provided a list of launch commands for each level at the bottom of this document. These instructions will load the first level.
 1. In <b>T2</b> run the launch command
    ```
    sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
-   -l 21.286722,-157.963594,0,0 \
+   -l 40.594988,-79.999149,0,0 \
    --out=udp:127.0.0.1:14550 \
    --out=udp:127.0.0.1:14551
+   ```
+   <details>
+   <summary>What is the sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
+      -l 40.594988,-79.999149,0,0 \
+      --out=udp:127.0.0.1:14550 \
+      --out=udp:127.0.0.1:14551 command?</summary>
+
+   `sim_vehicle.py` is a script from ArduPilot used to start a Software-In-The-Loop (SITL) vehicle simulation. The flags here specify the vehicle type (`-v Rover`), the simulation environment (`-f gazebo-rover`), and options like using a JSON model, opening a map and console, and setting the starting GPS location with `-l`.
+
+   The `--out=udp:127.0.0.1:14550` and `--out=udp:127.0.0.1:14551` parts send telemetry data over UDP to those ports on your local machine, which allows tools like QGroundControl or other ROS/bridge nodes to connect and interact with the simulated rover in the Gazebo environment.
+   </details>
 
 ### Launch QGroundControl
-In <b>T3</b> launch QGroundControl
-1. Navigate to the application folder
+1. In <b>T3</b> navigate to the application folder
    ```bash
    cd QGroundControl/
    ```
-2. Start QGroundControl
+2. In <b>T3</b> start QGroundControl
    ```bash
    ./QGroundControl-x86_64.AppImage
    ```
-You are now running the full simulation stack.
+   <details>
+   <summary>What is the /QGroundControl-x86_64.AppImage command?</summary>
 
-### Confirming your tech stack is running.
+   `./QGroundControl-x86_64.AppImage` runs the QGroundControl application from the current directory. The `./` tells the terminal to execute the file locally, and an `.AppImage` is a self-contained Linux executable that doesn’t need installation.
+
+   QGroundControl is a ground control station used to monitor and control drones/rovers, so in this setup it connects to the simulated vehicle (via the UDP ports from `sim_vehicle.py`) to display telemetry, maps, and allow you to send commands to the BlueBoat or rover simulation.
+
+   </details>
+
+# Operating and maintaining
+
+## Confirming your tech stack is running.
 To confirm your tech stack is running, you should see the following:
 1. Gazebo sim is running
 2. ArduPilot messages are streaming in <b>T2</b>
 3. QGroundControl is connected and shows your robot on the map.
+   ![Alt text](./cmra_images/tech_stack.png)
 
 ## Resetting the simulation
 You may often need to restart the simulation<. Most of the time, you do not have to rebuild.
 
-1. Click into <b>T1</b> and press `ctl + c`. This will stop the gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
-2. Do the same for <b>T2</b>
+1. Click into <b>T1 (Gazebo Terminal)</b> and press `ctl + c`. This will stop the gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
+2. Do the same for <b>T2 (ArduPilot terminal)</b>
 3. After both terminals are stopped, re-run the launch commands. Click into <b>T1</b>. Use the up arrow on your keyboard to load the last executed command. Check that it is the correct launch command, then press Enter.
 4. Do the same for <b>T2</b>
 
 Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow these steps if needed:
 1. Close the QGroundControl Application
-2. Click into <b>T3</b>, and press `ctl + c`.
+2. Click into <b>T3 (QGroundControl)</b>, and press `ctl + c`.
 3. Press up to load the last executed command. Confirm it’s correct and press enter.
 
 ## Closing the simulation tech stack.
 1. Close out of the QGroundControl application
-2. Click into <b>T1</b>, and press `ctl + c`.
-3. Do this for <b>T2</b> and <b>T3</b>.
+2. Click into <b>T1 (Gazebo terminal)</b>, and press `ctl + c`.
+3. Do this for <b>T2 (ArduPilot terminal)</b> and <b>T3 (QGroundControl terminal)</b>.
 4. In <b>T1</b> run the exit command
    ```bash
    exit
    ```
-5. Do this for <b?>T2<b> and if needed <b>T4</b>
+5. Do this for <b>T2</b> and if needed <b>T4 (Mission Uploader terminal)</b>
 
-## Level 1
+## Gazebo and ArduPilot launch commands
+### Mission 1 Gazebo and Ardupilot commands
+- Gazebo 
+   ```
+   ros2 launch move_blueboat level1_sim.launch.py
+   ```
+- ArduPilot
+   ```bash
+   sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
+   -l 40.594988,-79.999149,0,0 \
+   --out=udp:127.0.0.1:14550 \
+   --out=udp:127.0.0.1:14551
+   ```
+# Missions
+## Mission 1 - Setup, Maunel Flight, and Waypoints
+### Setup
 1. Follow the build instructions above to get the tech stack started.
 2. Complete Manual Drive in QGroundControl
 3. Complete Simple Waypoint Mission in QGroundControl
@@ -178,3 +220,5 @@ QGroundControl can send a waypoint plan to ArduPilot. ArduPilot uses that plan t
 9. When ready to execute the plan, click Upload or Upload Required in the top left of the application. 
 10. After the plan is uploaded, click Exit Plan.
 11. Hold space or slide the actuator to start the waypoint plan.
+
+
