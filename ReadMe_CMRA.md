@@ -24,17 +24,29 @@ Perform these steps in <b>T1</b>.
 1. In <b>T1</b> navigate to the project's Docker folder. <br />
    <details>
    <summary>Linux Tip!</summary>
-   
    Triple-click the command below to highlight it. `ctrl + c` to copy. In <b>T1</b> use `ctl + shift + v` to paste. You must use the `shift` key for copying and pasting inside terminals. </details>
-   </br>
-   
+
    ```bash
     cd cmra_sim/gazebosim_blueboat_ardupilot_sitl/blueboat_sitl/docker/
     ```
+   <details>
+   <summary>What is the cd command?</summary>
+   The cd (change directory) command is used in a terminal or command prompt to navigate between folders in a file system. It lets you move into a specific directory, go back to a previous one, or return to your home directory depending on the path you provide.
+   </details>
 2. In <b>T1</b> start the docker container by executing the run script. <b>This command will prompt you for a password. Ask the instructor for the password to continue.</b>
     ```bash
     sudo ./run.sh
     ```
+   <details>
+   <summary>What is the sudo ./run command?</summary>
+   
+   `sudo ./run.sh` means “run the `run.sh` shell script as the superuser. `sudo` gives the command elevated privileges, which this repo needs because `run.sh` launches Docker with privileged options, host networking, GPU access, device mounts, and X11 display forwarding for Gazebo, all of which often require admin-level access on Linux.
+
+   A `.sh` file is a shell script: a text file full of terminal commands. When you run `./run.sh`, the `./` tells the shell to execute the script from the current folder, and this particular script is set up to run with Bash.
+
+   In this project specifically, `run.sh` prepares X11 authentication, sets local paths for `gz_ws` and `SITL_Models`, and then starts a Docker container named `blueboat_sitl` with mounted volumes, host networking, NVIDIA GPU support, and the image `blueboat_sitl:latest`.
+   </details>
+
     You should see the following output:
     ```
     cmra@cmra-LOQ-15IRX9:~/cmra_sim/gazebosim_blueboat_ardupilot_sitl/blueboat_sitl/docker$ sudo ./run.sh
@@ -42,19 +54,8 @@ Perform these steps in <b>T1</b>.
     xauth:  file /tmp/.docker.xauth does not exist
     blueboat_sitl@cmra-LOQ-15IRX9:~/colcon_ws$
     ```
-   <details>
-   <summary>What is the cd command?</summary>
-   The cd (change directory) command is used in a terminal or command prompt to navigate between folders in a file system. It lets you move into a specific directory, go back to a previous one, or return to your home directory depending on the path you provide.
-   </details>
-   <details>
-   <summary>What is the sudo ./run command?</summary>
    
-   `sudo ./run.sh` means “run the `run.sh` shell script as the superuser.” `sudo` gives the command elevated privileges, which this repo likely needs because `run.sh` launches Docker with privileged options, host networking, GPU access, device mounts, and X11 display forwarding for Gazebo, all of which often require admin-level access on Linux.
-
-   A `.sh` file is a shell script: a text file full of terminal commands. When you run `./run.sh`, the `./` tells the shell to execute the script from the current folder, and this particular script is set up to run with Bash because it starts with the shebang `#!/usr/bin/env bash`. 
-
-   In this repo specifically, `run.sh` prepares X11 authentication, sets local paths for `gz_ws` and `SITL_Models`, and then starts a Docker container named `blueboat_sitl` with mounted volumes, host networking, NVIDIA GPU support, and the image `blueboat_sitl:latest`.
-   </details>
+   
 
 
 ### Prepare Gazebo terminal
@@ -65,7 +66,7 @@ Perform these steps in <b>T1</b>.
    <details>
    <summary>What does ../ mean?</summary>
    
-   `../` is shorthand for 'go back one folder'
+   `../` means go back one folder in a path.
    </details>
 
 ### Prepare ArduPilot terminal
@@ -75,10 +76,6 @@ In this section, you will enter the Docker container in <b>T2</b>
    ```bash
    sudo docker exec -it blueboat_sitl /bin/bash
    ```
-2. In <b>T2</b> navigate to the ArduPilot folder
-   ```bash
-   cd ../ardupilot
-   ```
    <details>
    <summary>What is the sudo docker exec -it blueboat_sitl /bin/bash command?</summary>
 
@@ -86,6 +83,11 @@ In this section, you will enter the Docker container in <b>T2</b>
 
    The `-it` flags make the session interactive (so you can type commands), and `/bin/bash` starts a Bash shell inside the container. In this repo’s context, this lets you “enter” the running `blueboat_sitl` simulation container to inspect files, run commands, or debug the Gazebo/ArduPilot SITL environment from the inside.
    </details>
+2. In <b>T2</b> navigate to the ArduPilot folder
+   ```bash
+   cd ../ardupilot
+   ```
+   
 
 ## Running the simulation
 When running the simulation, you must follow these steps in order. If these steps do not work, see the "Restarting the simulation" section.
@@ -100,8 +102,6 @@ Follow this order exactly.
    ```bash
    ros2 launch move_blueboat level1_sim.launch.py
    ```
-2. This will open the simulation window. Allow it to open and load
-3. <b>IMPORTANT</b> - Press play and confirm simulation is running before moving on
    <details>
    <summary>What is the ros2 launch move_blueboat level1_sim.launch.py command?</summary>
 
@@ -109,6 +109,9 @@ Follow this order exactly.
 
    In this project, running this command starts the BlueBoat Gazebo simulation for “level 1,” launching components like Gazebo, robot controllers, and any necessary ROS 2 nodes defined in that launch file so the simulation environment is fully set up and ready to run.
    </details>
+2. This will open the simulation window. Allow it to open and load
+3. <b>IMPORTANT</b> - Press play and confirm simulation is running before moving on
+   
 
 ### Launch ArduPilot
 1. In <b>T2</b> run the launch command
