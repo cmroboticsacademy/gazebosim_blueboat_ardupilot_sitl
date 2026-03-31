@@ -1,5 +1,5 @@
 # About this project
-TODO: ADD BREIF SUMMARY OF THE PROJECT.
+TODO: ADD BRIEF SUMMARY OF THE PROJECT.
 
 ## Docker
 ![Alt text](./cmra_images/docker.png)
