@@ -196,7 +196,7 @@ Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow
    --out=udp:127.0.0.1:14551
    ```
 # Missions
-## Mission 1 - Setup, Maunel Flight, and Waypoints
+## Mission 1 - Setup, Manual Flight, and Waypoints
 ### Setup
 1. Follow the build instructions above to get the tech stack started.
 2. Complete Manual Drive in QGroundControl
