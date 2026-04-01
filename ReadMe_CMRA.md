@@ -173,7 +173,7 @@ Follow this order exactly.
 ## Confirming your tech stack is running.
 To confirm your tech stack is running, you should see the following:
 1. Gazebo sim is running
-2. ArduPilot messages are streaming in <b>T2</b>
+2. ArduPilot messages are streaming in <b>T2 (ArduPilot terminal)</b>
 3. QGroundControl is connected and shows your robot on the map.
    ![Alt text](./cmra_images/tech_stack.png)
 
