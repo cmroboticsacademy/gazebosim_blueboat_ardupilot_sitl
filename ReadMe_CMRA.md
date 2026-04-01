@@ -7,12 +7,12 @@ Not all real-world platforms require or permit you to access these layers, even 
 
 There are four major software components in this system, including the physics simulator.
 
-- QGroundControl is the Ground Control Station (GCS) software. It is the primary user interface that you would see on your laptop or control station.
-- Ardupilot is the autopilot firmware running on board the vehicle. It calculates the necessary settings for the vehicle’s motors and control surfaces to carry out high-level navigation commands such as moving to a waypoint, then issues commands to low-level motor controllers accordingly. It monitors and adjusts those settings with the help of the vehicle’s sensors to keep the vehicle on track until the goal is reached.
+- <b>QGroundControl</b> is the Ground Control Station (GCS) software. It is the primary user interface that you would see on your laptop or control station.
+- <b>ArduPilot</b> is the autopilot firmware running on board the vehicle. It calculates the necessary settings for the vehicle’s motors and control surfaces to carry out high-level navigation commands such as moving to a waypoint, then issues commands to low-level motor controllers accordingly. It monitors and adjusts those settings with the help of the vehicle’s sensors to keep the vehicle on track until the goal is reached.
     - The autopilot program does not have a user interface, and so is largely invisible. It relies on external sources such as the Ground Control Station (GCS) to convey operator instructions.
-- Rviz is the visualization software for the robot’s sensor data. It allows an operator, maintainer, or analyst to view sensor data in a sensible way, such as a 3D map.
+- <b>Rviz</b> is the visualization software for the robot’s sensor data. It allows an operator, maintainer, or analyst to view sensor data in a sensible way, such as a 3D map.
     - This generally happens on a separate workstation or in the cloud. For purposes of this training module, however, Rviz will be loaded alongside the rest of the software.
-- GazeboSim is the robot simulator. It stands in for both the robot’s body and its physical environment during training or software troubleshooting. It is not used when the robot is actually being deployed.
+- <b>GazeboSim</b> is the robot simulator. It stands in for both the robot’s body and its physical environment during training or software troubleshooting. It is not used when the robot is actually being deployed.
     - When the autopilot is connected to the simulator, the simulator “talks” to the autopilot just as the real robot would, accepting motor commands and providing sensor feedback. The robot’s body and the world around it are simulated as well, so the motor commands translate into motion, and the sensor feedback reflects what the robot would see under those conditions.
     - Running the robot with all software operating as if for real, but with physics simulation taking the place of the physical world, is called SITL (Software In The Loop) operation.
 
