@@ -6,7 +6,7 @@ def generate_launch_description():
     return LaunchDescription([
         # Launch Gazebo simulation with environment variable
         ExecuteProcess(
-            cmd=['env', 'LIBGL_ALWAYS_SOFTWARE=1', 'gz', 'sim', 'waves.sdf'],
+            cmd=['env', 'LIBGL_ALWAYS_SOFTWARE=1', 'gz', 'sim', 'level1.sdf'],
             output='screen'
         ),
 

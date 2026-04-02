@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <model name="dock">
+    <static>true</static>
+
+    <link name="dock_link">
+
+      <!-- MAIN PLATFORM -->
+      <collision name="platform_collision">
+        <pose>0 0 0.1 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>6 2 0.2</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name="platform_visual">
+        <pose>0 0 0.1 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>6 2 0.2</size>
+          </box>
+        </geometry>
+        <material>
+            <script>
+                <uri>model://dock/materials/scripts</uri>
+                <uri>model://dock/materials/textures</uri>
+                <name>Dock/Wood</name>
+            </script>
+        </material>
+      </visual>
+
+      <!-- LEFT EDGE -->
+      <collision name="left_edge_collision">
+        <pose>0 -1.05 0.3 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>6 0.1 0.4</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name="left_edge_visual">
+        <pose>0 -1.05 0.3 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>6 0.1 0.4</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.3 0.2 0.1 1</ambient>
+          <diffuse>0.4 0.3 0.2 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- RIGHT EDGE -->
+      <collision name="right_edge_collision">
+        <pose>0 1.05 0.3 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>6 0.1 0.4</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name="right_edge_visual">
+        <pose>0 1.05 0.3 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>6 0.1 0.4</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.3 0.2 0.1 1</ambient>
+          <diffuse>0.4 0.3 0.2 1</diffuse>
+        </material>
+      </visual>
+
+    </link>
+  </model>
+</sdf>
