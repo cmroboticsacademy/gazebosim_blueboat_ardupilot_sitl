@@ -242,3 +242,54 @@ QGroundControl can send a waypoint plan to ArduPilot. ArduPilot uses that plan t
 11. Hold space or slide the actuator to start the waypoint plan.
 
 
+## Mission 2 - Waypoint around the buoy
+### Launch Sequence
+1. Launch level 2 Gazebo Simulation in <b>T1 (Gazebo Terminal)</b>
+   ```bash
+   ros2 launch move_blueboat level2_sim.launch.py
+   ```
+   <details>
+   <summary>Why a new launch command?</summary>
+   `level2_sim.launch.py` tells Gazebo what world to load. Each world has diffent assets like buoys and docks.
+   </details>
+2. Press play in the simulation
+3. Launch Level 2 ArduPilot in <b>T2 (ArduPilot Terminal)</b>
+   ```bash
+   sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
+      -l 40.594988,-79.999149,0,0 \
+      --out=udp:127.0.0.1:14550 \
+      --out=udp:127.0.0.1:14551
+   ```
+   <details>
+   <summary>Look familar?</summary>
+
+   This is the same command as level 1, so there is no need to change the location parameters. `-l 40.594988,-79.999149,0,0` defines where our boat spawns into the world. The first two numbers represent longitude and latitude. 
+   </details>
+4. Launch QGC in <b>T3 (QGroundControl Terminal)</b>
+
+### Mission Uploader
+Each mission has a script that takes buoys and docks from the simulated world and adds them as exhclusion zones to your flight plan. You can download the exclusion zones in QGroundControl so that you can see where buoys and docks are in your flight plan map. 
+1. Enter the docker container in <b>T4 (Mission Uploader terminal)</b>
+   ```bash
+   sudo docker exec -it blueboat_sitl /bin/bash
+   ```
+2. Navigate to the gz_ws (gazebo workspace) folder
+   ```bash
+   cd ../gz_ws/
+   ```
+3. Upload Mission
+   ```
+   ros2 run move_blueboat level2_plan
+   ```
+   <details>
+   <sumamry>What is the ros2 run move_blueboat level2_plan command?</summary> 
+   This command runs the level2_plan python file in the ROS 2 environment. The ppyhton file uploads a plan to ArduPilot that map the simulated objects to exclusion zones.
+   </details>
+4. In QGC application (not terminal), create a new empty flight plan.
+5. Click the file button to open up the file menu.
+6. Click the download button at the bottom of the menu.
+7. Confirm your fences downloaded. You should see a rectangle next to your robot. That is the dock. The other exclusion zone on you map represents where a buoy is located.
+8. You can now add our waypoints to the current plan.
+
+### Waypoint path around the buoy and back
+Create a waypoint path plan that has the Blueboat drive around the buoy and back. You may uses as many waypoints as you want. 
