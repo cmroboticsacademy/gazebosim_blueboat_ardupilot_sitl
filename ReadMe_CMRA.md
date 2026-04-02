@@ -250,6 +250,7 @@ QGroundControl can send a waypoint plan to ArduPilot. ArduPilot uses that plan t
    ```
    <details>
    <summary>Why a new launch command?</summary>
+
    `level2_sim.launch.py` tells Gazebo what world to load. Each world has diffent assets like buoys and docks.
    </details>
 2. Press play in the simulation
@@ -263,7 +264,7 @@ QGroundControl can send a waypoint plan to ArduPilot. ArduPilot uses that plan t
    <details>
    <summary>Look familar?</summary>
 
-   This is the same command as level 1, so there is no need to change the location parameters. `-l 40.594988,-79.999149,0,0` defines where our boat spawns into the world. The first two numbers represent longitude and latitude. 
+   This is the same command as level 1. There is no need to change the location parameters for this level. `-l 40.594988,-79.999149,0,0` defines where our boat spawns into the world. The first two numbers represent longitude and latitude. 
    </details>
 4. Launch QGC in <b>T3 (QGroundControl Terminal)</b>
 
