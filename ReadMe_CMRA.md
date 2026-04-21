@@ -28,21 +28,22 @@ In this Gazebo + ArduPilot project, Docker provides a complete simulation enviro
 # How to run this project
 
 ## Workstation preparation
-1. Open 4 terminal windows. Press `win_key`, start typing `terminal`. Open the application when it appears. To open another terminal window, right-click the terminal app icon on the left toolbar. Select `New Window`.
+1. Open 3 terminal windows. Press `win_key`, start typing `terminal`. Open the application when it appears. To open another terminal window, right-click the terminal app icon on the left toolbar. Select `New Window`.
 2. Recommended: Use the layout below
    ![Alt text](./cmra_images/TerminalLayout.png)
     <b>T1</b> Gazebo terminal <br/>
     <b>T2</b> ArduPilot terminal <br />
     <b>T3</b> QGroundControl terminal <br />
-    <b>T4</b> Misson Uploader terminal <br />
 
 
 ## Starting the Docker container
-Perform these steps in <b>T1</b>.
+Perform these steps in <b>T1 (Gazebo Terminal)</b>.
 1. In <b>T1</b> navigate to the project's Docker folder. <br />
    <details>
    <summary>Linux Tip!</summary>
-   Triple-click the command below to highlight it. `ctrl + c` to copy. In <b>T1</b> use `ctl + shift + v` to paste. You must use the `shift` key for copying and pasting inside terminals. </details>
+   
+   Use keyboard shortcuts to copy and paste inside of terminals. Press `ctl + shift + c` to copy and `ctl + shift + v` to paste. You can also right click and copy or paste if that is easier for you.
+   </details>
 
    ```bash
     cd cmra_sim/gazebosim_blueboat_ardupilot_sitl/blueboat_sitl/docker/
@@ -77,7 +78,7 @@ Perform these steps in <b>T1</b>.
 
 
 ### Prepare Gazebo terminal
-1. In <b>T1</b> navigate to the `gz_ws` folder
+1. In <b>T1 (Gazebo Terminal)</b> navigate to the `gz_ws` folder
    ```bash
    cd ../gz_ws
    ```
@@ -90,7 +91,7 @@ Perform these steps in <b>T1</b>.
 ### Prepare ArduPilot terminal
 In this section, you will enter the Docker container in <b>T2</b>
 
-1. In <b>T2</b> enter the docker container.
+1. In <b>T2 (ArduPilot Terminal)</b> enter the docker container.
    ```bash
    sudo docker exec -it blueboat_sitl /bin/bash
    ```
@@ -116,7 +117,7 @@ Follow this order exactly.
 3. Launch ArduPilot
 
 ### Launch and run Gazebo Simulation
-1. Launch Gazebo
+1. In <b>T1 (Gazebo Terminal)</b> Launch Gazebo
    ```bash
    ros2 launch move_blueboat level1_sim.launch.py
    ```
@@ -132,39 +133,38 @@ Follow this order exactly.
    
 
 ### Launch ArduPilot
-1. In <b>T2</b> run the launch command
+1. In <b>T2 (ArduPilot Terminal)</b> Launch ArduPilot
    ```
-   sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
-   -l 40.594988,-79.999149,0,0 \
-   --out=udp:127.0.0.1:14550 \
-   --out=udp:127.0.0.1:14551
+   sim_vehicle.py -v Rover -f gazebo-rover --model JSON \
+      --add-param-file=../gz_ws/cmra_boat.params -w \
+      -l 40.594988,-79.999149,0,0 \
+      --out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
    ```
    <details>
-   <summary>What is the sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
-      -l 40.594988,-79.999149,0,0 \
-      --out=udp:127.0.0.1:14550 \
-      --out=udp:127.0.0.1:14551 command?</summary>
+   <summary>What is the sim_vehicle.py command?</summary>
 
-   `sim_vehicle.py` is a script from ArduPilot used to start a Software-In-The-Loop (SITL) vehicle simulation. The flags here specify the vehicle type (`-v Rover`), the simulation environment (`-f gazebo-rover`), and options like using a JSON model, opening a map and console, and setting the starting GPS location with `-l`.
+   `sim_vehicle.py` is a script from ArduPilot used to start a Software-In-The-Loop (SITL) vehicle simulation. The flags here specify the vehicle type (`-v Rover`), the simulation environment (`-f gazebo-rover`), and options like using a JSON model, starting vehicle configuration with `--add-param-file`, and setting the starting GPS location with `-l`.
 
    The `--out=udp:127.0.0.1:14550` and `--out=udp:127.0.0.1:14551` parts send telemetry data over UDP to those ports on your local machine, which allows tools like QGroundControl or other ROS/bridge nodes to connect and interact with the simulated rover in the Gazebo environment.
    </details>
 
 ### Launch QGroundControl
-1. In <b>T3</b> navigate to the application folder
+1. In <b>T3 (QGroundControl Terminal)</b> navigate to the application folder
    ```bash
    cd QGroundControl/
    ```
-2. In <b>T3</b> start QGroundControl
+2. In <b>T3</b> launch QGroundControl
    ```bash
-   ./QGroundControl-x86_64.AppImage
+   ./QGroundControl-x86_64.AppImage /home/cmra/Documents/QGroundControl/Missions/level1.plan
    ```
    <details>
    <summary>What is the /QGroundControl-x86_64.AppImage command?</summary>
 
    `./QGroundControl-x86_64.AppImage` runs the QGroundControl application from the current directory. The `./` tells the terminal to execute the file locally, and an `.AppImage` is a self-contained Linux executable that doesn’t need installation.
 
-   QGroundControl is a ground control station used to monitor and control drones/rovers, so in this setup it connects to the simulated vehicle (via the UDP ports from `sim_vehicle.py`) to display telemetry, maps, and allow you to send commands to the BlueBoat or rover simulation.
+   `/home/cmra/Documents/QGroundControl/Missions/level1.plan` is a path to a QGroundControl plan file. This allows QGroundContol to automatically open it on launch.
+
+   QGroundControl is a ground control station used to monitor and control drones/rovers, so in this setup it connects to the simulated vehicle (via the UDP ports from `sim_vehicle.py`) to display telemetry, maps, and allow you to send commands to the BlueBoat simulation.
 
    </details>
 
@@ -190,6 +190,11 @@ Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow
 2. Click into <b>T3 (QGroundControl)</b>, and press `ctl + c`.
 3. Press up to load the last executed command. Confirm it’s correct and press enter.
 
+## Stoping the simuatlion
+1. 1. Click into <b>T1 (Gazebo Terminal)</b> and press `ctl + c`. This will stop the gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
+2. Do the same for <b>T2 (ArduPilot terminal)</b>
+3. Close the QGroundControl Application.
+
 ## Closing the simulation tech stack.
 1. Close out of the QGroundControl application
 2. Click into <b>T1 (Gazebo terminal)</b>, and press `ctl + c`.
@@ -199,98 +204,3 @@ Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow
    exit
    ```
 5. Do this for <b>T2</b> and if needed <b>T4 (Mission Uploader terminal)</b>
-
-## Gazebo and ArduPilot launch commands
-### Mission 1 Gazebo and Ardupilot commands
-- Gazebo 
-   ```
-   ros2 launch move_blueboat level1_sim.launch.py
-   ```
-- ArduPilot
-   ```bash
-   sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
-   -l 40.594988,-79.999149,0,0 \
-   --out=udp:127.0.0.1:14550 \
-   --out=udp:127.0.0.1:14551
-   ```
-# Missions
-## Mission 1 - Setup, Manual Flight, and Waypoints
-### Setup
-1. Follow the build instructions above to get the tech stack started.
-2. Complete Manual Drive in QGroundControl
-3. Complete Simple Waypoint Mission in QGroundControl
-
-### Manual Drive in QGroundControl
-1. Arm your robot by clicking on the message icon (upper left). This will expand, and you will see an Arm button.
-2. Click the Arm button.
-3. Confirm the Arm command by holding space or sliding the actuator in the center of the screen.
-4. Use the left virtual joystick to drive the boat forward and backward. Use the right virtual joystick to steer.
-5. Drive the boat, monitor the battery, and take note of the experience.
-
-### Simple Waypoint Mission in QGroundControl
-QGroundControl can send a waypoint plan to ArduPilot. ArduPilot uses that plan to navigate the boat to each waypoint.
-1. Click the top left icon in QGroundControl (looks like a Q)
-2. Select Plan Flight
-3. Select Empty Plan
-4. Click the Waypoint button on the left menu bar
-5. Add waypoints by clicking on the map.
-6. When you add waypoints, they will appear on the right menu bar next to the map. If you need to edit or delete waypoints, select them by clicking on them.
-7. Adjust the launch / RTL location by selecting the Mission Start node in the left menu above your waypoints.
-8. Once selected, click and drag the "launch" pin on the map to the desired launch / RTL position.
-9. When ready to execute the plan, click Upload or Upload Required in the top left of the application. 
-10. After the plan is uploaded, click Exit Plan.
-11. Hold space or slide the actuator to start the waypoint plan.
-
-
-## Mission 2 - Waypoint around the buoy
-### Launch Sequence
-1. Launch level 2 Gazebo Simulation in <b>T1 (Gazebo Terminal)</b>
-   ```bash
-   ros2 launch move_blueboat level2_sim.launch.py
-   ```
-   <details>
-   <summary>Why a new launch command?</summary>
-
-   `level2_sim.launch.py` tells Gazebo what world to load. Each world has diffent assets like buoys and docks.
-   </details>
-2. Press play in the simulation
-3. Launch Level 2 ArduPilot in <b>T2 (ArduPilot Terminal)</b>
-   ```bash
-   sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console \
-      -l 40.594988,-79.999149,0,0 \
-      --out=udp:127.0.0.1:14550 \
-      --out=udp:127.0.0.1:14551
-   ```
-   <details>
-   <summary>Look familar?</summary>
-
-   This is the same command as level 1. There is no need to change the location parameters for this level. `-l 40.594988,-79.999149,0,0` defines where our boat spawns into the world. The first two numbers represent longitude and latitude. 
-   </details>
-4. Launch QGC in <b>T3 (QGroundControl Terminal)</b>
-
-### Mission Uploader
-Each mission has a script that takes buoys and docks from the simulated world and adds them as exhclusion zones to your flight plan. You can download the exclusion zones in QGroundControl so that you can see where buoys and docks are in your flight plan map. 
-1. Enter the docker container in <b>T4 (Mission Uploader terminal)</b>
-   ```bash
-   sudo docker exec -it blueboat_sitl /bin/bash
-   ```
-2. Navigate to the gz_ws (gazebo workspace) folder
-   ```bash
-   cd ../gz_ws/
-   ```
-3. Upload Mission
-   ```
-   ros2 run move_blueboat level2_plan
-   ```
-   <details>
-   <sumamry>What is the ros2 run move_blueboat level2_plan command?</summary> 
-   This command runs the level2_plan python file in the ROS 2 environment. The ppyhton file uploads a plan to ArduPilot that map the simulated objects to exclusion zones.
-   </details>
-4. In QGC application (not terminal), create a new empty flight plan.
-5. Click the file button to open up the file menu.
-6. Click the download button at the bottom of the menu.
-7. Confirm your fences downloaded. You should see a rectangle next to your robot. That is the dock. The other exclusion zone on you map represents where a buoy is located.
-8. You can now add our waypoints to the current plan.
-
-### Waypoint path around the buoy and back
-Create a waypoint path plan that has the Blueboat drive around the buoy and back. You may uses as many waypoints as you want. 

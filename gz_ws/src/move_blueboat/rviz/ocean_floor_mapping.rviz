@@ -1,0 +1,126 @@
+Panels:
+  - Class: rviz_common/Displays
+    Help Height: 75
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /Grid1
+        - /Ocean Floor Map1
+        - /BlueBoat Odometry1
+      Splitter Ratio: 0.5
+    Tree Height: 650
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Tool Properties
+    Name: Tool Properties
+  - Class: rviz_common/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+  - Class: rviz_common/Time
+    Name: Time
+    SyncMode: 0
+    SyncSource: Ocean Floor Map
+
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      Plane: XY
+      Plane Cell Count: 100
+      Cell Size: 1
+      Color: 160; 160; 164
+      Reference Frame: odom
+      Alpha: 0.5
+      Value: true
+
+    - Class: rviz_default_plugins/PointCloud2
+      Name: Ocean Floor Map
+      Enabled: true
+      Topic:
+        Value: /ocean_floor/map_cloud
+        Depth: 10
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+      Color Transformer: AxisColor
+      Axis: Z
+      Use rainbow: true
+      Size (m): 0.08
+      Style: Flat Squares
+      Alpha: 1
+      Use Fixed Frame: true
+      Value: true
+
+    - Class: rviz_default_plugins/Odometry
+      Name: BlueBoat Odometry
+      Enabled: true
+      Topic:
+        Value: /model/blueboat/odometry
+        Depth: 10
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+      Keep: 200
+      Value: true
+
+  Enabled: true
+  Global Options:
+    Fixed Frame: odom
+    Background Color: 48; 48; 48
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Interact
+      Hide Inactive Objects: true
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+    - Class: rviz_default_plugins/SetInitialPose
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /initialpose
+    - Class: rviz_default_plugins/SetGoal
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /goal_pose
+    - Class: rviz_default_plugins/PublishPoint
+      Single click: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /clicked_point
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
+
+Views:
+  Current:
+    Class: rviz_default_plugins/Orbit
+    Distance: 28
+    Focal Point:
+      X: 0
+      Y: 0
+      Z: -3
+    Pitch: 1.1
+    Yaw: 0.8
+    Target Frame: odom
+
+Window Geometry:
+  Width: 1600
+  Height: 900
+  X: 100
+  Y: 100

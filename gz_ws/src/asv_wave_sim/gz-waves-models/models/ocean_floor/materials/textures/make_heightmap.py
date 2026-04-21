@@ -1,91 +1,97 @@
 #!/usr/bin/env python3
-from PIL import Image
+import os
 import math
 import random
+from PIL import Image
 
-SIZE = 513
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+OUT_PATH = os.path.join(BASE_DIR, "./ocean_floor_heightmap.png")
+
+SIZE = 257
 SEED = 42
 random.seed(SEED)
 
-def fbm(x, y, octaves=5):
-    total = 0.0
-    amplitude = 1.0
-    frequency = 1.0
-    norm = 0.0
+BASE_LEVEL = 0.18
+NUM_LARGE_BUMPS = 18
+NUM_MEDIUM_BUMPS = 45
+NUM_PITS = 16
 
-    for _ in range(octaves):
-        total += amplitude * (
-            math.sin((x * frequency) * 2.1) * 0.35 +
-            math.cos((y * frequency) * 1.7) * 0.35 +
-            math.sin((x + y) * frequency * 1.3) * 0.20 +
-            math.cos((x - y) * frequency * 2.7) * 0.10
-        )
-        norm += amplitude
-        amplitude *= 0.5
-        frequency *= 2.0
+ENABLE_WAVES = False
 
-    return total / norm
-
-def gaussian_feature(x, y, cx, cy, amp, sigma):
+def gaussian(x, y, cx, cy, amp, sigma):
     dx = x - cx
     dy = y - cy
     return amp * math.exp(-(dx * dx + dy * dy) / (2.0 * sigma * sigma))
 
-img = Image.new("L", (SIZE, SIZE))
-pixels = img.load()
+def clamp01(v):
+    return max(0.0, min(1.0, v))
 
-features = []
+def main():
+    img = Image.new("L", (SIZE, SIZE))
+    pixels = img.load()
 
-# Many small positive bumps
-for _ in range(80):
-    cx = random.uniform(0, 1)
-    cy = random.uniform(0, 1)
-    amp = random.uniform(0.08, 0.22)
-    sigma = random.uniform(0.015, 0.05)
-    features.append((cx, cy, amp, sigma))
+    features = []
 
-# Many small negative ravines / pits
-for _ in range(70):
-    cx = random.uniform(0, 1)
-    cy = random.uniform(0, 1)
-    amp = -random.uniform(0.08, 0.25)
-    sigma = random.uniform(0.015, 0.06)
-    features.append((cx, cy, amp, sigma))
+    for _ in range(NUM_LARGE_BUMPS):
+        cx = random.uniform(0.10, 0.90)
+        cy = random.uniform(0.10, 0.90)
+        amp = random.uniform(0.18, 0.40)
+        sigma = random.uniform(0.05, 0.12)
+        features.append((cx, cy, amp, sigma))
 
-values = []
+    for _ in range(NUM_MEDIUM_BUMPS):
+        cx = random.uniform(0.05, 0.95)
+        cy = random.uniform(0.05, 0.95)
+        amp = random.uniform(0.06, 0.16)
+        sigma = random.uniform(0.02, 0.05)
+        features.append((cx, cy, amp, sigma))
 
-for py in range(SIZE):
-    for px in range(SIZE):
-        x = px / (SIZE - 1)
-        y = py / (SIZE - 1)
+    for _ in range(NUM_PITS):
+        cx = random.uniform(0.10, 0.90)
+        cy = random.uniform(0.10, 0.90)
+        amp = -random.uniform(0.05, 0.14)
+        sigma = random.uniform(0.03, 0.07)
+        features.append((cx, cy, amp, sigma))
 
-        # Flat baseline
-        v = 0.5
+    values = []
+    for py in range(SIZE):
+        for px in range(SIZE):
+            x = px / (SIZE - 1)
+            y = py / (SIZE - 1)
 
-        # Broad distributed roughness
-        v += 0.10 * fbm(x * 6.0, y * 6.0, octaves=5)
+            v = BASE_LEVEL
 
-        # Fine texture everywhere
-        v += 0.03 * math.sin(x * 60.0)
-        v += 0.03 * math.cos(y * 55.0)
-        v += 0.02 * math.sin((x + y) * 75.0)
+            if ENABLE_WAVES:
+                v += 0.03 * math.sin(x * math.pi * 2.0)
+                v += 0.025 * math.cos(y * math.pi * 2.5)
+                v += 0.02 * math.sin((x + y) * math.pi * 1.5)
 
-        # Scattered bumps and pits everywhere
-        for cx, cy, amp, sigma in features:
-            v += gaussian_feature(x, y, cx, cy, amp, sigma)
+            for cx, cy, amp, sigma in features:
+                v += gaussian(x, y, cx, cy, amp, sigma)
 
-        values.append(v)
+            values.append(v)
 
-vmin = min(values)
-vmax = max(values)
+    vmin = min(values)
+    vmax = max(values)
 
-i = 0
-for py in range(SIZE):
-    for px in range(SIZE):
-        v = values[i]
-        i += 1
-        gray = int(255 * (v - vmin) / (vmax - vmin))
-        pixels[px, py] = max(0, min(255, gray))
+    i = 0
+    for py in range(SIZE):
+        for px in range(SIZE):
+            if abs(vmax - vmin) < 1e-12:
+                t = 0.5
+            else:
+                t = (values[i] - vmin) / (vmax - vmin)
+            i += 1
 
-img.save("ocean_floor_heightmap.png")
-print("Wrote ocean_floor_heightmap.png")
+            t = clamp01(t)
+            gray = int(round(255 * t))
+            pixels[px, py] = gray
+
+    os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
+    img.save(OUT_PATH)
+    print(f"Wrote {OUT_PATH}")
+    print(f"Image size: {SIZE} x {SIZE}")
+    print(f"Value range: {vmin:.6f} to {vmax:.6f}")
+
+if __name__ == "__main__":
+    main()

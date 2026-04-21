@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="level1">
+  <world name="level2">
     <plugin filename="gz-sim-physics-system"
             name="gz::sim::systems::Physics">
     </plugin>
@@ -66,6 +66,17 @@
     <include>
       <pose>0 0 0 0 0 0</pose>
       <uri>model://no_waves</uri>
+    </include>
+    
+    <include>
+      <uri>model://ocean_floor</uri>
+      <pose>0 0 -8 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>buoy_1</name>
+      <pose>15 0 0 0 0 0</pose>
     </include>
 
     <!-- <include>
@@ -197,10 +208,11 @@
       <pose>0 0 0 0 0 0</pose>
       <uri>model://blueboat</uri>
     </include>
-    <!-- <include>
+    <include>
       <uri>model://dock</uri>
+      <name>dock_1</name>
       <pose>0 1.8 0 0 0 0</pose>
-    </include>  -->
+    </include> 
 
     
 

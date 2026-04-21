@@ -16,6 +16,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         # Include launch directory
         (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
+        (os.path.join('share', package_name, 'rviz'), glob('rviz/*.rviz')),
         # Include any other directories here
     ],
     install_requires=['setuptools', 'tf2_ros'],
@@ -45,7 +46,8 @@ setup(
             'pid_controller_for_boat_mission = move_blueboat.pid_controller_for_boat_mission:main',
             'mpc_controller_for_boat_mission = move_blueboat.mpc_controller_for_boat_mission:main',
             'dp_beacon_dvl_run_boat_waypoint = move_blueboat.dp_beacon_dvl_run_boat_waypoint:main',
-            'level2_plan = move_blueboat.level2_plan:main',
+            'level1_plan_gen = move_blueboat.level1_plan_gen:main',
+            'bathymetry_mapper = move_blueboat.bathymetry_mapper:main',
         ],
     },
 )

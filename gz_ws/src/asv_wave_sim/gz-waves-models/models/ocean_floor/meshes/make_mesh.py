@@ -1,26 +1,41 @@
 #!/usr/bin/env python3
 import os
+import math
 from PIL import Image
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-HEIGHTMAP_PATH = os.path.join(
-    BASE_DIR, "../materials/textures/ocean_floor_heightmap.png"
-)
+HEIGHTMAP_PATH = os.path.join(BASE_DIR, "../materials/textures/ocean_floor_heightmap.png")
 OUTPUT_OBJ_PATH = os.path.join(BASE_DIR, "ocean_floor.obj")
 
 SIZE_X = 50.0
 SIZE_Y = 50.0
-SIZE_Z = 2.5
-THICKNESS = 1.0
-STEP = 6
+SIZE_Z = 4.0
+STEP = 4
 
-def add_face(faces, a, b, c):
-    faces.append((a, b, c))
+def normalize(v):
+    x, y, z = v
+    mag = math.sqrt(x * x + y * y + z * z)
+    if mag < 1e-12:
+        return (0.0, 0.0, 1.0)
+    return (x / mag, y / mag, z / mag)
+
+def sub(a, b):
+    return (a[0] - b[0], a[1] - b[1], a[2] - b[2])
+
+def cross(a, b):
+    return (
+        a[1] * b[2] - a[2] * b[1],
+        a[2] * b[0] - a[0] * b[2],
+        a[0] * b[1] - a[1] * b[0],
+    )
+
+def add(a, b):
+    return (a[0] + b[0], a[1] + b[1], a[2] + b[2])
 
 def main():
     img = Image.open(HEIGHTMAP_PATH).convert("L")
     width, height = img.size
-    px = img.load()
+    pixels = img.load()
 
     xs = list(range(0, width, STEP))
     ys = list(range(0, height, STEP))
@@ -34,90 +49,47 @@ def main():
 
     vertices = []
     faces = []
+    vid = {}
 
-    # top surface vertices
-    top_ids = {}
     for j, py in enumerate(ys):
-        for i, px_i in enumerate(xs):
-            gray = px[px_i, py]
+        for i, px in enumerate(xs):
+            gray = pixels[px, py]
             z = (gray / 255.0) * SIZE_Z
-            x = (px_i / (width - 1)) * SIZE_X - SIZE_X / 2.0
-            y = (py / (height - 1)) * SIZE_Y - SIZE_Y / 2.0
+            x = (px / (width - 1)) * SIZE_X - (SIZE_X / 2.0)
+            y = (py / (height - 1)) * SIZE_Y - (SIZE_Y / 2.0)
             vertices.append((x, y, z))
-            top_ids[(i, j)] = len(vertices)
+            vid[(i, j)] = len(vertices)
 
-    # bottom surface vertices
-    bottom_z = -THICKNESS
-    bottom_ids = {}
-    for j, py in enumerate(ys):
-        for i, px_i in enumerate(xs):
-            x = (px_i / (width - 1)) * SIZE_X - SIZE_X / 2.0
-            y = (py / (height - 1)) * SIZE_Y - SIZE_Y / 2.0
-            vertices.append((x, y, bottom_z))
-            bottom_ids[(i, j)] = len(vertices)
-
-    # top surface triangles
+    # Top surface only, with upward-facing winding
     for j in range(gh - 1):
         for i in range(gw - 1):
-            v1 = top_ids[(i, j)]
-            v2 = top_ids[(i + 1, j)]
-            v3 = top_ids[(i, j + 1)]
-            v4 = top_ids[(i + 1, j + 1)]
-            add_face(faces, v1, v3, v2)
-            add_face(faces, v2, v3, v4)
+            v1 = vid[(i, j)]
+            v2 = vid[(i + 1, j)]
+            v3 = vid[(i, j + 1)]
+            v4 = vid[(i + 1, j + 1)]
+            faces.append((v1, v2, v3))
+            faces.append((v2, v4, v3))
 
-    # bottom surface triangles (reversed)
-    for j in range(gh - 1):
-        for i in range(gw - 1):
-            v1 = bottom_ids[(i, j)]
-            v2 = bottom_ids[(i + 1, j)]
-            v3 = bottom_ids[(i, j + 1)]
-            v4 = bottom_ids[(i + 1, j + 1)]
-            add_face(faces, v1, v2, v3)
-            add_face(faces, v2, v4, v3)
+    normals = [(0.0, 0.0, 0.0) for _ in vertices]
+    for a, b, c in faces:
+        pa = vertices[a - 1]
+        pb = vertices[b - 1]
+        pc = vertices[c - 1]
+        n = cross(sub(pb, pa), sub(pc, pa))
+        normals[a - 1] = add(normals[a - 1], n)
+        normals[b - 1] = add(normals[b - 1], n)
+        normals[c - 1] = add(normals[c - 1], n)
 
-    # side walls: top edge
-    for i in range(gw - 1):
-        t1 = top_ids[(i, 0)]
-        t2 = top_ids[(i + 1, 0)]
-        b1 = bottom_ids[(i, 0)]
-        b2 = bottom_ids[(i + 1, 0)]
-        add_face(faces, t1, b1, t2)
-        add_face(faces, t2, b1, b2)
-
-    # bottom edge
-    for i in range(gw - 1):
-        t1 = top_ids[(i, gh - 1)]
-        t2 = top_ids[(i + 1, gh - 1)]
-        b1 = bottom_ids[(i, gh - 1)]
-        b2 = bottom_ids[(i + 1, gh - 1)]
-        add_face(faces, t1, t2, b1)
-        add_face(faces, t2, b2, b1)
-
-    # left edge
-    for j in range(gh - 1):
-        t1 = top_ids[(0, j)]
-        t2 = top_ids[(0, j + 1)]
-        b1 = bottom_ids[(0, j)]
-        b2 = bottom_ids[(0, j + 1)]
-        add_face(faces, t1, t2, b1)
-        add_face(faces, t2, b2, b1)
-
-    # right edge
-    for j in range(gh - 1):
-        t1 = top_ids[(gw - 1, j)]
-        t2 = top_ids[(gw - 1, j + 1)]
-        b1 = bottom_ids[(gw - 1, j)]
-        b2 = bottom_ids[(gw - 1, j + 1)]
-        add_face(faces, t1, b1, t2)
-        add_face(faces, t2, b1, b2)
+    normals = [normalize(n) for n in normals]
 
     with open(OUTPUT_OBJ_PATH, "w", encoding="utf-8") as f:
-        f.write("# watertight ocean floor slab mesh\n")
+        f.write("# ocean floor top-surface mesh\n")
         for x, y, z in vertices:
             f.write(f"v {x:.6f} {y:.6f} {z:.6f}\n")
+        for nx, ny, nz in normals:
+            f.write(f"vn {nx:.6f} {ny:.6f} {nz:.6f}\n")
         for a, b, c in faces:
-            f.write(f"f {a} {b} {c}\n")
+            f.write(f"f {a}//{a} {b}//{b} {c}//{c}\n")
 
     print(f"Wrote {OUTPUT_OBJ_PATH}")
     print(f"Vertices: {len(vertices)}")

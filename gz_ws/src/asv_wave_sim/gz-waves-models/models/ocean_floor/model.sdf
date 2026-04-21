@@ -3,16 +3,13 @@
   <model name="ocean_floor">
     <static>true</static>
 
+    <!-- Original floor -->
     <link name="terrain_link">
       <collision name="terrain_collision">
         <geometry>
-          <heightmap>
-            <uri>model://ocean_floor/materials/textures/ocean_floor_heightmap.png</uri>
-            <size>50 50 2.5</size>
-            <pos>0 0 0</pos>
-            <sampling>1</sampling>
-            <use_terrain_paging>false</use_terrain_paging>
-          </heightmap>
+          <mesh>
+            <uri>model://ocean_floor/meshes/ocean_floor.obj</uri>
+          </mesh>
         </geometry>
       </collision>
 
@@ -23,11 +20,27 @@
             <uri>model://ocean_floor/meshes/ocean_floor.obj</uri>
           </mesh>
         </geometry>
-        <material>
-          <ambient>0.45 0.42 0.36 1</ambient>
-          <diffuse>0.55 0.52 0.44 1</diffuse>
-          <specular>0.01 0.01 0.01 1</specular>
-        </material>
+      </visual>
+    </link>
+
+    <!-- World land, lifted above the old floor -->
+    <link name="world_land_link">
+      <pose>0 0 8 0 0 0</pose>
+      <collision name="world_land_collision">
+        <geometry>
+          <mesh>
+            <uri>model://ocean_floor/meshes/world_land.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+
+      <visual name="world_land_visual">
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <mesh>
+            <uri>model://ocean_floor/meshes/world_land.obj</uri>
+          </mesh>
+        </geometry>
       </visual>
     </link>
   </model>

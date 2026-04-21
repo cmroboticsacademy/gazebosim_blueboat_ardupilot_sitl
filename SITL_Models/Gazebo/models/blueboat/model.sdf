@@ -378,7 +378,59 @@
       <parent>imu_link</parent>
       <child>navsat_link</child>
     </joint>
+    <!-- Bathymetry sensor -->
+    <link name="bathymetry_link">
+      <!-- Put it under the hull, near the middle of the boat -->
+      <pose>0.20 0 -0.35 0 0 0</pose>
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
 
+      <sensor name="bathymetry_sensor" type="gpu_lidar">
+        <!-- Rotate so the scan points downward -->
+        <pose degrees="true">0 0 0 0 90 0</pose>
+        <always_on>1</always_on>
+        <update_rate>8.0</update_rate>
+        <topic>bathymetry/scan</topic>
+
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>120</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.523599</min_angle>
+              <max_angle>0.523599</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>1</samples>
+              <resolution>1</resolution>
+              <min_angle>0</min_angle>
+              <max_angle>0</max_angle>
+            </vertical>
+          </scan>
+          <range>
+            <min>0.2</min>
+            <max>25.0</max>
+            <resolution>0.02</resolution>
+          </range>
+        </ray>
+
+        <visualize>true</visualize>
+      </sensor>
+    </link>
+
+    <joint name="bathymetry_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>bathymetry_link</child>
+    </joint>
     <!-- plugins -->
     <plugin name="gz::sim::systems::JointStatePublisher"
       filename="gz-sim-joint-state-publisher-system">
