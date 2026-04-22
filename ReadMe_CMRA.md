@@ -211,7 +211,8 @@ To confirm your tech stack is running, you should see the following:
 3. QGroundControl is connected and shows your robot on the map.
    ![Alt text](./cmra_images/qgc_connect.png)
  
-<b>If this is your first time reading this 
+<b>Stop here if this is your first time seeing this. Go to the [Missions](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Missions.md) document.</b>
+
 ## Resetting the simulation
 You may often need to restart the simulation<. Most of the time, you do not have to rebuild.
 
@@ -227,15 +228,15 @@ Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow
 
 ## Stoping the simuatlion
 1. 1. Click into <b>T1 (Gazebo Terminal)</b> and press `ctl + c`. This will stop the gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
-2. Do the same for <b>T2 (ArduPilot terminal)</b>
+2. Do the same for <b>T2 (ArduPilot Terminal)</b>
 3. Close the QGroundControl Application.
 
 ## Closing the simulation tech stack.
 1. Close out of the QGroundControl application
-2. Click into <b>T1 (Gazebo terminal)</b>, and press `ctl + c`.
-3. Do this for <b>T2 (ArduPilot terminal)</b> and <b>T3 (QGroundControl terminal)</b>.
+2. Click into <b>T1 (Gazebo Terminal)</b>, and press `ctl + c`.
+3. Do this for <b>T2 (ArduPilot Terminal)</b> and <b>T3 (QGroundControl Terminal)</b>.
 4. In <b>T1</b> run the exit command
    ```bash
    exit
    ```
-5. Do this for <b>T2</b> and if needed <b>T4 (Mission Uploader terminal)</b>
+5. Do this for <b>T2</b>.
