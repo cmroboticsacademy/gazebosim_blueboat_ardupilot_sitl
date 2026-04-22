@@ -53,9 +53,9 @@ Perform these steps in <b>T1 (Gazebo Terminal)</b>.
 
    The cd (change directory) command is used in a terminal or command prompt to navigate between folders in a file system. It lets you move into a specific directory, go back to a previous one, or return to your home directory, depending on the path you provide.
    
-   Wherever you navigate to is considered your working directory. A lot of commands in linux intiate scripts. It is easier to launch scripts when your terminal's working directing is the same location as your script you want to launch. 
+   Wherever you navigate to is considered your working directory. Many commands in Linux run scripts. It is easier to launch scripts when your terminal's working directory is the same location as the script you want to launch. 
 
-   In this step we are changing our working directory to the project's docker folder. This is where the docker launch files live.
+   In this step, we are changing our working directory to the project's Docker folder. This is where the Docker launch files live.
    ![Alt text](./cmra_images/cd_command.png)
 
    </details>
@@ -92,7 +92,7 @@ Perform these steps in <b>T1 (Gazebo Terminal)</b>.
    
    `../` means go back one folder in a path.
 
-   For this step we need to change our working directory to `gz_ws/` (Gazebo Workspace). This folder contains the scripts to launch Gazebo. When you launch Docker, it changes your working directiory to the Docker's colcon folder. We need to navigate back one folder where the `gz_ws/` live. This is why we add `../` to the path.
+   For this step, we need to change our working directory to `gz_ws/` (Gazebo Workspace). This folder contains the scripts to launch Gazebo. When you launch Docker, it changes your working directory to Docker's colcon folder. We need to navigate back one folder to where `gz_ws/` lives. This is why we add `../` to the path.
    
    ![Alt text](./cmra_images/gz_folder.png)
 
@@ -126,7 +126,7 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
    You can clear your terminal's log by using the `reset` command. This will delete all previous logs inside of your terminal. It will put you back into the same working directory.
    </details>
    
-   ![Alt text](./cmra_images/launch_ready.png)
+   ![Alt text](./cmra_images/ready_launch.png)
 
 ## Running the simulation
 When running the simulation, you must follow these steps in order. If these steps do not work, see the "Restarting the simulation" section.
@@ -144,9 +144,9 @@ Follow this order exactly.
    <details>
    <summary>What is the ros2 launch move_blueboat level1_sim.launch.py command?</summary>
 
-   `ros2 launch move_blueboat level1_sim.launch.py` is a ROS 2 command used to start a predefined launch configuration for a robot or simulation. The `ros2 launch` part tells ROS 2 to run a launch file, `move_blueboat` is the ROS 2 package name, and `level1_sim.launch.py` is the specific Python-based launch file that defines what nodes, parameters, and processes to start.
+   `ros2 launch move_blueboat level1_sim.launch.py` is a ROS 2 command used to start a predefined launch configuration for a robot or simulation. The `ros2 launch` command tells ROS 2 to run a launch file; `move_blueboat` is the ROS 2 package name, and `level1_sim.launch.py` is the specific Python-based launch file that defines which nodes, parameters, and processes to start.
 
-   In this project, running this command starts the BlueBoat Gazebo simulation for “level 1,” launching components like Gazebo, robot controllers, and any necessary ROS 2 nodes defined in that launch file so the simulation environment is fully set up and ready to run.
+   In this project, running this command starts the BlueBoat Gazebo simulation for “level 1,” launching components like Gazebo, robot controllers, and any necessary ROS 2 nodes defined in that launch file, so the simulation environment is fully set up and ready to run.
 
    (optional) Layout the Gazebo application over top of <b>T1 (Gazebo Terminal)</b>.
 
@@ -168,11 +168,11 @@ Follow this order exactly.
    <details>
    <summary>What is the sim_vehicle.py command?</summary>
 
-   `sim_vehicle.py` is a script from ArduPilot used to start a Software-In-The-Loop (SITL) vehicle simulation. The flags here specify the vehicle type (`-v Rover`), the simulation environment (`-f gazebo-rover`), and options like using a JSON model, starting vehicle configuration with `--add-param-file`, and setting the starting GPS location with `-l`.
+   `sim_vehicle.py` is a script from ArduPilot for starting a Software-In-The-Loop (SITL) vehicle simulation. The flags here specify the vehicle type (`-v Rover`), the simulation environment (`-f gazebo-rover`), and options such as using a JSON model, starting the vehicle configuration with `--add-param-file`, and setting the starting GPS location with `-l`.
 
    The `--out=udp:127.0.0.1:14550` and `--out=udp:127.0.0.1:14551` parts send telemetry data over UDP to those ports on your local machine, which allows tools like QGroundControl or other ROS/bridge nodes to connect and interact with the simulated rover in the Gazebo environment.
 
-   This launch script will open a MavLink Command Console. We will not be using this, so you can minimize it. This console could be used as a control system for the robot, but we will be using QGroundControl instead.
+   This launch script will open a MAVLink Command Console. We will not be using this, so you can minimize it. This console could serve as a control system for the robot, but we will use QGroundControl instead.
    </details>
 
 ![Alt text](./cmra_images/ardu_playing.png)
@@ -191,9 +191,9 @@ Follow this order exactly.
 
    `./QGroundControl-x86_64.AppImage` runs the QGroundControl application from the current directory. The `./` tells the terminal to execute the file locally, and an `.AppImage` is a self-contained Linux executable that doesn’t need installation.
 
-   `/home/cmra/Documents/QGroundControl/Missions/level1.plan` is a path to a QGroundControl plan file. This allows QGroundContol to automatically open it on launch.
+   `/home/cmra/Documents/QGroundControl/Missions/level1.plan` is a path to a QGroundControl plan file. This allows QGroundControl to automatically open it on launch.
 
-   QGroundControl is a ground control station used to monitor and control drones/rovers, so in this setup it connects to the simulated vehicle (via the UDP ports from `sim_vehicle.py`) to display telemetry, maps, and allow you to send commands to the BlueBoat simulation.
+   QGroundControl is a ground control station used to monitor and control drones/rovers. In this setup, it connects to the simulated vehicle (via the UDP ports in `sim_vehicle.py`) to display telemetry and maps and to allow you to send commands to the Gazebo simulation.
 
    (optional) Layout the QGroundControl application to cover the right half of your screen. We will need the most screen space for this application.
 
@@ -225,7 +225,7 @@ Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow
 2. Click into <b>T3 (QGroundControl)</b>, and press `ctl + c`.
 3. Press up to load the last executed command. Confirm it’s correct and press enter.
 
-## Stoping the simuatlion
+## Stopping the simulation
 1. 1. Click into <b>T1 (Gazebo Terminal)</b> and press `ctl + c`. This will stop the gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
 2. Do the same for <b>T2 (ArduPilot Terminal)</b>
 3. Close the QGroundControl Application.
