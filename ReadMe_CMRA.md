@@ -42,8 +42,7 @@ Perform these steps in <b>T1 (Gazebo Terminal)</b>.
    <details>
    <summary>Linux Tip!</summary>
    
-   Use keyboard shortcuts to copy and paste inside of terminals. Press `ctl + shift + c` to copy and `ctl + shift + v` to paste. You can also right click and copy or paste if that is easier for you.
-
+   Use keyboard shortcuts to copy and paste inside terminals. Press `ctl + shift + c` to copy and `ctl + shift + v` to paste.     You can also right-click and copy or paste if that is easier for you.
    </details>
 
    ```bash
@@ -52,7 +51,7 @@ Perform these steps in <b>T1 (Gazebo Terminal)</b>.
    <details>
    <summary>What is the cd command?</summary>
 
-   The cd (change directory) command is used in a terminal or command prompt to navigate between folders in a file system. It lets you move into a specific directory, go back to a previous one, or return to your home directory depending on the path you provide.
+   The cd (change directory) command is used in a terminal or command prompt to navigate between folders in a file system. It lets you move into a specific directory, go back to a previous one, or return to your home directory, depending on the path you provide.
    
    Wherever you navigate to is considered your working directory. A lot of commands in linux intiate scripts. It is easier to launch scripts when your terminal's working directing is the same location as your script you want to launch. 
 
