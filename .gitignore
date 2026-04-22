@@ -1,5 +1,6 @@
 gz_ws/build/.built_by
 gz_ws/build/COLCON_IGNORE
+gz_ws/build/
 gz_ws/build/gz-waves1/arch.c
 gz_ws/build/gz-waves1/cmake_args.last
 gz_ws/build/gz-waves1/cmake_install.cmake
