@@ -13,7 +13,7 @@
         <algorithm>fft</algorithm>
         <tile_size>256</tile_size>
         <cell_count>256</cell_count>
-        <wind_speed>15</wind_speed>
+        <wind_speed>5</wind_speed>
         <wind_angle_deg>135</wind_angle_deg>
         <steepness>2</steepness>
       </wave>
@@ -58,7 +58,7 @@
             <algorithm>fft</algorithm>
             <tile_size>256</tile_size>
             <cell_count>256</cell_count>
-            <wind_speed>15</wind_speed>
+            <wind_speed>5</wind_speed>
             <wind_angle_deg>135</wind_angle_deg>
             <steepness>2</steepness>
           </wave>

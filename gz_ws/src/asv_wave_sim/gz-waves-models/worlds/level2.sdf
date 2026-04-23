@@ -65,25 +65,18 @@
 
     <include>
       <pose>0 0 0 0 0 0</pose>
-      <uri>model://no_waves</uri>
+      <uri>model://heavy_waves</uri>
+    </include>
+    
+    <include>
+      <uri>model://ocean_floor</uri>
+      <pose>0 0 -8 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://buoy_marker</uri>
       <name>buoy_1</name>
-      <pose>15 10 0 0 0 0</pose>
-    </include>
-
-    <include>
-      <uri>model://buoy_marker</uri>
-      <name>buoy_2</name>
-      <pose>-20 5 0 0 0 0</pose>
-    </include>
-
-    <include>
-      <uri>model://buoy_marker</uri>
-      <name>buoy_3</name>
-      <pose>30 -12 0 0 0 0</pose>
+      <pose>15 0 0 0 0 0</pose>
     </include>
 
     <!-- <include>

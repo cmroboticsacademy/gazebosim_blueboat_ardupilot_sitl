@@ -47,6 +47,7 @@ setup(
             'mpc_controller_for_boat_mission = move_blueboat.mpc_controller_for_boat_mission:main',
             'dp_beacon_dvl_run_boat_waypoint = move_blueboat.dp_beacon_dvl_run_boat_waypoint:main',
             'level1_plan_gen = move_blueboat.level1_plan_gen:main',
+            'level3_plan_gen = move_blueboat.level3_plan_gen:main',
             'bathymetry_mapper = move_blueboat.bathymetry_mapper:main',
         ],
     },

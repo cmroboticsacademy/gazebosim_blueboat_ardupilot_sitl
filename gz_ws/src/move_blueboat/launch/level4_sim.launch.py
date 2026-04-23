@@ -1,19 +1,16 @@
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
-import os
 
 def generate_launch_description():
-    pkg_share = get_package_share_directory('move_blueboat')
-    rviz_config = os.path.join(pkg_share, 'rviz', 'ocean_floor_mapping.rviz')
-
     return LaunchDescription([
+        # Launch Gazebo simulation with environment variable
         ExecuteProcess(
             cmd=['env', 'LIBGL_ALWAYS_SOFTWARE=1', 'gz', 'sim', 'level4.sdf'],
             output='screen'
         ),
 
+        # Launch the Gazebo-ROS bridge
         Node(
             package='ros_ign_bridge',
             executable='parameter_bridge',
@@ -22,32 +19,21 @@ def generate_launch_description():
                 '/model/blueboat/joint/motor_stbd_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',
                 '/model/blueboat/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
-                '/bathymetry/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
+                # camera
+                '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                # lidar
+                '/laser_scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
             ],
             output='screen'
         ),
 
-        Node(
-            package='move_blueboat',
-            executable='bathymetry_mapper',
-            name='bathymetry_mapper',
-            output='screen',
-            parameters=[{
-            'scan_topic': '/bathymetry/scan',
-            'odom_topic': '/model/blueboat/odometry',
-            'map_frame': 'odom',
-            'sensor_offset_xyz': [0.20, 0.0, -0.35],
-            'sensor_offset_rpy': [0.0, 1.57079632679, 0.0],
-            'voxel_size': 0.05,
-            'min_range': 0.20,
-            'max_range': 30.0,
-            }]
-        ),
-
-        Node(
-            package='rviz2',
-            executable='rviz2',
-            arguments=['-d', rviz_config],
-            output='screen'
-        ),
+        # Optionally, launch your ROS 2 node if you have a custom node for additional logic
+        # Node(
+        #     package='move_blueboat',
+        #     executable='robot_controller',
+        #     output='screen',
+        #     name='robot_controller'
+        # ),
     ])
+

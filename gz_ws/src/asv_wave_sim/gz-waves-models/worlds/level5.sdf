@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="level2">
+  <world name="level4">
     <plugin filename="gz-sim-physics-system"
             name="gz::sim::systems::Physics">
     </plugin>
@@ -71,24 +71,142 @@
       <uri>model://ocean_floor</uri>
       <pose>0 0 -8 0 0 0</pose>
     </include>
-
     <include>
       <uri>model://buoy_marker</uri>
       <name>buoy_1</name>
-      <pose>15 90 0 0 0 0</pose>
+      <pose>15 10 0 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://buoy_marker</uri>
       <name>buoy_2</name>
-      <pose>12.5 92.5 0 0 0 0</pose>
+      <pose>-20 5 0 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://buoy_marker</uri>
       <name>buoy_3</name>
-      <pose>10 95 0 0 0 0</pose>
+      <pose>30 -12 0 0 0 0</pose>
     </include>
+    <!-- Underwater test cubes -->
+
+    <model name="test_cube_1">
+      <static>true</static>
+      <pose>-8 -6 -3.2 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.5 1.5 1.5</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.5 1.5 1.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.2 1</ambient>
+            <diffuse>0.8 0.2 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="test_cube_2">
+      <static>true</static>
+      <pose>-2 4 -2.4 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>2.0 2.0 2.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.0 2.0 2.0</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.8 0.2 1</ambient>
+            <diffuse>0.2 0.8 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="test_cube_3">
+      <static>true</static>
+      <pose>5 -3 -2.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.0 1.0 3.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.0 1.0 3.0</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.2 0.8 1</ambient>
+            <diffuse>0.2 0.2 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="test_cube_4">
+      <static>true</static>
+      <pose>1 7 -3.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>3.0 1.5 1.5</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>3.0 1.5 1.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.8 0.2 1</ambient>
+            <diffuse>0.9 0.8 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- <include>
+      <uri>model://buoy_marker</uri>
+      <name>buoy_1</name>
+      <pose>15 10 0 0 0 0</pose>
+    </include> -->
+
+    <!-- <include>
+      <uri>model://buoy_marker</uri>
+      <name>buoy_2</name>
+      <pose>-20 5 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>buoy_3</name>
+      <pose>30 -12 0 0 0 0</pose>
+    </include> -->
 
     <!-- ENU axes -->
     <!-- <model name="axes">
@@ -201,11 +319,11 @@
       <pose>0 0 0 0 0 0</pose>
       <uri>model://blueboat</uri>
     </include>
-    <include>
+    <!-- <include>
       <uri>model://dock</uri>
       <name>dock_1</name>
       <pose>0 1.8 0 0 0 0</pose>
-    </include> 
+    </include>  -->
 
     
 

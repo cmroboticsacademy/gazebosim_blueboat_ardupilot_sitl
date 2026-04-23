@@ -1,0 +1,37 @@
+[0.499s] Invoking command in '/home/blueboat_sitl/gz_ws/build/move_blueboat': PYTHONPATH=/home/blueboat_sitl/gz_ws/build/move_blueboat/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/blueboat_sitl/gz_ws/install/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/blueboat_sitl/gz_ws/build/move_blueboat/build --no-deps symlink_data
+[0.669s] running develop
+[0.759s] running egg_info
+[0.759s] writing move_blueboat.egg-info/PKG-INFO
+[0.759s] writing dependency_links to move_blueboat.egg-info/dependency_links.txt
+[0.759s] writing entry points to move_blueboat.egg-info/entry_points.txt
+[0.759s] writing requirements to move_blueboat.egg-info/requires.txt
+[0.759s] writing top-level names to move_blueboat.egg-info/top_level.txt
+[0.761s] reading manifest file 'move_blueboat.egg-info/SOURCES.txt'
+[0.762s] writing manifest file 'move_blueboat.egg-info/SOURCES.txt'
+[0.762s] running build_ext
+[0.763s] Creating /home/blueboat_sitl/gz_ws/install/lib/python3.10/site-packages/move-blueboat.egg-link (link to .)
+[0.763s] Installing bathymetry_mapper script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.763s] Installing dp_beacon_dvl_run_boat_waypoint script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.763s] Installing dp_run script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.763s] Installing gui_joy_controller script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.763s] Installing joy_sim_controller script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing key_controller script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing level1_plan_gen script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing level3_plan_gen script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing mission_planner_blueboat script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing mpc_controller_for_boat_mission script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing pid_controller_for_boat_mission script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing robot_controller script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing run_blueboat_mission script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing run_horizion_mpc script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing run_mission script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing run_mpc script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing thread_dp_run_with_heading script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing thrust_allocator script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing watchdog script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] Installing way_controller_for_boat_mission script to /home/blueboat_sitl/gz_ws/install/lib/move_blueboat
+[0.764s] 
+[0.764s] Installed /home/blueboat_sitl/gz_ws/build/move_blueboat
+[0.764s] running symlink_data
+[0.764s] symbolically linking /home/blueboat_sitl/gz_ws/build/move_blueboat/launch/level5_sim.launch.py -> /home/blueboat_sitl/gz_ws/install/share/move_blueboat/launch
+[0.783s] Invoked command in '/home/blueboat_sitl/gz_ws/build/move_blueboat' returned '0': PYTHONPATH=/home/blueboat_sitl/gz_ws/build/move_blueboat/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/blueboat_sitl/gz_ws/install/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/blueboat_sitl/gz_ws/build/move_blueboat/build --no-deps symlink_data
