@@ -1,24 +1,14 @@
 # Missions
-## Mission 1 - Setup, Manual Flight, and Waypoints
+## Mission 0 - Mission 0: Software Setup and Manual Un-docking
 Learn and practice the steps to start up the simulation. Understand the relationship between the simulator setup and the real-world hardware and software configuration. Verify the vehicle responds by manually driving it away from the dock, then back.
 
 ### Setup
-1. Stop the simulation if it is running.
-2. Launch level 1 simulation in <b>T1 (Simulation Terminal).</b> Press play in the simulation window before moving on.
-```bash
-ros2 launch move_blueboat level1_sim.launch.py
-```
-3. Launch ArduPilot in <b>T2 (ArduPilot Terminal)
-```bash
-sim_vehicle.py -v Rover -f gazebo-rover --model JSON \
---add-param-file=../gz_ws/cmra_boat.params -w \
--l 40.594988,-79.999149,0,0 \
---out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
-```
-4. Launch QGroundControl w/ level 1 plan.
-```
+1. Complete steps in [System Overview -  Setup and Running](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/ReadMe_CMRA.md)
 
-### Manual Drive in QGroundControl
+### QGroundControl Overview
+![Alt text](./cmra_images/qgc.png)
+
+###  Manual Un-docking
 1. Arm your robot by clicking on the message icon (upper left). This will expand, and you will see an Arm button.
 2. Click the Arm button.
 3. Confirm the Arm command by holding space or sliding the actuator in the center of the screen.

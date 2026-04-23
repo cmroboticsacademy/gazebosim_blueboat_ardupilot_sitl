@@ -25,7 +25,7 @@ Docker is a tool that packages software and everything it needs to run (code, li
 
 In this Gazebo + ArduPilot project, Docker provides a complete simulation environment with all dependencies already installed. Instead of manually configuring each tool, the container can be run to immediately access a working setup, ensuring consistency and reducing setup errors.
 
-# How to run this project
+# Setup and Running
 
 ## Workstation preparation
 1. Open 3 terminal windows. Press `win_key`, start typing `terminal`. Open the application when it appears. To open another terminal window, right-click the terminal app icon on the left toolbar. Select `New Window`.
