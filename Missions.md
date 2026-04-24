@@ -6,12 +6,12 @@ Learn and practice the steps to start up the simulation. Understand the relation
 1. Complete steps in [System Overview -  Setup and Running](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/ReadMe_CMRA.md)
 
 ###  Manual Un-docking
-All steps should be performed inside of QGroundControl unless otherwise stated.
+All steps should be performed inside QGroundControl unless otherwise stated.
 <b>Arming in manual mode</b>
 
-1. In Gazebo, right click the blueboat in the Entity Tree. Click Follow. This will make the camera follow the Blueboat while it moves.
+1. In Gazebo, right-click the blueboat in the Entity Tree. Click Follow. This will make the camera follow the Blueboat while it moves.
 ![Alt text](./cmra_images/follow.png)  
-2. In <b>T2 (ArduPilot Terminal)</b>, confirm your robot is ready to be armed. When you see `AP: AHRS: EKF3 active` log, your robot is ready. You should see out similar to this.
+2. In <b>T2 (ArduPilot Terminal)</b>, confirm your robot is ready to be armed. When you see `AP: AHRS: EKF3 active` in the log, your robot is ready. You should see output similar to this.
 ```bash
 AP: EKF3 IMU0 tilt alignment complete
 AP: EKF3 IMU1 tilt alignment complete
@@ -27,15 +27,15 @@ AP: AHRS: EKF3 active
 ```
 2. Set your flight mode to manual by clicking the current flight mode and selecting Manual in the dropdown. (Your robot may already be set to Manual mode).
 ![Alt text](./cmra_images/qgc_manual_mode.png)
-3. Arm your robot by opening the Arm/Console menu, and clicking arm
+3. Arm your robot by opening the Arm/Console menu and clicking arm
 ![Alt text](./cmra_images/qgc_arm.png)
 4. Confirm the Arm command by holding space or sliding the actuator in the center of the screen.
 
 <details>
     <summary>Failed to arm?</summary>
-    Before the robot arms, you goes through a series of checks. If one of the checks fails, the robot fails to arm. In the simulator, it is most likely due to two causes.
+    Before the robot arms, it goes through a series of checks. If one of the checks fails, the robot fails to arm. In the simulator, it is most likely due to two causes.
     1. You did not wait until EKF3 is active. You'll see errors stating you did not set the AHRS mode.
-    2. The computer is running too slow to consistently send sensor data to ArduPilot, and will take a little longer to calibrate its postion and saticfy all of the armming checks.
+    2. The computer is running too slow to consistently send sensor data to ArduPilot, and will take a little longer to calibrate its position and satisfy all of the arming checks.
 
     If this happens to you, wait until your robot status says "Ready to Fly" and is green. Confrim EFK3 is Active, and rearm.
 </details>
@@ -44,11 +44,11 @@ AP: AHRS: EKF3 active
 ![Alt text](./cmra_images/qcg_joy.png)
 6. Drive the boat, monitor the battery, and take note of the experience.
 
-### Mission 1a: Buoy and Back
-Program simple autonomous mission to go around a buoy and return.
+## Mission 1a: Buoy and Back
+Program a simple autonomous mission to go around a buoy and return.
 
 ### Setup
-1. If your mission is still running from mission 0 ignore the next step.
+1. If your mission is still running from mission 0, ignore the next step.
 2. Start/Restart the simulation with the following launch commands. Close QGroundControl
    1. Gazebo (Press play before next step)
    ```
@@ -67,7 +67,7 @@ Program simple autonomous mission to go around a buoy and return.
    ```
 
 ### Creating a waypoint mission
-1. Click QGroundControl menu icon and select "Plan Flight"
+1. Click the QGroundControl menu icon and select "Plan Flight."
 ![Alt text](./cmra_images/qgc_menu.png)
 2. Zoom in on your robot in the map area by scrolling or pressing the + or - buttons.
 3. Click the waypoint button in the left menu bar.
@@ -77,35 +77,35 @@ Program simple autonomous mission to go around a buoy and return.
 5. Place multiple waypoints (as many as you want)
 ![Alt text](./cmra_images/qcg_multi_point.png)
 6. Adjust your Mission Start position.
-   1. Click Mission Start node on the right side menu
+   1. Click the Mission Start node on the right side menu
    ![Alt text](./cmra_images/qcg_mission_node.png)
    2. Click "Launch Position" and set it to 0ft.
    3. Drag the green Launch point in line with your robot.
     ![Alt text](./cmra_images/qcg_mission_pos.png)
-7. Upload your mission to ArduPilot by clicking Upload Requiered
+7. Upload your mission to ArduPilot by clicking Upload Required
     ![Alt text](./cmra_images/qcg_upload.png)
 8. Click "Exit Plan" after upload.
 
 ### Running a waypoint mission.
-1. If your robot is ready to arm, you may be prompted to automatically arm and start mission. When ready, confirm arming by sliding the slider, or holding the space bar.
-   1. If tyou are not automatically prompted, set the flight mode to Auto and arm the robot.
+1. QGroundControl will automatically prompt you to arm and start the mission. You can only do this if there are no fences around your robot.
+   1. Set flight mode to Manual.
+   2. Arm the robot using the menu, and slide the confirmation.
+   3. Once armed, manually drive away from the dock.
+   4. Once you clear the dock, change the flight mode to Auto.
+   5. Confirm Mission start if prompted.
 2. Your robot should now be carrying out the mission.
 <details>
-<summary>Robot enters bouy's exculsion zone.</summary>
-If the robot triggers the exclusion zone by entering it, it will automatically go into hold mode. You can change the mode back to Auto if the robot drifts through the zone. If the robot gets stuck inside of the zone, you need to change the flight mode to Manual, drive the robot out of the zone, and change back to auto.
+<summary>Robot enters buoy's exclusion zone.</summary>
+If the robot enters the exclusion zone, it will automatically go into hold mode. You can switch the mode back to Auto if the robot drifts out of the zone. If the robot gets stuck in the zone, switch the flight mode to Manual, drive it out of the zone, then switch back to auto.
 </detials>
 
 <details>
-<summary>The robot is stuck outside of an exlusion zone.</summary>
-Your robot might not have a valid path to follow becuase it is too close to an exlusion zone. This can happen when you are close to the dock or buoy. Change your flight mode to manual and drive away from the zone. When far enough away, change it back to Auto.
+<summary>The robot is stuck outside of an exclusion zone.</summary>
+Your robot might not have a valid path to follow because it is too close to an exclusion zone. This can happen when you are close to the dock or buoy. Change your flight mode to manual and drive away from the zone. When far enough away, change it back to Auto.
 </details>
 
-<details>
-<summary>How to prevent the robot from drifting when stopped?</summary>
-If you set your flight mode to "Loiter," the robot will uses its motors to stay in the same place. This is useful if there is a heavy current like in this mission.
-</details>
 
-1. After the mission is complete, you can change your flight mode to RTL (Return to Launch). This will return to the launch point directly. You can also use SmartRTL which will come back to the launch point the way it came.
+After the mission is complete, you can change your flight mode to RTL (Return to Launch). This will return directly to the launch point. You can also use SmartRTL, which will come back to the launch point the way it came.
 
 
 
@@ -136,7 +136,12 @@ Proceed to implement a second simple-looking waypoint course independently. Moni
 
 <details>
 <summary>The robot will not arm.</summary>
-Becuase of the waves, it takes a while for EFK3 to become active. Wait for the activation log before arming.
+Because of the waves, it takes a while for EFK3 to become active. Wait for the activation log before arming.
+</details>
+
+<details>
+<summary>How to prevent the robot from drifting when stopped?</summary>
+If you set your flight mode to "Loiter," the robot will use its motors to stay in the same place. This is useful if there is a heavy current, like in this mission.
 </details>
 
 ## Mission 2a: Channel
@@ -171,13 +176,13 @@ Plan a mission sequence around an island. Use exclusion zones to keep the vehicl
 ![Alt text](./cmra_images/qcg_fence_left.png)
 6. Uncheck "Inclusion" for this fence.
 ![Alt text](./cmra_images/qcg_set_exlude.png)
-7. Add another Polygon Fence for the east coast, and uncheck "Inclusion"
+7. Add another Polygon Fence for the east coast, and uncheck "Inclusion."
 ![Alt text](./cmra_images/qcg_big_fence.png)
 
-### Create and Run a waypoint mission.
+### Create and run a waypoint mission.
 1. Click Mission in the Plan Flight View.
 2. Click Waypoint to add waypoints.
-3. Use a single waypoint to navigate to the other side of the lake, and adjust launch position.
+3. Use a single waypoint to navigate to the other side of the lake, and adjust the launch position.
 ![Alt text](./cmra_images/qcg_lake_mission.png)
 4. Upload the mission.
 5. Exit "Plan Flight."
@@ -207,7 +212,7 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
    ```
 
 ### Create GEO Fence
-1. Create a plan with two Poloygon GEO Fences. Postion them so you can drive through the narrow straight between the west coast and island.
+1. Create a plan with two Polygon GEO Fences. Position them so you can drive through the narrow channel between the west coast and the island.
    ![Alt text](./cmra_images/qcg_island.png)
 
 ### Create waypoint program
@@ -218,10 +223,10 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
 
 ### Run the mission
 1. Run the mission and monitor the robot.
-2. When you robot cannot path through the buoys, change the flight mode to Manual and enter the buoy's exclusion zone.
-3. When you enter, the flight mode will automatically switch to hold for saftey. Switch it back to Manual and drive through.
+2. When your robot cannot path through the buoys, change the flight mode to Manual and enter the buoy's exclusion zone.
+3. When you enter, the flight mode will automatically switch to hold for safety. Switch it back to Manual and drive through.
 4. When you exit the zone, change the flight mode back to Auto.
-5. After your mission is complete, try to come back though the channel.
+5. After your mission is complete, try to come back through the channel.
 straight
 
 ## Mission 3: Underwater mapping
@@ -237,9 +242,9 @@ Enable autonomous data collection over a relatively clear lakebed using a lawnmo
    <details>
    <summary>RVIZ</summary>
 
-   RViz (Robot Visualization) is a 3D tool in ROS used to display sensor data and spatial information in real time. It helps you see how your robot or vehicle interprets its environment by visualizing things like transforms (TF), maps, and point clouds. Rather than processing data itself, RViz acts as a debugging and validation tool, letting you confirm that sensors are aligned correctly and that incoming data makes sense in a shared coordinate frame.
+   RViz (Robot Visualization) is a 3D tool in ROS used to display sensor data and spatial information in real time. It helps    you see how your robot or vehicle interprets its environment by visualizing elements such as transforms (TF), maps, and point clouds. Rather than processing data itself, RViz acts as a debugging and validation tool, letting you confirm that sensors are aligned correctly and that incoming data makes sense in a shared coordinate frame.
 
-   When using a bathymetric LiDAR to scan the ocean floor, the sensor outputs depth measurements that can be represented as a 3D point cloud. In RViz, this appears as a PointCloud2, where each point corresponds to a spot on the seabed. As your vehicle moves, these scans can be accumulated into a larger map, giving you a detailed view of underwater terrain. Proper TF alignment and filtering are important to remove noise and ensure the map builds accurately over time.
+   When using a bathymetric LiDAR to scan the ocean floor, the sensor outputs depth measurements that can be represented as a 3D point cloud. In RViz, this appears as a PointCloud2, where each point corresponds to a spot on the seabed. As your vehicle moves, these scans can be accumulated into a larger map, giving you a detailed view of underwater terrain. Proper TF alignment and filtering are important for removing noise and ensuring the map builds accurately over time.
 
    </details>
 
