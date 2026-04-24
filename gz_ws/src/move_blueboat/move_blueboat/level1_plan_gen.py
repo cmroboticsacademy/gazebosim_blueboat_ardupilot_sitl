@@ -25,7 +25,7 @@ class QGCFenceUploader(Node):
         # BUOYS (CIRCLES)
         # =========================
         self.buoys = [
-            {'name': 'B1', 'east': 15.0,  'north': 0.0},
+            {'name': 'B1', 'east': 30.0,  'north': 0.0},
         ]
 
         # =========================

@@ -25,7 +25,7 @@
 
     <!-- World land, lifted above the old floor -->
     <link name="world_land_link">
-      <pose>0 0 8 0 0 0</pose>
+      <pose>0 0 4 0 0 0</pose>
       <collision name="world_land_collision">
         <geometry>
           <mesh>

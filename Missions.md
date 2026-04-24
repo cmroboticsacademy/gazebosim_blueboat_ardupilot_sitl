@@ -223,3 +223,34 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
 4. When you exit the zone, change the flight mode back to Auto.
 5. After your mission is complete, try to come back though the channel.
 straight
+
+## Mission 3: Underwater mapping
+Enable autonomous data collection over a relatively clear lakebed using a lawnmower pattern and side-scan sonar.
+
+## Setup
+1. Stop the simulation (See [Stopping the simulation](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/ReadMe_CMRA.md) section)
+2. Start the simulation with the following launch commands. Close QGroundControl before doing so.
+   1. Gazebo (Press play before next step)
+   ```
+   ros2 launch move_blueboat level5_sim.launch.py
+   ```
+   <details>
+   <summary>RVIZ</summary>
+
+   RViz (Robot Visualization) is a 3D tool in ROS used to display sensor data and spatial information in real time. It helps you see how your robot or vehicle interprets its environment by visualizing things like transforms (TF), maps, and point clouds. Rather than processing data itself, RViz acts as a debugging and validation tool, letting you confirm that sensors are aligned correctly and that incoming data makes sense in a shared coordinate frame.
+
+   When using a bathymetric LiDAR to scan the ocean floor, the sensor outputs depth measurements that can be represented as a 3D point cloud. In RViz, this appears as a PointCloud2, where each point corresponds to a spot on the seabed. As your vehicle moves, these scans can be accumulated into a larger map, giving you a detailed view of underwater terrain. Proper TF alignment and filtering are important to remove noise and ensure the map builds accurately over time.
+
+   </details>
+
+   2. ArduPilot
+   ```
+   sim_vehicle.py -v Rover -f gazebo-rover --model JSON \
+      --add-param-file=../gz_ws/cmra_boat.params -w \
+      -l 40.594988,-79.999149,0,0 \
+      --out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
+   ```
+   3. QGroundControl
+   ```
+   ./QGroundControl-x86_64.AppImage /home/cmra/Documents/QGroundControl/Missions/level4.plan
+   ```

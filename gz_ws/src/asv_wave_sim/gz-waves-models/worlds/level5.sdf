@@ -69,9 +69,9 @@
     </include>
     <include>
       <uri>model://ocean_floor</uri>
-      <pose>0 0 -8 0 0 0</pose>
+      <pose>0 0 -6 0 0 0</pose>
     </include>
-    <include>
+    <!-- <include>
       <uri>model://buoy_marker</uri>
       <name>buoy_1</name>
       <pose>15 10 0 0 0 0</pose>
@@ -87,7 +87,7 @@
       <uri>model://buoy_marker</uri>
       <name>buoy_3</name>
       <pose>30 -12 0 0 0 0</pose>
-    </include>
+    </include> -->
     <!-- Underwater test cubes -->
 
     <model name="test_cube_1">

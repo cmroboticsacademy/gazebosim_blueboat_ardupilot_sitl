@@ -70,13 +70,13 @@
     
     <include>
       <uri>model://ocean_floor</uri>
-      <pose>0 0 -8 0 0 0</pose>
+      <pose>0 0 -6 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://buoy_marker</uri>
       <name>buoy_1</name>
-      <pose>15 0 0 0 0 0</pose>
+      <pose>30 0 0 0 0 0</pose>
     </include>
 
     <!-- <include>
