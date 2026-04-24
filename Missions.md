@@ -41,7 +41,9 @@ AP: AHRS: EKF3 active
 </details>
 
 5. Use the left virtual joystick to drive the boat forward and backward. Use the right virtual joystick to steer.
-![Alt text](./cmra_images/qcg_joy.png)
+
+![Alt text](./cmra_images/qgc_joy.png)
+
 6. Drive the boat, monitor the battery, and take note of the experience.
 
 ## Mission 1a: Buoy and Back
@@ -71,19 +73,19 @@ Program a simple autonomous mission to go around a buoy and return.
 ![Alt text](./cmra_images/qgc_menu.png)
 2. Zoom in on your robot in the map area by scrolling or pressing the + or - buttons.
 3. Click the waypoint button in the left menu bar.
-![Alt text](./cmra_images/qcg_waypoint.png)
+![Alt text](./cmra_images/qgc_waypoint.png)
 4. Click an area on the map to add a waypoint.
-![Alt text](./cmra_images/qcg_first_point.png)
+![Alt text](./cmra_images/qgc_first_point.png)
 5. Place multiple waypoints (as many as you want)
-![Alt text](./cmra_images/qcg_multi_point.png)
+![Alt text](./cmra_images/qgc_multi_point.png)
 6. Adjust your Mission Start position.
    1. Click the Mission Start node on the right side menu
-   ![Alt text](./cmra_images/qcg_mission_node.png)
+   ![Alt text](./cmra_images/qgc_mission_node.png)
    2. Click "Launch Position" and set it to 0ft.
    3. Drag the green Launch point in line with your robot.
-    ![Alt text](./cmra_images/qcg_mission_pos.png)
+    ![Alt text](./cmra_images/qgc_mission_pos.png)
 7. Upload your mission to ArduPilot by clicking Upload Required
-    ![Alt text](./cmra_images/qcg_upload.png)
+    ![Alt text](./cmra_images/qgc_upload.png)
 8. Click "Exit Plan" after upload.
 
 ### Running a waypoint mission.
@@ -170,20 +172,20 @@ Plan a mission sequence around an island. Use exclusion zones to keep the vehicl
 1. Create a plan by going to Plan Flight in QGroundControl.
 2. Zoom your map out so you can see most of the lake.
 3. Click "Fence" on the left menu
-![Alt text](./cmra_images/qcg_fence.png)
+![Alt text](./cmra_images/qgc_fence.png)
 4. Click Polygon Fence
 5. Fence off the west coast of the lake with the fence.
-![Alt text](./cmra_images/qcg_fence_left.png)
+![Alt text](./cmra_images/qgc_fence_left.png)
 6. Uncheck "Inclusion" for this fence.
-![Alt text](./cmra_images/qcg_set_exlude.png)
+![Alt text](./cmra_images/qgc_set_exlude.png)
 7. Add another Polygon Fence for the east coast, and uncheck "Inclusion."
-![Alt text](./cmra_images/qcg_big_fence.png)
+![Alt text](./cmra_images/qgc_big_fence.png)
 
 ### Create and run a waypoint mission.
 1. Click Mission in the Plan Flight View.
 2. Click Waypoint to add waypoints.
 3. Use a single waypoint to navigate to the other side of the lake, and adjust the launch position.
-![Alt text](./cmra_images/qcg_lake_mission.png)
+![Alt text](./cmra_images/qgc_lake_mission.png)
 4. Upload the mission.
 5. Exit "Plan Flight."
 6. Run the waypoint mission.
@@ -213,11 +215,11 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
 
 ### Create GEO Fence
 1. Create a plan with two Polygon GEO Fences. Position them so you can drive through the narrow channel between the west coast and the island.
-   ![Alt text](./cmra_images/qcg_island.png)
+   ![Alt text](./cmra_images/qgc_island.png)
 
 ### Create waypoint program
 1. Create a waypoint mission to navigate through the channel.
-    ![Alt text](./cmra_images/qcg_island_waypoint.png)
+    ![Alt text](./cmra_images/qgc_island_waypoint.png)
 2. Upload it to the robot.
 3. Exit "Plan Flight."
 
