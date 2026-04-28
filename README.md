@@ -1,332 +1,237 @@
-# BlueBoat simulation SITL with GazeboSim and QGC
-
-The following repository offers the BlueBoat simulation SITL with GazeboSim. Users can plan complex missions using QGroundControl by defining waypoints and survey grids.
-
-## BlueBoat follows waypoints
-
-![image](https://github.com/oceansystemslab/blueboat_ardupilot_SITL/assets/30973337/46894659-2f5c-4a65-8e1d-d58383a94fc8)
-
-## BlueBoat performs a survey
-
-![image](https://github.com/oceansystemslab/blueboat_ardupilot_SITL/assets/30973337/85a8fe30-87c4-49d0-acbd-c38d9fff1fb7)
+# Setup and Running
+## Workstation preparation
+1. Open 3 terminal windows. Press `win_key`, start typing `terminal`. Open the application when it appears. To open another terminal window, right-click the terminal app icon on the left toolbar. Select `New Window`.
+2. Recommended: Use the layout below
+   ![Alt text](./cmra_images/TerminalLayout.png)
+    <b>T1</b> Gazebo terminal <br/>
+    <b>T2</b> ArduPilot terminal <br />
+    <b>T3</b> QGroundControl terminal <br />
 
 
-
-## Prerequisites
-
-- Download and Install [QGroundControl](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html) (optional).
-- Install [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) to support Docker to access GPU (required).
-- Repository has been tested on: Ubuntu 22.04, Ubuntu 24.04, ArchLinux (Kernel 6.8).
-- Run these commands, so the system will use the NVIDIA GPU for rendering graphics, which is typically desired for more graphics-intensive tasks.
-
-```bash
-sudo apt install nvidia-prime
-sudo prime-select nvidia
-sudo reboot now
-```
+## Starting the Docker container
+Perform these steps in <b>T1 (Gazebo Terminal)</b>.
+1. In <b>T1</b> navigate to the project's Docker folder. <br />
+   <details>
+   <summary>Linux Tip!</summary>
    
+   Use keyboard shortcuts to copy and paste inside terminals. Press `ctl + shift + c` to copy and `ctl + shift + v` to paste.     You can also right-click and copy or paste if that is easier for you.
+   </details>
 
-## Build
+   ```bash
+    cd cmra_sim/gazebosim_blueboat_ardupilot_sitl/blueboat_sitl/docker/
+    ```
+   <details>
+   <summary>What is the cd command?</summary>
 
-```bash
-git clone https://github.com/markusbuchholz/gazebosim_blueboat_ardupilot_sitl.git
+   The cd (change directory) command is used in a terminal or command prompt to navigate between folders in a file system. It lets you move into a specific directory, go back to a previous one, or return to your home directory, depending on the path you provide.
+   
+   Wherever you navigate to is considered your working directory. Many commands in Linux run scripts. It is easier to launch scripts when your terminal's working directory is the same location as the script you want to launch. 
 
-cd /gazebosim_blueboat_ardupilot_sitl/blueboat_sitl/docker
+   In this step, we are changing our working directory to the project's Docker folder. This is where the Docker launch files live.
+   ![Alt text](./cmra_images/cd_command.png)
 
-sudo ./build.sh
+   </details>
+2. In <b>T1</b> start the docker container by executing the run script. <b>This command will prompt you for a password. Ask the instructor for the password to continue.</b>
+    ```bash
+    sudo ./run.sh
+    ```
+   <details>
+   <summary>What is the sudo ./run command?</summary>
+   
+   `sudo ./run.sh` means “run the `run.sh` shell script as the superuser. `sudo` gives the command elevated privileges, which this repo needs because `run.sh` launches Docker with privileged options, host networking, GPU access, device mounts, and X11 display forwarding for Gazebo, all of which often require admin-level access on Linux.
 
-```
+   A `.sh` file is a shell script: a text file full of terminal commands. When you run `./run.sh`, the `./` tells the shell to execute the script from the current folder, and this particular script is set up to run with Bash.
 
-## Run
+   In this project specifically, `run.sh` prepares X11 authentication, sets local paths for `gz_ws` and `SITL_Models`, and then starts a Docker container named `blueboat_sitl` with mounted volumes, host networking, NVIDIA GPU support, and the image `blueboat_sitl:latest`.
 
-Note:
+    You should see the following output:
+    ```
+    cmra@cmra-LOQ-15IRX9:~/cmra_sim/gazebosim_blueboat_ardupilot_sitl/blueboat_sitl/docker$ sudo ./run.sh
+    [sudo] password for cmra: 
+    xauth:  file /tmp/.docker.xauth does not exist
+    blueboat_sitl@cmra-LOQ-15IRX9:~/colcon_ws$
+    ```
+   </details>
 
-Adjust these lines in ```run.sh```
 
-```bash
-local_gz_ws="/home/markus/blueboat_ardupilot_SITL/gz_ws"
-local_SITL_Models="/home/markus/blueboat_ardupilot_SITL/SITL_Models"
-```
+### Prepare Gazebo terminal
+1. In <b>T1 (Gazebo Terminal)</b> navigate to the `gz_ws` folder
+   ```bash
+   cd ../gz_ws/
+   ```
+   <details>
+   <summary>What does ../ mean?</summary>
+   
+   `../` means go back one folder in a path.
+
+   For this step, we need to change our working directory to `gz_ws/` (Gazebo Workspace). This folder contains the scripts to launch Gazebo. When you launch Docker, it changes your working directory to Docker's colcon folder. We need to navigate back one folder to where `gz_ws/` lives. This is why we add `../` to the path.
+   
+   ![Alt text](./cmra_images/gz_folder.png)
+
+   </details>
+
+### Prepare ArduPilot terminal
+In this section, you will enter the Docker container in <b>T2 (ArduPilot Terminal)</b>
+
+1. In <b>T2</b> enter the docker container.
+   ```bash
+   sudo docker exec -it blueboat_sitl /bin/bash
+   ```
+   <details>
+   <summary>What is the sudo docker exec -it blueboat_sitl /bin/bash command?</summary>
+
+   `sudo docker exec -it blueboat_sitl /bin/bash` runs a command inside an already running Docker container with elevated privileges. The `sudo` ensures you have permission to interact with Docker, while `docker exec` tells Docker to execute the `blueboat_sitl` container environment.
+
+   The `-it` flags make the session interactive (so you can type commands), and `/bin/bash` starts a Bash shell inside the container. In this repo’s context, this lets you “enter” the running `blueboat_sitl` simulation container to inspect files, run commands, or debug the Gazebo/ArduPilot SITL environment from the inside.
+
+   ![Alt text](./cmra_images/connect_docker.png)
+
+   </details>
+
+2. In <b>T2</b> navigate to the ArduPilot folder
+   ```bash
+   cd ../ardupilot
+   ```
+   <details>
+   <summary>Linux Tip!</summary>
+
+   You can clear your terminal's log by using the `reset` command. This will delete all previous logs inside of your terminal. It will put you back into the same working directory.
+   </details>
+   
+   ![Alt text](./cmra_images/ready_launch.png)
+
+## Running the simulation
+When running the simulation, you must follow these steps in order. If these steps do not work, see the "Restarting the simulation" section.
+
+Follow this order exactly.
+1. Launch the Gazebo simulation
+2. Start the simulation inside Gazebo
+3. Launch ArduPilot
+
+### Launch and run Gazebo Simulation
+1. In <b>T1 (Gazebo Terminal)</b> Launch Gazebo
+   ```bash
+   ros2 launch move_blueboat mission0_sim.launch.py
+   ```
+   <details>
+   <summary>What is the ros2 launch move_blueboat mission0_sim.launch.py command?</summary>
+
+   `ros2 launch move_blueboat mission0_sim.launch.py` is a ROS 2 command used to start a predefined launch configuration for a robot or simulation. The `ros2 launch` command tells ROS 2 to run a launch file; `move_blueboat` is the ROS 2 package name, and `mission0_sim.launch.py` is the specific Python-based launch file that defines which nodes, parameters, and processes to start.
+
+   In this project, running this command starts the BlueBoat Gazebo simulation for “mission0,” launching components like Gazebo, robot controllers, and any necessary ROS 2 nodes defined in that launch file, so the simulation environment is fully set up and ready to run.
+
+   (optional) Layout the Gazebo application over top of <b>T1 (Gazebo Terminal)</b>.
+
+   ![Alt text](./cmra_images/gazebo_layout.png)
+   </details>
+2. This will open the simulation window. Allow it to open and load.
+3. <b>IMPORTANT</b> - Press play and confirm simulation is running before moving on
+   
+![Alt text](./cmra_images/sim_playing.png)
+
+### Launch ArduPilot
+1. In <b>T2 (ArduPilot Terminal)</b> Launch ArduPilot
+   ```bash
+   sim_vehicle.py -v Rover -f gazebo-rover --model JSON \
+      --add-param-file=../gz_ws/cmra_boat.params -w \
+      -l 40.595009,-79.99974,0,0 \
+      --out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
+   ```
+   <details>
+   <summary>What is the sim_vehicle.py command?</summary>
+
+   `sim_vehicle.py` is a script from ArduPilot for starting a Software-In-The-Loop (SITL) vehicle simulation. The flags here specify the vehicle type (`-v Rover`), the simulation environment (`-f gazebo-rover`), and options such as using a JSON model, starting the vehicle configuration with `--add-param-file`, and setting the starting GPS location with `-l`.
+
+   The `--out=udp:127.0.0.1:14550` and `--out=udp:127.0.0.1:14551` parts send telemetry data over UDP to those ports on your local machine, which allows tools like QGroundControl or other ROS/bridge nodes to connect and interact with the simulated rover in the Gazebo environment.
+
+   This launch script will open a MAVLink Command Console. We will not be using this, so you can minimize it. This console could serve as a control system for the robot, but we will use QGroundControl instead.
+   </details>
+
+![Alt text](./cmra_images/ardu_playing.png)
+
+### Launch QGroundControl
+1. In <b>T3 (QGroundControl Terminal)</b> navigate to the application folder
+   ```bash
+   cd QGroundControl/
+   ```
+2. In <b>T3</b> launch QGroundControl
+   ```bash
+   ./QGroundControl-x86_64.AppImage /home/cmra/Documents/QGroundControl/Missions/mission0.plan
+   ```
+   <details>
+   <summary>What is the /QGroundControl-x86_64.AppImage command?</summary>
+
+   `./QGroundControl-x86_64.AppImage` runs the QGroundControl application from the current directory. The `./` tells the terminal to execute the file locally, and an `.AppImage` is a self-contained Linux executable that doesn’t need installation.
+
+   `/home/cmra/Documents/QGroundControl/Missions/level1.plan` is a path to a QGroundControl plan file. This allows QGroundControl to automatically open it on launch.
+
+   QGroundControl is a ground control station used to monitor and control drones/rovers. In this setup, it connects to the simulated vehicle (via the UDP ports in `sim_vehicle.py`) to display telemetry and maps and to allow you to send commands to the Gazebo simulation.
+
+   (optional) Layout the QGroundControl application to cover the right half of your screen. We will need the most screen space for this application.
+
+   ![Alt text](./cmra_images/qgc_connect.png)
+
+   </details>
+
+### Configuring RC in QGroundControl
+1. Launch QGroundControl if you have not already.
+2. Click the QGtroundControl menu button <br /> ![Alt text](./cmra_images/qgc_menu.png)
+3. Click <b>Vehicle Configuration</b>
+4. Click <b>Joystick</b>
+5. Click <b>Buttons</b>
+6. Assign the buttons to the following actions. <br /> ![Alt text](./cmra_images/qgc_joy_buttons.png)
+   1. R1 - Arms boat
+   2. R2 - Disarms boat
+   3. X - Changes boat mode to hold
+   4. Square - Changes boat mode to manual
+   5. Circle - Changes boat mode to auto
+   6. Triangle - Changes boat more to RTL
+7. Click <b>Advanced</b>
+8. Modify the following
+    1.  Center stick is zero throttle
+    2.  Allow negative Thrust is true (checked)
+    3.  Enable further advanced settings is true (checked)
+    4.  Deadbands is true (checked)
+9.  Click <b>Calibration</b>
+10. Calibrate your RC
+11. Press Exit to return to map.
 
 
-```bash
-sudo ./run.sh
+# Operating and maintaining
 
-colcon build
-
-source install/setup.bash
-
-cd ../gz_ws
-
-colcon build --symlink-install --merge-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DCMAKE_CXX_STANDARD=17
-
-source install/setup.bash
-
-source gazebo_exports.sh
+## Confirming your tech stack is running.
+To confirm your tech stack is running, you should see the following:
+1. Gazebo sim is running
+2. ArduPilot messages are streaming in <b>T2 (ArduPilot terminal)</b>
+3. QGroundControl is connected and shows your robot on the map.
+   ![Alt text](./cmra_images/qgc_connect.png)
  
-```
-## Start QGC (outside Docker)
-
-```bash
-./QGroundControl.AppImage
-```
-
-## Run GazeboSim inside Docker
-
-```bash
-sudo docker exec -it blueboat_sitl /bin/bash
-
-ros2 launch move_blueboat launch_robot_simulation.launch.py
-```
-
-## Run SITL
-
-
-Notes:
-
-- IMPORTANT: Run GazbenSim first as it holds the ArduPilot plugin, which you can connect with the ArduPilot SITL (Rover) simulator!
-  
-- The flag ```-l``` is the localization (lat,lon,alt,heading). Check your favorite location with Google Maps.
-- ```sim_vehicle.py --help ``` -prints all available commands and flags.
-- in ```run.sh``` adjust these two lines for your host specific:
-
-```bash
-local_gz_ws="/home/markus/blueboat_ardupilot_SITL/gz_ws"
-local_SITL_Models="/home/markus/blueboat_ardupilot_SITL/SITL_Models"
-```
-  
-```bash
-
-sudo docker exec -it blueboat_sitl /bin/bash
-
-cd ../ardupilot
-
-sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console -l 55.99541530863445,-3.3010225004910683,0,0
-
-# if you need to recompile 
-Tools/environment_install/install-prereqs-ubuntu.sh -y
-
-# after recompiling 
-. ~/.profile
-```
-
-## Path Planner Interface 
-
-The Mavlink protocol offers simple commands to the vehicle to navigate to waypoints so that the vehicle can perform its mission. The following can be considered an interface to the vehicle (simulator). It accepts waypoints from the path planner as arguments from the terminal and sends them to ArduRover for execution.
-
-```bash
-# Launch Gazebo and ArduRover before executing the mission.
-
-cd extras_boat
-python3 args_mission_planner_gps.py --positions "0,0;5,5;0,0;10,-10;-5,5;0,0;30,30;0,0"
-
-```
-You can launch the program with "hard-coded" waypoints.
-
-```bash
-cd extras_boat
-python3 mission_planner_gps.py
-
-```
-
-Run the following program to feed ArduRover with waypoints one by one. Once the program activates, it will execute a constant flow of waypoints from the terminal.
-
-```bash
-cd extras_boat
-python3 loop_mission_planner_gps.py
-
-```
-
----
-
-## Start BlueBoat simulation with ArduPilot and simple ROS 2 interface
-
-ROS 2 interface provides two common topics (ROS 2 is a function wrapper for Mavlink protocol):
-
-```bash
-/bluerov2/odometry
-/bluerov2/cmd_vel
-/bluerov2/servo_outputs
-/blueboat/send_port_motor_0_100_thrust
-/blueboat/send_stbd_motor_0_100_thrust
-```
-
-All steps as follows:
-
-```bash
-#Termminal 1
-ros2 launch move_blueboat launch_robot_simulation.launch.py
-
-#Termminal 2
-sim_vehicle.py -v Rover -f gazebo-rover --model JSON --map --console -l 55.99541530863445,-3.3010225004910683,0,0
-
-#Termminal 3
-cd /home/gz_ws/src/extras_interface
-python3 ros2_blueboat_interface.py
-
-```
-Run the motors individually.
-
-```bash
-ros2 topic pub /blueboat/send_port_motor_0_100_thrust std_msgs/msg/Float32 "{data: 25.0}"
-ros2 topic pub /blueboat/send_stbd_motor_0_100_thrust std_msgs/msg/Float32 "{data: 30.0}"
-``
-
----
-
-## Guided mode with Dynamic Position
-
-Following the program accepts the X and Y coordinates of the desired waypoint through terminal input. The vehicle navigates to position and maintains its ```dynamic position```, ensuring stability between waypoints despite external disturbances.
-
-```bash
-cd extras_boat
-python3 loop_mission_planner_gps_dynamic_position.py
-
-```
-The following program accepts the constant flow of waypoints from the terminal and performs the ```dynamic position``` in the last.
-
-```bash
-cd extras_boat
-python3 mission_planner_gps_dynamic_position.py
-
-```
-
-## ROS 2 mission controller with Dynamic Position
-
-The path planner can execute the mission by feeding the mission controller with waypoints. Each waypoint will be executed, and the boat will stay at the last waypoint in a dynamic position, waiting for the next command from the controller.
-
-```bash
-# Start Gazebo
-ros2 launch move_blueboat launch_robot_simulation.launch.py
-
-# Start Controller
-ros2 run move_blueboat dp_beacon_dvl_run_boat_waypoint
-
-# Publish waypoints
-ros2 topic pub -1 /waypoints std_msgs/Float64MultiArray "{data: [5.0, 5.0]}" -1
-
-```
-
-
-## Control BlueBoat using joystick
-
-Launching the interface allows control of BlueBoat using a joystick.
-
-```bash
-cd /home/gz_ws/src/extras_interface
-python3 ros2_blueboat_interface.py
-```
-The joystick left/right handler is mapped to topics,
-
-```bash
-/blueboat/send_port_motor_0_100_thrust
-/blueboat/send_stbd_motor_0_100_thrust
-```
-Launching the interface enables control of BlueBoat using a differential drive.<br>
-The RIGHT axis of the joystick is responsible for moving forward and backward, while the other LEFT axis of the joystick controls movement to the left/right, 
-
-```bash
-cd /home/gz_ws/src/extras_interface
-python3 ros2_blueboat_interface_diff.py
-```
-
-## ROS 2 topics
-
-```bash
-# BlueBoat
-/model/blueboat/joint/motor_port_joint/cmd_thrust
-/model/blueboat/joint/motor_stbd_joint/cmd_thrust
-/model/blueboat/navsat
-/model/blueboat/odometry
-```
-
-## Control BlueBoat directly using [pymavlink](https://mavlink.io/en/mavgen_python/)
-Note:
-
-- Find useful examples in folder ```èxtras_boat```.
- 
-```bash
-sudo pip3 install pymavlink
-```
-### Run scripts
-```bash
-cd extras_boat
-
-python3 run_boat.py
-```
-
-## PlotJuggler
-
-```bash
-ros2 run plotjuggler plotjuggler
-```
-![image](https://github.com/oceansystemslab/blueboat_ardupilot_SITL/assets/30973337/776bb3e9-4848-4f54-bc26-55da6d475fa1)
-
-
-
-## Waves Control
-
-Type ```Waves Control```in the GazeboSim menu (3 dots) to access the control panel of ocean disturbances.
-
-![image](https://github.com/oceansystemslab/blueboat_ardupilot_SITL/assets/30973337/674ac7da-55fd-46bc-887a-36e1ba55016e)
-
-## ASV Mission Planner
-
-The mission planner provides the opportunity to define the start, goal, obstacles, and waypoints for the ASV to follow. Users can plan missions using the ```RRT*``` or ```A*``` algorithm. The ```Simple Path``` constructs the path based on the start, goal, and waypoints. After the path planner finds the path, the user can send the path to run ROS 2 program, which reads the path and moves the vehicle (default in ```Gazebo```).
-
-```bash
-#run Gazebo
-
-ros2 launch move_blueboat launch_robot_simulation.launch.py
-
-#start path planner GUI
-
-cd gz_ws/src/move_blueboat/move_blueboat
-
-python3 coralguide_asv_mission_planner.py
-```
-
-![image](https://github.com/oceansystemslab/blueboat_ardupilot_SITL/assets/30973337/96d934f4-e89d-41ea-9397-906ed8635f5b)
-
-
-## MAVProxy Cheatsheet
-
-For example:
-```bash
-arm throttle
-mode
-mode GUIDED
-disarm
-
-```
-
-- [cheatsheet](https://ardupilot.org/mavproxy/docs/getting_started/cheatsheet.html)
-
-## References
-
-- [ROS-Gazebo Bridge](https://github.com/gazebosim/ros_gz/tree/ros2/ros_gz_bridge)
-- [Ardupilot_gazebo](https://github.com/ArduPilot/ardupilot_gazebo)
-- [Gazebo demos](https://github.com/gazebosim/ros_gz/tree/ros2/ros_gz_sim_demos)
-- [BlueBoat operational manual](https://bluerobotics.com/learn/blueboat-operators-guide/)
-- [QGroundControl User Guide](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/)
-- [BlueBoat SITL](https://github.com/ArduPilot/SITL_Models/blob/master/Gazebo/docs/BlueBoat.md)
-- [ArduPilot and Gazebo](https://ardupilot.org/dev/docs/sitl-with-gazebo.html)
-- [SITL](https://www.ardusub.com/developers/sitl.html)
-- [Wave Sim](https://github.com/srmainwaring/asv_wave_sim)
-- [icra2023_ros2_gz_tutorial](https://github.com/osrf/icra2023_ros2_gz_tutorial?tab=readme-ov-file#overview)
-- [Gazebo Ocean Simulation](https://docs.google.com/presentation/d/1JXwWMPPVT7y03Vr6cWtrwAwyvdysmg3NW9ZmI276dMY/edit#slide=id.p)
-- [Multi-LRAUV Simulation](https://docs.google.com/presentation/d/1RIuvOOTdQvoAKKRzGnNZW8Ikp_VGVaUOyAZc-BANXdo/edit#slide=id.g71c89e7412_2_52)
-- [rover-sitl](https://ardupilot.org/dev/docs/rover-sitlmavproxy-tutorial.html)
-- [cruise-throttle-and-cruise-speed](https://ardupilot.org/rover/docs/rover-tuning-throttle-and-speed.html#cruise-throttle-and-cruise-speed) - refer to the doc. for instructions on how to set global velocity and acc.
-- [Rover: L1 navigation overview](https://ardupilot.org/dev/docs/rover-L1.html)
-- [Extended Kalman Filter Navigation Overview and Tuning](https://ardupilot.org/dev/docs/extended-kalman-filter.html)
-- [Rover Control Modes](https://ardupilot.org/rover/docs/rover-control-modes.html)
-- [Dynamic position mode](https://ardupilot.org/rover/docs/loiter-mode.html)
-- [flight-modes](https://ardupilot.org/copter/docs/flight-modes.html)
-- [common-non-gps-navigation](https://ardupilot.org/copter/docs/common-non-gps-navigation-landing-page.html)
-- [Guided Mode](https://ardupilot.org/copter/docs/ac2_guidedmode.html)
-- [ArduPilot-ROVER](https://ardupilot.org/rover/index.html)
-- [GPS / Non-GPS Transitions](https://ardupilot.org/copter/docs/common-non-gps-to-gps.html)
-- [EKF Failsafe](https://ardupilot.org/copter/docs/ekf-inav-failsafe.html)
-- [tuning-navigation](https://ardupilot.org/rover/docs/rover-tuning-navigation.html)
-  
+<b>Stop here if this is your first time seeing this. Go to the [Missions](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Missions.md) document.</b>
+
+## Resetting the simulation
+You may often need to restart the simulation<. Most of the time, you do not have to rebuild.
+
+1. Click into <b>T1 (Gazebo Terminal)</b> and press `ctl + c`. This will stop the gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
+2. Do the same for <b>T2 (ArduPilot terminal)</b>
+3. After both terminals are stopped, re-run the launch commands. Click into <b>T1</b>. Use the up arrow on your keyboard to load the last executed command. Check that it is the correct launch command, then press Enter.
+4. Do the same for <b>T2</b>
+
+Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow these steps if needed:
+1. Close the QGroundControl Application
+2. Click into <b>T3 (QGroundControl)</b>, and press `ctl + c`.
+3. Press up to load the last executed command. Confirm it’s correct and press enter.
+
+## Stopping the simulation
+1. 1. Click into <b>T1 (Gazebo Terminal)</b> and press `ctl + c`. This will stop the gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
+2. Do the same for <b>T2 (ArduPilot Terminal)</b>
+3. Close the QGroundControl Application.
+
+## Closing the simulation tech stack.
+1. Close out of the QGroundControl application
+2. Click into <b>T1 (Gazebo Terminal)</b>, and press `ctl + c`.
+3. Do this for <b>T2 (ArduPilot Terminal)</b> and <b>T3 (QGroundControl Terminal)</b>.
+4. In <b>T1</b> run the exit command
+   ```bash
+   exit
+   ```
+5. Do this for <b>T2</b>.

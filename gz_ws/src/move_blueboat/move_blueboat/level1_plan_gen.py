@@ -12,8 +12,8 @@ class QGCFenceUploader(Node):
         super().__init__('qgc_mixed_geofence')
 
         self.declare_parameter('vehicle_connection', 'udpin:0.0.0.0:14551')
-        self.declare_parameter('origin_lat_deg', 40.594988)
-        self.declare_parameter('origin_lon_deg', -79.999149)
+        self.declare_parameter('origin_lat_deg', 40.595009)
+        self.declare_parameter('origin_lon_deg', -79.99974)
         self.declare_parameter('buoy_radius_m', 5.0)
 
         self.vehicle_connection = str(self.get_parameter('vehicle_connection').value)
@@ -25,7 +25,7 @@ class QGCFenceUploader(Node):
         # BUOYS (CIRCLES)
         # =========================
         self.buoys = [
-            {'name': 'B1', 'east': 30.0,  'north': 0.0},
+            {'name': 'B1', 'east': 115.0,  'north': 25.0},
         ]
 
         # =========================
@@ -34,11 +34,11 @@ class QGCFenceUploader(Node):
         self.rectangles = [
             {
                 'name': 'dock_1',
-                'east': 0.0,
+                'east': 1.2,
                 'north': 1.8,
                 'length': 6.0,
                 'width': 2.0,
-                'yaw': 0.0
+                'yaw': -1.5708,
             }
         ]
 

@@ -1,3 +1,6 @@
+### Notes
+colcon build --symlink-install --merge-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DCMAKE_CXX_STANDARD=17
+Heightmaps run source ~/terrain-venv/bin/activate
 # Missions
 ## Mission 0 - Mission 0: Software Setup and Manual Un-docking
 Learn and practice the steps to start up the simulation. Understand the relationship between the simulator setup and the real-world hardware and software configuration. Verify the vehicle responds by manually driving it away from the dock, then back.
@@ -25,24 +28,27 @@ AP: EKF3 IMU0 is using GPS
 AP: EKF3 IMU1 is using GPS
 AP: AHRS: EKF3 active
 ```
+
 2. Set your flight mode to manual by clicking the current flight mode and selecting Manual in the dropdown. (Your robot may already be set to Manual mode).
 ![Alt text](./cmra_images/qgc_manual_mode.png)
 3. Arm your robot by opening the Arm/Console menu and clicking arm
 ![Alt text](./cmra_images/qgc_arm.png)
 4. Confirm the Arm command by holding space or sliding the actuator in the center of the screen.
+    <details>
 
-<details>
     <summary>Failed to arm?</summary>
+
     Before the robot arms, it goes through a series of checks. If one of the checks fails, the robot fails to arm. In the simulator, it is most likely due to two causes.
     1. You did not wait until EKF3 is active. You'll see errors stating you did not set the AHRS mode.
     2. The computer is running too slow to consistently send sensor data to ArduPilot, and will take a little longer to calibrate its position and satisfy all of the arming checks.
-
+        
     If this happens to you, wait until your robot status says "Ready to Fly" and is green. Confrim EFK3 is Active, and rearm.
-</details>
+
+    </details>
 
 5. Use the left virtual joystick to drive the boat forward and backward. Use the right virtual joystick to steer.
 
-![Alt text](./cmra_images/qgc_joy.png)
+`![Alt text](./cmra_images/qgc_joy.png)
 
 6. Drive the boat, monitor the battery, and take note of the experience.
 
@@ -60,7 +66,7 @@ Program a simple autonomous mission to go around a buoy and return.
    ```
    sim_vehicle.py -v Rover -f gazebo-rover --model JSON \
       --add-param-file=../gz_ws/cmra_boat.params -w \
-      -l 40.594988,-79.999149,0,0 \
+      -l 40.595009,-79.99974,0,0 \
       --out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
    ```
    3. QGroundControl
@@ -70,23 +76,23 @@ Program a simple autonomous mission to go around a buoy and return.
 
 ### Creating a waypoint mission
 1. Click the QGroundControl menu icon and select "Plan Flight."
-![Alt text](./cmra_images/qgc_menu.png)
+   ![Alt text](./cmra_images/qgc_menu.png)
 2. Zoom in on your robot in the map area by scrolling or pressing the + or - buttons.
 3. Click the waypoint button in the left menu bar.
-![Alt text](./cmra_images/qgc_waypoint.png)
+   ![Alt text](./cmra_images/qgc_waypoint.png)
 4. Click an area on the map to add a waypoint.
-![Alt text](./cmra_images/qgc_first_point.png)
+    ![Alt text](./cmra_images/qgc_first_point.png)
 5. Place multiple waypoints (as many as you want)
-![Alt text](./cmra_images/qgc_multi_point.png)
-6. Adjust your Mission Start position.
+6. ![Alt text](./cmra_images/qgc_multi_point.png)
+7. Adjust your Mission Start position.
    1. Click the Mission Start node on the right side menu
    ![Alt text](./cmra_images/qgc_mission_node.png)
    2. Click "Launch Position" and set it to 0ft.
    3. Drag the green Launch point in line with your robot.
     ![Alt text](./cmra_images/qgc_mission_pos.png)
-7. Upload your mission to ArduPilot by clicking Upload Required
+8. Upload your mission to ArduPilot by clicking Upload Required
     ![Alt text](./cmra_images/qgc_upload.png)
-8. Click "Exit Plan" after upload.
+9. Click "Exit Plan" after upload.
 
 ### Running a waypoint mission.
 1. QGroundControl will automatically prompt you to arm and start the mission. You can only do this if there are no fences around your robot.
@@ -97,9 +103,10 @@ Program a simple autonomous mission to go around a buoy and return.
    5. Confirm Mission start if prompted.
 2. Your robot should now be carrying out the mission.
 <details>
+
 <summary>Robot enters buoy's exclusion zone.</summary>
 If the robot enters the exclusion zone, it will automatically go into hold mode. You can switch the mode back to Auto if the robot drifts out of the zone. If the robot gets stuck in the zone, switch the flight mode to Manual, drive it out of the zone, then switch back to auto.
-</detials>
+</details>
 
 <details>
 <summary>The robot is stuck outside of an exclusion zone.</summary>

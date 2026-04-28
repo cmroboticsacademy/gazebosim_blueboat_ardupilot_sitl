@@ -1,4 +1,0 @@
-Invoking command in '/home/blueboat_sitl/gz_ws/build/gz-waves1': /usr/bin/cmake --build /home/blueboat_sitl/gz_ws/build/gz-waves1 -- -j16 -l16
-Invoked command in '/home/blueboat_sitl/gz_ws/build/gz-waves1' returned '0': /usr/bin/cmake --build /home/blueboat_sitl/gz_ws/build/gz-waves1 -- -j16 -l16
-Invoking command in '/home/blueboat_sitl/gz_ws/build/gz-waves1': /usr/bin/cmake --install /home/blueboat_sitl/gz_ws/build/gz-waves1
-Invoked command in '/home/blueboat_sitl/gz_ws/build/gz-waves1' returned '0': /usr/bin/cmake --install /home/blueboat_sitl/gz_ws/build/gz-waves1

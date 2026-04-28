@@ -16,8 +16,8 @@ HEIGHTMAP_PATH = os.path.join(BASE_DIR, "world_heightmap.png")
 LIGHTMAP_PATH = os.path.join(BASE_DIR, "world_lightmap.png")
 MASK_DEBUG_PATH = os.path.join(BASE_DIR, "world_landmask_debug.png")
 
-CENTER_LAT = 40.594988
-CENTER_LON = -79.999149
+CENTER_LAT = 40.595009
+CENTER_LON = -79.99974
 
 # Full terrain size in meters
 TERRAIN_SIZE_M = 400.0
