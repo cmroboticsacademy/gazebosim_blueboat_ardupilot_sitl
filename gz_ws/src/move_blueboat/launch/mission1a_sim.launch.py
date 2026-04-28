@@ -1,12 +1,12 @@
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess
+from launch.actions import ExecuteProcess, TimerAction
 from launch_ros.actions import Node
 
 def generate_launch_description():
     return LaunchDescription([
         # Launch Gazebo simulation with environment variable
         ExecuteProcess(
-            cmd=['env', 'LIBGL_ALWAYS_SOFTWARE=1', 'gz', 'sim', 'level1.sdf'],
+            cmd=['env', 'LIBGL_ALWAYS_SOFTWARE=1', 'gz', 'sim', '--force-version', '7','-r', 'level1.sdf'],
             output='screen'
         ),
 
@@ -27,7 +27,24 @@ def generate_launch_description():
             ],
             output='screen'
         ),
-
+        TimerAction(
+            period=5.0,
+            actions=[
+                ExecuteProcess(
+                    cmd=[
+                        'gz',
+                        'topic',
+                        '-t',
+                        '/camera/enable_streaming',
+                        '-m',
+                        'gz.msgs.Boolean',
+                        '-p',
+                        'data: true',
+                    ],
+                    output='screen',
+                )
+            ],
+        ),
         # Optionally, launch your ROS 2 node if you have a custom node for additional logic
         # Node(
         #     package='move_blueboat',
