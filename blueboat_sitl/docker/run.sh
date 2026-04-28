@@ -24,6 +24,9 @@ docker run -it \
     -e XAUTHORITY=$XAUTH \
     -e NVIDIA_VISIBLE_DEVICES=all \
     -e NVIDIA_DRIVER_CAPABILITIES=all \
+    -e GZ_VERSION=garden \
+    -e GZ_SIM_SYSTEM_PLUGIN_PATH=/home/blueboat_sitl/ardupilot_gazebo/build \
+    -e GST_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/gstreamer-1.0 \
     -v "$XAUTH:$XAUTH" \
     -v "/tmp/.X11-unix:/tmp/.X11-unix" \
     -v "/etc/localtime:/etc/localtime:ro" \

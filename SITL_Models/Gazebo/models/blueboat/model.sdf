@@ -309,47 +309,65 @@
         </dynamics>
       </axis>
     </joint>
-    <!-- Low-cost QGC camera -->
-    <link name="qgc_camera_link">
-      <pose>0.45 0 0.35 0 0.08 0</pose>
+    <!-- Lightweight forward-facing FPV camera -->
+    <link name="fpv_camera_link">
+      <!-- Mount camera above/forward on the BlueBoat.
+          Gazebo camera optical axis is generally +X, so this points forward. -->
+      <pose relative_to="base_link">0.55 0 0.28 0 0 0</pose>
 
       <inertial>
         <mass>0.05</mass>
         <inertia>
-          <ixx>0.00001</ixx>
+          <ixx>0.00002</ixx>
+          <iyy>0.00002</iyy>
+          <izz>0.00002</izz>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.00001</iyy>
           <iyz>0</iyz>
-          <izz>0.00001</izz>
         </inertia>
       </inertial>
 
-      <sensor name="qgc_camera" type="camera">
-        <pose>0 0 0 0 0 0</pose>
-        <always_on>1</always_on>
-        <update_rate>10</update_rate>
-        <visualize>false</visualize>
-        <topic>qgc_camera/image</topic>
+      <visual name="fpv_camera_visual">
+        <geometry>
+          <box>
+            <size>0.06 0.04 0.04</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.02 0.02 0.02 1</ambient>
+          <diffuse>0.02 0.02 0.02 1</diffuse>
+        </material>
+      </visual>
 
+      <sensor name="fpv_camera" type="camera">
+        <always_on>true</always_on>
+        <update_rate>15</update_rate>
+        <topic>/camera</topic>
         <camera>
           <horizontal_fov>1.3962634</horizontal_fov>
           <image>
             <width>640</width>
             <height>360</height>
-            <format>R8G8B8</format>
+            <format>RGB_INT8</format>
           </image>
           <clip>
             <near>0.05</near>
             <far>100</far>
           </clip>
         </camera>
+        <plugin name="GstCameraPlugin"
+            filename="/home/blueboat_sitl/ardupilot_gazebo/build/libGstCameraPlugin.so">
+          <udp_host>127.0.0.1</udp_host>
+          <udp_port>5600</udp_port>
+          <use_basic_pipeline>true</use_basic_pipeline>
+          <use_cuda>false</use_cuda>
+        </plugin>
       </sensor>
     </link>
 
-    <joint name="qgc_camera_joint" type="fixed">
+    <joint name="fpv_camera_fixed_joint" type="fixed">
       <parent>base_link</parent>
-      <child>qgc_camera_link</child>
+      <child>fpv_camera_link</child>
     </joint>
     <!-- sensors -->
     <link name="imu_link">

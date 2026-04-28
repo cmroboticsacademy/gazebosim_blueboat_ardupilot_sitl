@@ -152,13 +152,19 @@ RUN [ "/bin/bash" , "-c" , "\
 
 # Set up the environment
 WORKDIR /home/$USERNAME/colcon_ws
-
+ENV GZ_VERSION=garden
+ENV GZ_SIM_SYSTEM_PLUGIN_PATH=/home/blueboat_sitl/ardupilot_gazebo/build
+ENV GST_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/gstreamer-1.0
 RUN echo "export PATH=/home/$USERNAME/.local/bin:\$PATH" >> /home/$USERNAME/.bashrc \
  && echo "export PYTHONPATH=/home/$USERNAME/.local/lib/python3.10/site-packages:\$PYTHONPATH" >> /home/$USERNAME/.bashrc \
  && echo "source /home/$USERNAME/colcon_ws/src/blueboat_sitl/setup.bash" >> /home/$USERNAME/.bashrc \
  && echo '[ -f /home/'"$USERNAME"'/gz_ws/install/setup.bash ] && source /home/'"$USERNAME"'/gz_ws/install/setup.bash' >> /home/$USERNAME/.bashrc \
- && echo '[ -f /home/'"$USERNAME"'/gz_ws/gazebo_exports.sh ] && source /home/'"$USERNAME"'/gz_ws/gazebo_exports.sh' >> /home/$USERNAME/.bashrc
- 
+ && echo '[ -f /home/'"$USERNAME"'/gz_ws/gazebo_exports.sh ] && source /home/'"$USERNAME"'/gz_ws/gazebo_exports.sh' >> /home/$USERNAME/.bashrc 
+
+RUN echo 'export GZ_VERSION=garden' >> /home/$USERNAME/.bashrc \
+&& echo 'export GZ_SIM_SYSTEM_PLUGIN_PATH=/home/'"$USERNAME"'/ardupilot_gazebo/build:$GZ_SIM_SYSTEM_PLUGIN_PATH' >> /home/$USERNAME/.bashrc \
+&& echo 'export GST_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/gstreamer-1.0:$GST_PLUGIN_PATH' >> /home/$USERNAME/.bashrc
+
 USER root
 RUN apt-get update && apt-get install -y nano
 RUN apt-get -y --quiet --no-install-recommends install \
@@ -192,6 +198,14 @@ RUN apt-get install -y \
 
 RUN python3 -m pip install gekko  
 
+RUN apt update && apt install -y \
+    gstreamer1.0-tools \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-ugly \
+    gstreamer1.0-libav 
+    
 USER $USERNAME
 
 USER root
