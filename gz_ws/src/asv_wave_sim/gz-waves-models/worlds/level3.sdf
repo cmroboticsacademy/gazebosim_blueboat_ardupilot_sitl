@@ -72,6 +72,18 @@
       <pose>0 0 -6 0 0 0</pose>
     </include>
 
+
+    <!--BLUE BOAT-->
+    <include>
+      <pose>0 0 0 0 0 -1.5708</pose>
+      <uri>model://blueboat</uri>
+    </include>
+    <include>
+      <uri>model://dock</uri>
+      <name>dock_1</name>
+      <pose>1.8 1.2 -.1 0 0 -1.5708</pose>
+    </include> 
+
     <!-- <include>
       <uri>model://buoy_marker</uri>
       <name>buoy_1</name>
@@ -147,10 +159,7 @@
       <uri>model://duck</uri>
     </include> -->
 
-    <include>
-      <pose>0 5 0 0 0 0</pose>
-      <uri>model://spherical_buoy</uri>
-    </include>
+   
 
     <!-- <include>
       <pose>5 0 0 0 0 0</pose>
@@ -196,16 +205,7 @@
     </joint>  -->
 
 
-    <!--BLUE BOAT-->
-    <include>
-      <pose>0 0 0 0 0 0</pose>
-      <uri>model://blueboat</uri>
-    </include>
-    <include>
-      <uri>model://dock</uri>
-      <name>dock_1</name>
-      <pose>0 1.8 0 0 0 0</pose>
-    </include> 
+ 
 
     
 

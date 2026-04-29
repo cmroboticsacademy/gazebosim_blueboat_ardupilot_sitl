@@ -7,9 +7,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HEIGHTMAP_PATH = os.path.join(BASE_DIR, "../materials/textures/ocean_floor_heightmap.png")
 OUTPUT_OBJ_PATH = os.path.join(BASE_DIR, "ocean_floor.obj")
 
-SIZE_X = 50.0
-SIZE_Y = 50.0
-SIZE_Z = 4.0
+SIZE_X = 100.0
+SIZE_Y = 100.0
+SIZE_Z = 5
 STEP = 4
 
 def normalize(v):

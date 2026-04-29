@@ -10,10 +10,9 @@ from pymavlink import mavutil
 class QGCFenceUploader(Node):
     def __init__(self):
         super().__init__('qgc_mixed_geofence')
-
         self.declare_parameter('vehicle_connection', 'udpin:0.0.0.0:14551')
-        self.declare_parameter('origin_lat_deg', 40.594988)
-        self.declare_parameter('origin_lon_deg', -79.999149)
+        self.declare_parameter('origin_lat_deg', 40.595009)
+        self.declare_parameter('origin_lon_deg', -79.99974)
         self.declare_parameter('buoy_radius_m', 5.0)
 
         self.vehicle_connection = str(self.get_parameter('vehicle_connection').value)
@@ -25,9 +24,14 @@ class QGCFenceUploader(Node):
         # BUOYS (CIRCLES)
         # =========================
         self.buoys = [
-            {'name': 'B1', 'east': 15,  'north': 90.0},
-            {'name': 'B2', 'east': 12.5,  'north': 92.5},
-            {'name': 'B3', 'east': 10,  'north': 95.0},
+            {'name': 'B1', 'east': 50,  'north': 90.0},
+            {'name': 'B2', 'east': 52,  'north': 88},
+            {'name': 'B3', 'east': 54,  'north': 86.0},
+            {'name': 'B4', 'east': 56,  'north': 84.0},
+            {'name': 'B5', 'east': 58,  'north': 82.0},
+            {'name': 'B6', 'east': 60,  'north': 80.0},
+            {'name': 'B7', 'east': 62,  'north': 78.0},
+            {'name': 'B8', 'east': 64,  'north': 76.0},
 
         ]
 
@@ -37,10 +41,18 @@ class QGCFenceUploader(Node):
         self.rectangles = [
             {
                 'name': 'dock_1',
-                'east': 0.0,
+                'east': 1.2,
                 'north': 1.8,
                 'length': 6.0,
                 'width': 2.0,
+                'yaw': -1.5708,
+            },
+            {
+                'name': 'block1',
+                'east': 180,
+                'north': 90,
+                'length': 125,
+                'width': 20,
                 'yaw': 0.0
             }
         ]

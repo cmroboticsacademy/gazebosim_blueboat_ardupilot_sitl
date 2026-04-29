@@ -7,14 +7,14 @@ from PIL import Image
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUT_PATH = os.path.join(BASE_DIR, "./ocean_floor_heightmap.png")
 
-SIZE = 257
+SIZE = 256
 SEED = 42
 random.seed(SEED)
 
 BASE_LEVEL = 0.18
-NUM_LARGE_BUMPS = 18
-NUM_MEDIUM_BUMPS = 45
-NUM_PITS = 16
+NUM_LARGE_BUMPS = 50
+NUM_MEDIUM_BUMPS = 1000
+NUM_PITS = 0
 
 ENABLE_WAVES = False
 
