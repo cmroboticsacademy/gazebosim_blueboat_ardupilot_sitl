@@ -127,19 +127,6 @@ Follow this order exactly.
 2. This will open the simulation window. Allow it to open and load.
 3. <b>IMPORTANT</b> - Press play and confirm simulation is running before moving on <br /> ![Alt text](./cmra_images/sim_playing.png)
 
-<b>(Optional) Open FVP Camera View</b>
-
-1. Open a new terminal.
-2. Enter blueboat docker <br />
-```bash
-sudo docker exec -it blueboat_sitl /bin/bash
-```
-3. Open Image Viewer <br />
-```bash
-ros2 run rqt_image_view rqt_image_view /camera
-```
-<details>
-   <summary>What is the ros2 run rqt_image_view rqt_image_view /camera.py command?</summary>
 
 
 ### Launch ArduPilot

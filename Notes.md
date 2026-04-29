@@ -25,3 +25,18 @@ Got COMMAND_ACK: REQUEST_CAMERA_INFORMATION: UNSUPPORTED
 Flight battery 100 percent
 Got COMMAND_ACK: REQUEST_MESSAGE: ACCEPTED
 Got COMMAND_ACK: REQUEST_MESSAGE: ACCEPTED
+
+<b>(Optional) Open FVP Camera View</b>
+
+1. Open a new terminal.
+2. Enter blueboat docker <br />
+```bash
+sudo docker exec -it blueboat_sitl /bin/bash
+```
+3. Open Image Viewer <br />
+```bash
+ros2 run rqt_image_view rqt_image_view /camera
+```
+<details>
+   <summary>What is the ros2 run rqt_image_view rqt_image_view /camera.py command?</summary>
+</details>
