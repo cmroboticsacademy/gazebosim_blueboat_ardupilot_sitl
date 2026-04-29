@@ -52,7 +52,7 @@ def generate_launch_description():
             output='screen'
         ),
         TimerAction(
-            period=5.0,
+            period=10.0,
             actions=[
                 ExecuteProcess(
                     cmd=[
