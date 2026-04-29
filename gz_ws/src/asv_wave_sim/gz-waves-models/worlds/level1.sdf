@@ -84,6 +84,7 @@
       <pose>0 0 0 0 0 -1.5708</pose>
       <uri>model://blueboat</uri>
     </include>
+  
     <include>
       <uri>model://dock</uri>
       <name>dock_1</name>

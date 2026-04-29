@@ -5,18 +5,18 @@ Plan a mission sequence around an island. Use exclusion zones to keep the vehicl
 1. Stop the simulation (See [Stopping the simulation](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/ReadMe_CMRA.md) section)
 2. Start the simulation with the following launch commands. Close QGroundControl before doing so.
    1. Gazebo (Press play before next step)
-   ```
-   ros2 launch move_blueboat level3_sim.launch.py
+   ```bash
+   ros2 launch move_blueboat mission2a_sim.launch.py
    ```
    2. ArduPilot
-   ```
+   ```bash
    sim_vehicle.py -v Rover -f gazebo-rover --model JSON \
       --add-param-file=../gz_ws/cmra_boat.params -w \
-      -l 40.594988,-79.999149,0,0 \
+      -l 40.595009,-79.99974,0,0 \
       --out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
    ```
    3. QGroundControl
-   ```
+   ```bash
    ./QGroundControl-x86_64.AppImage /home/cmra/Documents/QGroundControl/Missions/level3.plan
    ```
 
@@ -51,13 +51,13 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
 2. Start the simulation with the following launch commands. Close QGroundControl before doing so.
    1. Gazebo (Press play before next step)
    ```
-   ros2 launch move_blueboat level4_sim.launch.py
+   ros2 launch move_blueboat mission2b_sim.launch.py
    ```
    2. ArduPilot
-   ```
+   ```bash
    sim_vehicle.py -v Rover -f gazebo-rover --model JSON \
       --add-param-file=../gz_ws/cmra_boat.params -w \
-      -l 40.594988,-79.999149,0,0 \
+      -l 40.595009,-79.99974,0,0 \
       --out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
    ```
    3. QGroundControl
