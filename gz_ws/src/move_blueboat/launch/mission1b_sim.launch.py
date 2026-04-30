@@ -6,7 +6,7 @@ def generate_launch_description():
     return LaunchDescription([
         # Launch Gazebo simulation with environment variable
         ExecuteProcess(
-            cmd=['env', 'LIBGL_ALWAYS_SOFTWARE=1', 'gz', 'sim', '--force-version', '7','-r', 'level2.sdf'],
+            cmd=['env', 'LIBGL_ALWAYS_SOFTWARE=1', 'gz', 'sim', '--force-version', '7','-r', '-s', 'level2.sdf'],
             output='screen'
         ),
 
@@ -24,7 +24,7 @@ def generate_launch_description():
                 '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
                 '/model/blueboat/link/qgc_camera_link/sensor/qgc_camera/image@sensor_msgs/msg/Image[gz.msgs.Image',
                 # lidar
-                '/laser_scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
+                # '/laser_scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
             ],
             output='screen'
         ),

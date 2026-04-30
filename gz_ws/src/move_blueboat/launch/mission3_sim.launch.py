@@ -10,7 +10,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         ExecuteProcess(
-            cmd=['env', 'gz', 'sim', '--force-version', '7','-r', 'level5.sdf'],
+            cmd=['env', 'gz', 'sim', '--force-version', '7','-r', '-s', 'level5.sdf'],
             output='screen'
         ),
 

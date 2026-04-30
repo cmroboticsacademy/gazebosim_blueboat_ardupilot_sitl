@@ -227,3 +227,18 @@ Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow
    exit
    ```
 5. Do this for <b>T2</b>.
+
+## Open Headless Gazebo Instance
+1. Open a new terminal
+2. Enter blueboat Docker <br />
+```bash
+sudo docker exec -it blueboat_sitl /bin/bash
+```
+3. Navigate to `gz_ws` <br />
+```bash
+cd ../gz_ws/
+```
+4. Launch Gazebo Instance <br />
+```bash
+gz sim --force-version 7 -g
+```

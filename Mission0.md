@@ -2,7 +2,7 @@
 Learn and practice the steps to start up the simulation. Understand the relationship between the simulator setup and the real-world hardware and software configuration. Verify the vehicle responds by manually driving it away from the dock, then back.
 
 ## Setup
-1. Complete steps in [System Overview -  Setup and Running](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/README.md)
+1. Complete [Setup guide](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/README.md)
 
 ### Opening a plan in QGroundControl.
 Each mission has a default program that needs to be opened and uploaded to the robot. These steps will use mission0.plan as an example. Other missions will instruct you to open the plan, but will not go into detail.

@@ -6,7 +6,7 @@ def generate_launch_description():
     return LaunchDescription([
         # Launch Gazebo simulation with environment variable
         ExecuteProcess(
-            cmd=['env', 'LIBGL_ALWAYS_SOFTWARE=1', 'gz', 'sim', '--force-version', '7','-r', 'level4.sdf'],
+            cmd=['env', 'LIBGL_ALWAYS_SOFTWARE=1', 'gz', 'sim', '--force-version', '7','-r', '-s', 'level4.sdf'],
             output='screen'
         ),
 
@@ -23,7 +23,7 @@ def generate_launch_description():
                 '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
                 '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
                 # lidar
-                '/laser_scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
+                # '/laser_scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
             ],
             output='screen'
         ),

@@ -84,11 +84,11 @@
       <pose>1.8 1.2 -.1 0 0 -1.5708</pose>
     </include> 
 
-    <!-- <include>
+    <include>
       <uri>model://buoy_marker</uri>
       <name>buoy_1</name>
-      <pose>15 10 0 0 0 0</pose>
-    </include> -->
+      <pose>115 150 0 0 0 0</pose>
+    </include> 
 
     <!-- <include>
       <uri>model://buoy_marker</uri>

@@ -26,5 +26,23 @@ Enable autonomous data collection over a relatively clear lakebed using a lawnmo
    ```
    3. QGroundControl
    ```bash
-   ./QGroundControl-x86_64.AppImage /home/cmra/Documents/QGroundControl/Missions/level4.plan
+   ./QGroundControl-x86_64.AppImage
    ```
+   4. Open and Load <b>mission3<.plan</b> in QGroundControl.
+   
+### Mission3 plan
+This plan only provides an excusion zone for the dock.
+
+### Create a Survey.
+
+1. Go to Plan View.
+2. Click <b>Patten</b>. Select <b>Survey</b>
+3. Click <b>Basic</b> to get a rectangle pattern.
+4. Adjust the plan to cover the area south of the launch location. <br />![Alt text](./cmra_images/qgc_survey.png)
+5. Upload Plan
+6. Exit Plan
+
+### Running the Survey.
+1. Manually drive away from the dock.
+2. Change mode to Auto (B).
+3. Monitor RVIZ to see the scan.

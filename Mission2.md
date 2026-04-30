@@ -17,31 +17,31 @@ Plan a mission sequence around an island. Use exclusion zones to keep the vehicl
    ```
    3. QGroundControl
    ```bash
-   ./QGroundControl-x86_64.AppImage /home/cmra/Documents/QGroundControl/Missions/level3.plan
+   ./QGroundControl-x86_64.AppImage
    ```
+   4. Open and load <b>mission2a</b> in QGroundControl.
+
+### Mission2a plan
+There are two GEO Fences, one for the dock and one for the buoy. The buoy is located North of the island.
 
 ### Creating a GEO Fence
 1. Create a plan by going to Plan Flight in QGroundControl.
 2. Zoom your map out so you can see most of the lake.
-3. Click "Fence" on the left menu
-![Alt text](./cmra_images/qgc_fence.png)
-4. Click Polygon Fence
-5. Fence off the west coast of the lake with the fence.
-![Alt text](./cmra_images/qgc_fence_left.png)
-6. Uncheck "Inclusion" for this fence.
-![Alt text](./cmra_images/qgc_set_exlude.png)
-7. Add another Polygon Fence for the east coast, and uncheck "Inclusion."
-![Alt text](./cmra_images/qgc_big_fence.png)
+3. Click <b>Fence</b> on the left menu <br /> ![Alt text](./cmra_images/qgc_fence.png)
+4. Click <b>Polygon Fence</b>
+5. Fence off the west coast of the lake with the fence. <br /> ![Alt text](./cmra_images/qgc_fence_left.png)
+6. Uncheck <b>Inclusion</b> for this fence. <br /> ![Alt text](./cmra_images/qgc_set_exlude.png)
+7. Add another Polygon Fence for the east coast, and uncheck <b>Inclusion</b>. <br /> ![Alt text](./cmra_images/qgc_big_fence.png)
 
 ### Create and run a waypoint mission.
-1. Click Mission in the Plan Flight View.
-2. Click Waypoint to add waypoints.
-3. Use a single waypoint to navigate to the other side of the lake, and adjust the launch position.
-![Alt text](./cmra_images/qgc_lake_mission.png)
+1. Click <b>Mission</b> in the Plan Flight View.
+2. Click <b>Waypoint</b> to add waypoints.
+3. Use a single waypoint to navigate to the other side of the lake, and adjust the launch position. <br />![Alt text](./cmra_images/qgc_lake_mission.png)
 4. Upload the mission.
-5. Exit "Plan Flight."
-6. Run the waypoint mission.
-7. Monitor the robot. You may need to manually take over if the robot gets stuck.
+5. Exit Plan
+6. Manually drive away from the dock.
+7. Run the waypoint mission.
+8. Monitor the robot. You may need to manually take over if the robot gets stuck.
 
 ## Mission 2b: Narrow Channel
 Recognize, plan for, and run a mission in which a portion of the route is known to be too narrow and may require manual control
@@ -64,10 +64,16 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
    ```
    ./QGroundControl-x86_64.AppImage /home/cmra/Documents/QGroundControl/Missions/level4.plan
    ```
+   4. Open and Load <b>mission2b.plan</b> in QGroundControl.
+
+### Mission2b plan
+This plan provides you with two different types of GEO Fences.
+It provides excusion zones for the dock. There is also an excusion zone blocking the main route of the lake, forcing us to navigate the channel. The channel has a line of bouys that must be navigated in Manual mode.
+
+This plan also provides an inclusion zone. A zone marked for incusion means a robot cannot path outside of the zone. This prevents us from having to GEO fence the entire lake.
 
 ### Create GEO Fence
-1. Create a plan with two Polygon GEO Fences. Position them so you can drive through the narrow channel between the west coast and the island.
-   ![Alt text](./cmra_images/qgc_island.png)
+1. Create a plan with two Polygon GEO Fences. Position them so you can drive through the narrow channel between the west coast and the island <br />![Alt text](./cmra_images/qgc_island.png)
 
 ### Create waypoint program
 1. Create a waypoint mission to navigate through the channel.
@@ -81,4 +87,3 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
 3. When you enter, the flight mode will automatically switch to hold for safety. Switch it back to Manual and drive through.
 4. When you exit the zone, change the flight mode back to Auto.
 5. After your mission is complete, try to come back through the channel.
-straight
