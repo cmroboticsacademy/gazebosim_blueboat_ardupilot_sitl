@@ -3,3 +3,4 @@ gz_ws/log/
 gz_ws/install/
 gz_ws/src/move_blueboat/move_blueboat/__pycache__/
 gz_ws/src/asv_wave_sim/gz-waves-models/models/ocean_floor/materials/textures/AzureKeyIgnore.txt
+gz_ws/src/asv_wave_sim/gz-waves-models/models/world_mass/materials/textures/AzureKeyIgnore.txt
