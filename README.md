@@ -1,4 +1,5 @@
-# Setup and Running
+# BlueBoat simulation SITL with GazeboSim and QGC
+
 ## Workstation preparation
 1. Open 3 terminal windows. Press `win_key`, start typing `terminal`. Open the application when it appears. To open another terminal window, right-click the terminal app icon on the left toolbar. Select `New Window`.
 2. Recommended: Use the layout below
@@ -101,12 +102,6 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
    ![Alt text](./cmra_images/ready_launch.png)
 
 ## Running the simulation
-When running the simulation, you must follow these steps in order. If these steps do not work, see the "Restarting the simulation" section.
-
-Follow this order exactly.
-1. Launch the Gazebo simulation
-2. Start the simulation inside Gazebo
-3. Launch ArduPilot
 
 ### Launch and run Gazebo Simulation
 1. In <b>T1 (Gazebo Terminal)</b> Launch Gazebo
@@ -125,7 +120,7 @@ Follow this order exactly.
    ![Alt text](./cmra_images/gazebo_layout.png)
    </details>
 2. This will open the simulation window. Allow it to open and load.
-3. <b>IMPORTANT</b> - Press play and confirm simulation is running before moving on <br /> ![Alt text](./cmra_images/sim_playing.png)
+<br /> ![Alt text](./cmra_images/sim_playing.png)
 
 
 
@@ -156,16 +151,14 @@ Follow this order exactly.
    ```
 2. In <b>T3</b> launch QGroundControl
    ```bash
-   ./QGroundControl-x86_64.AppImage /home/cmra/Documents/QGroundControl/Missions/mission0.plan
+   ./QGroundControl-x86_64.AppImage
    ```
    <details>
    <summary>What is the /QGroundControl-x86_64.AppImage command?</summary>
 
    `./QGroundControl-x86_64.AppImage` runs the QGroundControl application from the current directory. The `./` tells the terminal to execute the file locally, and an `.AppImage` is a self-contained Linux executable that doesn’t need installation.
 
-   `/home/cmra/Documents/QGroundControl/Missions/level1.plan` is a path to a QGroundControl plan file. This allows QGroundControl to automatically open it on launch.
-
-   QGroundControl is a ground control station used to monitor and control drones/rovers. In this setup, it connects to the simulated vehicle (via the UDP ports in `sim_vehicle.py`) to display telemetry and maps and to allow you to send commands to the Gazebo simulation.
+   QGroundControl is a ground control station used to monitor and control drones/rovers. In this setup, it connects to the simulated vehicle (via the UDP ports in `sim_vehicle.py`) to display telemetry and maps and cameras and to allow you to send commands to the Gazebo simulation.
 
    (optional) Layout the QGroundControl application to cover the right half of your screen. We will need the most screen space for this application.
 
@@ -182,10 +175,10 @@ Follow this order exactly.
 6. Assign the buttons to the following actions. <br /> ![Alt text](./cmra_images/qgc_joy_buttons.png)
    1. R1 - Arms boat
    2. R2 - Disarms boat
-   3. X - Changes boat mode to hold
-   4. Square - Changes boat mode to manual
-   5. Circle - Changes boat mode to auto
-   6. Triangle - Changes boat more to RTL
+   3. A - Changes boat mode to hold
+   4. X - Changes boat mode to manual
+   5. B - Changes boat mode to auto
+   6. Y - Changes boat more to RTL
 7. Click <b>Advanced</b>
 8. Modify the following
     1.  Center stick is zero throttle
@@ -206,8 +199,7 @@ To confirm your tech stack is running, you should see the following:
 3. QGroundControl is connected and shows your robot on the map.
    ![Alt text](./cmra_images/qgc_connect.png)
  
-<b>Stop here if this is your first time seeing this. Go to the [Missions](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Missions.md) document.</b>
-
+ 
 ## Resetting the simulation
 You may often need to restart the simulation<. Most of the time, you do not have to rebuild.
 

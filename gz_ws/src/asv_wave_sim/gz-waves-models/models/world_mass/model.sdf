@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <model name="world_mass">
+    <static>true</static>
+    <!-- World land, lifted above the old floor -->
+    <link name="world_land_link">
+      <pose>0 0 4 0 0 0</pose>
+      <collision name="world_land_collision">
+        <geometry>
+          <mesh>
+            <uri>model://world_mass/meshes/world_land.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+
+      <visual name="world_land_visual">
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <mesh>
+            <uri>model://world_mass/meshes/world_land.obj</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

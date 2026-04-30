@@ -68,7 +68,7 @@
       <uri>model://no_waves</uri>
     </include>
     <include>
-      <uri>model://ocean_floor</uri>
+      <uri>model://world_mass</uri>
       <pose>0 0 -6 0 0 0</pose>
     </include>
     <include>

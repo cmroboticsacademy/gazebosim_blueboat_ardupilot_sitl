@@ -10,7 +10,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         ExecuteProcess(
-            cmd=['env', 'LIBGL_ALWAYS_SOFTWARE=1', 'gz', 'sim', '--force-version', '7','-r', 'level5.sdf'],
+            cmd=['env', 'gz', 'sim', '--force-version', '7','-r', 'level5.sdf'],
             output='screen'
         ),
 

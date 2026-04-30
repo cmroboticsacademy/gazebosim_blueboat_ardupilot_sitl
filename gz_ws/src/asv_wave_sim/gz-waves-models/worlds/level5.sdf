@@ -69,8 +69,12 @@
     </include>
     <include>
       <uri>model://ocean_floor</uri>
-      <pose>0 0 -6 0 0 0</pose>
+      <pose>00 -45 -10 0 0 0</pose>
     </include>
+    <include>
+      <uri>model://world_mass</uri>
+      <pose>0 0 -6 0 0 0</pose>
+    </include> 
      <!--BLUE BOAT-->
     <include>
       <pose>0 0 0 0 0 -1.5708</pose>
