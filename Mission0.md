@@ -6,16 +6,16 @@ Learn and practice the steps to start up the simulation. Understand the relation
 
 ### Opening a plan in QGroundControl.
 Each mission has a default program that needs to be opened and uploaded to the robot. These steps will use mission0.plan as an example. Other missions will instruct you to open the plan, but will not go into detail.
-1. In QGroundControl click on the Q menu button. <br /> ![q_menu](./cmra_images/qgc_menu.png)
+1. In QGroundControl click on the <b>Q</b> menu button. <br /> ![q_menu](./cmra_images/qgc_menu.png)
 2. Click <b>Plan Flight</b>
-3. Select <b>File</b> to open the menu. ![q_menu](./cmra_images/qgc_file.png)
+3. Select <b>File</b> to open the menu. <br />![q_menu](./cmra_images/qgc_file.png)
 4. Click <b>Open</b> <br />
-5. Open mission0.plan file. ![q_menu](./cmra_images/qgc_plan.png)
-6. Upload your plan to ArduPilot by clicking Upload Required<br /> ![Alt text](./cmra_images/qgc_upload.png)
+5. Open mission0.plan file. <br />![q_menu](./cmra_images/qgc_plan.png)
+6. Upload your plan to ArduPilot by clicking Upload Required. <br />![Alt text](./cmra_images/qgc_upload.png)
 7. Exit plan.
 
 ### Mission 0 plan
-The mission zero plan provides you with two GEO fences. The first fence is where the dock is located in the simulated world. The second is where a buoy is located in the world. These GEO fences are set up to work with your robot's pathfinding logic. The pathfinder will try to avoid these zones as best as possible. If your robot enters one of these zones, it will automatically change the flight mode to Hold. 
+The mission zero plan provides you with two GEO fences. The first fence is where the dock is located in the simulated world. The second is where a buoy is located in the world. These GEO fences are set up to work with your robot's pathfinding logic. The pathfinder will try to avoid these zones as best as possible. If your robot enters one of these zones, it will automatically switch to Hold mode. 
 
 ###  Manual Un-docking
 All steps should be performed inside QGroundControl unless otherwise stated.
@@ -43,11 +43,11 @@ All steps should be performed inside QGroundControl unless otherwise stated.
     <summary>Failed to arm?</summary>
 
     Before the robot arms, it goes through a series of checks. If one of the checks fails, the robot fails to arm. In the simulator, it is most likely due to three causes.
-    1. Your RC is throttling the robot and not set in a netural postion. This will prevent EKF3 from activating. Try recalibrating your RC in vehicle configuration. If this fails, unplug the RC and manually arm through QGroundControl before plugging your RC back in. 
+    1. Your RC is throttling the robot and is not set in a neutral position. This will prevent EKF3 from activating. First try "flicking" the left stick down. This can reset it to neutral. If that does not work, try recalibrating your RC in vehicle configuration. If this fails, unplug the RC and manually arm it through QGroundControl before plugging it back in. 
     2. You did not wait until EKF3 is active. You'll see errors stating you did not set the AHRS mode.
     3. The computer is running too slow to consistently send sensor data to ArduPilot, and will take a little longer to calibrate its position and satisfy all of the arming checks.
         
-    If this happens to you, wait until your QGroundControl status states "Ready to Fly" and is green and rearm.
+    If this happens to you, wait until your QGroundControl status shows "Ready to Fly" in green, then rearm.
 
     </details>
 
