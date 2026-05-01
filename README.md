@@ -183,12 +183,12 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
 8. Click <b>Advanced</b>
 9. Modify the following
     1.  Center stick is zero throttle
-    2.  Allow negative Thrust is true (checked)
+    2.  "Allow negative Thrust" is set to true (checked)
     3.  Enable further advanced settings is true (checked)
-    4.  Deadbands is true (checked)
+    4.  "Deadbands" is set to true (checked)
 10. Click <b>Calibration</b>
 11. Calibrate your RC
-12. Press Exit to return to map.
+12. Press <b>Exit</b> to return to the map.
 
 
 # Operating and maintaining
