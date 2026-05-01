@@ -106,7 +106,7 @@
 
     <model name="test_cube_1">
       <static>true</static>
-      <pose>-8 -6 -3.2 0 0 0</pose>
+      <pose>-8 -26 -3.2 0 0 0</pose>
       <link name="link">
         <collision name="collision">
           <geometry>
@@ -131,7 +131,7 @@
 
     <model name="test_cube_2">
       <static>true</static>
-      <pose>-2 4 -2.4 0 0 0</pose>
+      <pose>10 -40 -5 0 0 0</pose>
       <link name="link">
         <collision name="collision">
           <geometry>
@@ -156,7 +156,7 @@
 
     <model name="test_cube_3">
       <static>true</static>
-      <pose>5 -3 -2.5 0 0 0</pose>
+      <pose>5 -25 -4 0 0 0</pose>
       <link name="link">
         <collision name="collision">
           <geometry>
@@ -181,7 +181,7 @@
 
     <model name="test_cube_4">
       <static>true</static>
-      <pose>1 7 -3.0 0 0 0</pose>
+      <pose>-25 -50 -3.5 0 0 0</pose>
       <link name="link">
         <collision name="collision">
           <geometry>
