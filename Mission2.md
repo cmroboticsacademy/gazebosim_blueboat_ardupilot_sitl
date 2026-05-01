@@ -3,7 +3,7 @@ Plan a mission sequence around an island. Use exclusion zones to keep the vehicl
 
 ### Setup
 1. Stop the simulation (See [Stopping the simulation](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/ReadMe_CMRA.md) section)
-2. Start the simulation with the following launch commands. Close QGroundControl before doing so.
+2. Start the simulation with the following launch commands.
    1. Gazebo (Press play before next step)
    ```bash
    ros2 launch move_blueboat mission2a_sim.launch.py
@@ -19,7 +19,7 @@ Plan a mission sequence around an island. Use exclusion zones to keep the vehicl
    ```bash
    ./QGroundControl-x86_64.AppImage
    ```
-   4. Open and load <b>mission2a</b> in QGroundControl.
+4. Open and load <b>mission2a</b> in QGroundControl.
 
 ### Mission2a plan
 There are two GEO Fences, one for the dock and one for the buoy. The buoy is located North of the island.
@@ -48,7 +48,7 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
 
 ### Setup
 1. Stop the simulation (See [Stopping the simulation](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/ReadMe_CMRA.md) section)
-2. Start the simulation with the following launch commands. Close QGroundControl before doing so.
+2. Start the simulation with the following launch commands.
    1. Gazebo (Press play before next step)
    ```
    ros2 launch move_blueboat mission2b_sim.launch.py
@@ -68,16 +68,15 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
 
 ### Mission2b plan
 This plan provides you with two different types of GEO Fences.
-It provides excusion zones for the dock. There is also an excusion zone blocking the main route of the lake, forcing us to navigate the channel. The channel has a line of bouys that must be navigated in Manual mode.
+It provides excusion zones for the dock. There is also an exclusion zone blocking the lake's main route, forcing us to navigate the narrow channel. The channel has a line of buoys that must be navigated in Manual mode.
 
-This plan also provides an inclusion zone. A zone marked for incusion means a robot cannot path outside of the zone. This prevents us from having to GEO fence the entire lake.
+This plan also provides an inclusion zone. A zone marked for inclusion means a robot cannot path outside of the zone. This prevents us from having to GEO fence the entire lake.
 
 ### Create GEO Fence
 1. Create a plan with two Polygon GEO Fences. Position them so you can drive through the narrow channel between the west coast and the island <br />![Alt text](./cmra_images/qgc_island.png)
 
 ### Create waypoint program
-1. Create a waypoint mission to navigate through the channel.
-    ![Alt text](./cmra_images/qgc_island_waypoint.png)
+1. Create a waypoint mission to navigate through the channel. <br />![Alt text](./cmra_images/qgc_island_waypoint.png)
 2. Upload it to the robot.
 3. Exit "Plan Flight."
 
