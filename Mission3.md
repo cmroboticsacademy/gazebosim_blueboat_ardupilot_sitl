@@ -9,9 +9,9 @@ Enable autonomous data collection over a relatively clear lakebed using a lawnmo
    ros2 launch move_blueboat mission3_sim.launch.py
    ```
    <details>
-   <summary>RVIZ</summary>
+   <summary>RViz</summary>
 
-   RViz (Robot Visualization) is a 3D tool in ROS used to display sensor data and spatial information in real time. It helps    you see how your robot or vehicle interprets its environment by visualizing elements such as transforms (TF), maps, and point clouds. Rather than processing data itself, RViz acts as a debugging and validation tool, letting you confirm that sensors are aligned correctly and that incoming data makes sense in a shared coordinate frame.
+   RViz (ROS Visualization) is a 3D tool in ROS for displaying sensor data and spatial information in real time. It helps you see how your robot or vehicle interprets its environment by visualizing elements such as transforms (TF), maps, and point clouds. Rather than processing data itself, RViz serves as a debugging and validation tool, allowing you to confirm that sensors are aligned correctly and that incoming data makes sense within a shared coordinate frame.
 
    When using a bathymetric LiDAR to scan the ocean floor, the sensor outputs depth measurements that can be represented as a 3D point cloud. In RViz, this appears as a PointCloud2, where each point corresponds to a spot on the seabed. As your vehicle moves, these scans can be accumulated into a larger map, giving you a detailed view of underwater terrain. Proper TF alignment and filtering are important for removing noise and ensuring the map builds accurately over time.
 
@@ -28,7 +28,7 @@ Enable autonomous data collection over a relatively clear lakebed using a lawnmo
    ```bash
    ./QGroundControl-x86_64.AppImage
    ```
-   4. Open and Load <b>mission3<.plan</b> in QGroundControl.
+4. Open and Load <b>mission3.plan</b> in QGroundControl.
    
 ### Mission3 plan
 This plan only provides an excusion zone for the dock.
@@ -45,4 +45,4 @@ This plan only provides an excusion zone for the dock.
 ### Running the Survey.
 1. Manually drive away from the dock.
 2. Change mode to Auto (B).
-3. Monitor RVIZ to see the scan.
+3. Monitor RViz to see the scan.
