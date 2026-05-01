@@ -27,17 +27,17 @@ Program a simple autonomous mission to go around a buoy and return.
    ```
    ./QGroundControl-x86_64.AppImage
    ```
-   4. Open and load <b>mission1a.plan</b> in QGroundControl.
+4. Open and load <b>mission1a.plan</b> in QGroundControl.
 
 ### Mission1a plan
 This plan is exactly the same as mission 0. There are two GEO Fences, one for the dock and one for the buoy.
 
 ### Creating a waypoint mission
-1. Click the QGroundControl menu icon and select <b>Plan Flight</b>. <br />![Alt text](./cmra_images/qgc_menu.png)
+1. In QGroundControl, click on the Q menu button, and select <b>Plan Flight</b>. <br />![Alt text](./cmra_images/qgc_menu.png)
 2. Zoom in on your robot in the map area by scrolling or pressing the + or - buttons.
-3. Select Mission Tab menu.<br /> ![Alt text](./cmra_images/qgc_mission_node.png)
-4. Click the waypoint button in the left menu bar. <br />![Alt text](./cmra_images/qgc_waypoint.png)
-5. Click an area on the map to add a waypoint . <br />![Alt text](./cmra_images/qgc_first_point.png)
+3. Select <b>Mission</b> Tab menu.<br /> ![Alt text](./cmra_images/qgc_mission_node.png)
+4. Click the <b>waypoint</b> button in the left menu bar. <br />![Alt text](./cmra_images/qgc_waypoint.png)
+5. Click an area on the map to add a waypoint. <br />![Alt text](./cmra_images/qgc_first_point.png)
 6. Place multiple waypoints (as many as you want) <br />![Alt text](./cmra_images/qgc_multi_point.png)
 7. Adjust your Mission Start position.
    1. Click the Mission Start node on the right side menu. <br />![Alt text](./cmra_images/qgc_mission_node.png)
@@ -47,7 +47,7 @@ This plan is exactly the same as mission 0. There are two GEO Fences, one for th
 9. Click <b>Exit Plan</b> after upload.
 
 ### Running a waypoint mission.
-QGroundControl may automatically set your flight mode to auto or guided if you have a valid waypoint mission. However, if you arm your robot in auto near a fence (dock), the pathfinding algorithm will not generate a valid path to your way point. You must make some distance between you and the dock before changing to auto.
+QGroundControl may automatically set your flight mode to auto or guided if you have a valid waypoint mission. However, if you arm your robot in auto near a fence (dock), the pathfinding algorithm will not generate a valid path to your waypoint. You must maintain some distance from the dock before switching to Auto.
 1. Use the RC to:
    1. Set flight mode to Manual (X)
    2. Arm the robot (R1)
@@ -70,11 +70,11 @@ After the mission is complete, you can change your flight mode to RTL (Return to
 
 
 ## Mission 1b: Monitoring the vehicle
-Proceed to implement a second simple-looking waypoint course independently. Monitor the vehicle during operation. The vehicle will experience course drift due to a current. Enable corrections in autonomy settings. Re-engage and complete mission.
+Proceed to implement a second simple-looking waypoint course independently. Monitor the vehicle during operation. The vehicle will experience course drift due to a current. Enable corrections in autonomy settings. Re-engage and complete the mission.
 
 ### Setup
 1. Stop the simulation (See [Stopping the simulation](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/ReadMe_CMRA.md) section)
-2. Start the simulation with the following launch commands. Close QGroundControl before doing so.
+2. Start the simulation with the following launch commands.
    1. Gazebo (Press play before next step)
    ```bash
    ros2 launch move_blueboat mission1b_sim.launch.py
@@ -90,15 +90,15 @@ Proceed to implement a second simple-looking waypoint course independently. Moni
    ```bash
    ./QGroundControl-x86_64.AppImage 
    ```
-   4. Open and load <b>mission2b.plan</b> in QGroundControl.
+4. Open and load <b>mission2b.plan</b> in QGroundControl.
 
-### Mission1a plan
+### Mission1b plan
 This plan is exactly the same as mission 0. There are two GEO Fences, one for the dock and one for the buoy.
 
 ### Create and Run Mission
-1. Create a waypoint program. Create a program so that your robot end's near the bouy. <br /><br />![Alt text](./cmra_images/qgc_mission1b.png)
+1. Create a waypoint program. Create a program so that your robot ends near the buoy. <br />![Alt text](./cmra_images/qgc_mission1b.png)
 2. Run your mission and monitor the robot. Take note of the changes now that there are waves.
-3. Let your robot sit near the bouy for at least 5 minutes.
+3. Let your robot sit near the buoy for at least 5 minutes.
 
 <details>
 <summary>The robot will not arm.</summary>
