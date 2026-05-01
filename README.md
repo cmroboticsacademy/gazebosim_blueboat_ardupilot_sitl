@@ -167,27 +167,28 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
    </details>
 
 ### Configuring RC in QGroundControl
-1. Launch QGroundControl if you have not already.
-2. Click the QGtroundControl menu button <br /> ![Alt text](./cmra_images/qgc_menu.png)
-3. Click <b>Vehicle Configuration</b>
-4. Click <b>Joystick</b>
-5. Click <b>Buttons</b>
-6. Assign the buttons to the following actions. <br /> ![Alt text](./cmra_images/qgc_joy_buttons.png)
+1. Plug Gampad into computer. (if using logitech set it to X mode on the back)
+2. Launch QGroundControl if you have not already.
+3. Click the QGtroundControl menu button <br /> ![Alt text](./cmra_images/qgc_menu.png)
+4. Click <b>Vehicle Configuration</b>
+5. Click <b>Joystick</b>
+6. Click <b>Buttons</b>
+7. Assign the buttons to the following actions. <br /> ![Alt text](./cmra_images/qgc_joy_buttons.png)
    1. R1 - Arms boat
    2. R2 - Disarms boat
    3. A - Changes boat mode to hold
    4. X - Changes boat mode to manual
    5. B - Changes boat mode to auto
    6. Y - Changes boat more to RTL
-7. Click <b>Advanced</b>
-8. Modify the following
+8. Click <b>Advanced</b>
+9. Modify the following
     1.  Center stick is zero throttle
     2.  Allow negative Thrust is true (checked)
     3.  Enable further advanced settings is true (checked)
     4.  Deadbands is true (checked)
-9.  Click <b>Calibration</b>
-10. Calibrate your RC
-11. Press Exit to return to map.
+10. Click <b>Calibration</b>
+11. Calibrate your RC
+12. Press Exit to return to map.
 
 
 # Operating and maintaining
