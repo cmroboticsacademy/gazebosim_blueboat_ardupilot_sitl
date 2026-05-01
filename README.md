@@ -139,7 +139,7 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
 
    The `--out=udp:127.0.0.1:14550` and `--out=udp:127.0.0.1:14551` parts send telemetry data over UDP to those ports on your local machine, which allows tools like QGroundControl or other ROS/bridge nodes to connect and interact with the simulated rover in the Gazebo environment.
 
-   This launch script will open a MAVLink Command Console. We will not be using this, so you can minimize it. This console could serve as a control system for the robot, but we will use QGroundControl instead.
+   This launch script will open a MAVLink Command Console. We will not be using this, so you can minimize it. This console could serve as the robot's control system, but we will use QGroundControl instead.
    </details>
 
 ![Alt text](./cmra_images/ardu_playing.png)
@@ -158,7 +158,7 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
 
    `./QGroundControl-x86_64.AppImage` runs the QGroundControl application from the current directory. The `./` tells the terminal to execute the file locally, and an `.AppImage` is a self-contained Linux executable that doesn’t need installation.
 
-   QGroundControl is a ground control station used to monitor and control drones/rovers. In this setup, it connects to the simulated vehicle (via the UDP ports in `sim_vehicle.py`) to display telemetry and maps and cameras and to allow you to send commands to the Gazebo simulation.
+   QGroundControl is a ground control station used to monitor and control drones/rovers. In this setup, it connects to the simulated vehicle (via the UDP ports in `sim_vehicle.py`) to display telemetry, maps, and cameras and to allow you to send commands to the Gazebo simulation.
 
    (optional) Layout the QGroundControl application to cover the right half of your screen. We will need the most screen space for this application.
 
@@ -167,9 +167,9 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
    </details>
 
 ### Configuring RC in QGroundControl
-1. Plug Gampad into computer. (if using logitech set it to X mode on the back)
+1. Plug the Gampad into the computer. (If using Logitech, set it to X mode on the back.)
 2. Launch QGroundControl if you have not already.
-3. Click the QGtroundControl menu button <br /> ![Alt text](./cmra_images/qgc_menu.png)
+3. Click the QGtroundControl menu button<br /> ![Alt text](./cmra_images/qgc_menu.png)
 4. Click <b>Vehicle Configuration</b>
 5. Click <b>Joystick</b>
 6. Click <b>Buttons</b>
