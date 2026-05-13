@@ -175,7 +175,7 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
 6. Click <b>Buttons</b>
 7. Assign the buttons to the following actions. <br /> ![Alt text](./cmra_images/qgc_joy_buttons.png)
    1. R1 - Arms boat
-   2. R2 - Disarms boat
+   2. L1 - Disarms boat
    3. A - Changes boat mode to hold
    4. X - Changes boat mode to manual
    5. B - Changes boat mode to auto
