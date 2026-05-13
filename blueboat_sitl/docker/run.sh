@@ -28,6 +28,8 @@ docker run -it \
     -e GZ_SIM_SYSTEM_PLUGIN_PATH=/home/blueboat_sitl/ardupilot_gazebo/build \
     -e GST_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/gstreamer-1.0 \
     -v "$XAUTH:$XAUTH" \
+    -e ROS_LOCALHOST_ONLY=1 \
+    -e ROS_DOMAIN_ID=0 \
     -v "/tmp/.X11-unix:/tmp/.X11-unix" \
     -v "/etc/localtime:/etc/localtime:ro" \
     -v "/dev/input:/dev/input" \
