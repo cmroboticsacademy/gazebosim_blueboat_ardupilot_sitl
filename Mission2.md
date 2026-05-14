@@ -52,7 +52,7 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
 ### Setup
 1. Stop the simulation (See [Stopping the simulation](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/ReadMe_CMRA.md) section)
 2. Start the simulation with the following launch commands.
-   1. Gazebo (Press play before next step)
+   1. Gazebo 
    ```
    ros2 launch move_blueboat mission2b_sim.launch.py
    ```
@@ -71,9 +71,9 @@ Recognize, plan for, and run a mission in which a portion of the route is known 
 
 ### Mission2b plan
 This plan provides you with two different types of GEO Fences.
-It provides excusion zones for the dock. There is also an exclusion zone blocking the lake's main route, forcing us to navigate the narrow channel. The channel has a line of buoys that must be navigated in Manual mode.
+It provides exclusion zones for the dock. There is also an exclusion zone blocking the lake's main route, forcing us to navigate the narrow channel. The channel has a line of buoys that must be navigated in Manual mode.
 
-This plan also provides an inclusion zone. A zone marked for inclusion means a robot cannot path outside of the zone. This prevents us from having to GEO fence the entire lake.
+This plan also provides an inclusion zone. A zone marked for inclusion means a robot cannot path outside of the zone. This prevents us from having to GEO-fence the entire lake.
 
 ### Create GEO Fence
 1. Create a plan with two Polygon GEO Fences. Position them so you can drive through the narrow channel between the west coast and the island <br />![Alt text](./cmra_images/qgc_island.png)
@@ -86,6 +86,6 @@ This plan also provides an inclusion zone. A zone marked for inclusion means a r
 ### Run the mission
 1. Run the mission and monitor the robot.
 2. When your robot cannot path through the buoys, change the flight mode to Manual and enter the buoy's exclusion zone.
-3. When you enter, the flight mode will automatically switch to hold for safety. Switch it back to Manual and drive through.
+3. When you enter, the flight mode will automatically switch to Hold for safety. Switch it back to Manual and drive through.
 4. When you exit the zone, change the flight mode back to Auto.
 5. After your mission is complete, try to come back through the channel.
