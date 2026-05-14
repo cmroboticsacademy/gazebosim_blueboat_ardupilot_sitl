@@ -2,8 +2,7 @@
 Plan a mission sequence around an island. Use exclusion zones to keep the vehicle away from known navigational hazards.
 
 ### Setup
-1. Stop the simulation (See [Stopping the simulation](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/ReadMe_CMRA.md) section)
-2. Start the simulation with the following launch commands.
+Start the simulation with the following launch commands.
    1. Gazebo (Press play before next step)
    ```bash
    ros2 launch move_blueboat mission2a_sim.launch.py
