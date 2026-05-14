@@ -2,7 +2,93 @@
 Learn and practice the steps to start up the simulation. Understand the relationship between the simulator setup and the real-world hardware and software configuration. Verify the vehicle responds by manually driving it away from the dock, then back.
 
 ## Setup
-1. Complete [Setup guide](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/README.md)
+Launch and run Gazebo Simulation
+1. In <b>T1 (Gazebo Terminal)</b> Launch Gazebo
+   ```bash
+   ros2 launch move_blueboat mission0_sim.launch.py
+   ```
+   <details>
+   <summary>What is the ros2 launch move_blueboat mission0_sim.launch.py command?</summary>
+
+   `ros2 launch move_blueboat mission0_sim.launch.py` is a ROS 2 command used to start a predefined launch configuration for a robot or simulation. The `ros2 launch` command tells ROS 2 to run a launch file; `move_blueboat` is the ROS 2 package name, and `mission0_sim.launch.py` is the specific Python-based launch file that defines which nodes, parameters, and processes to start.
+
+   In this project, running this command starts the BlueBoat Gazebo simulation for “mission0,” launching components like Gazebo, robot controllers, and any necessary ROS 2 nodes defined in that launch file, so the simulation environment is fully set up and ready to run.
+
+   (optional) Layout the Gazebo application over top of <b>T1 (Gazebo Terminal)</b>.
+
+   ![Alt text](./cmra_images/gazebo_layout.png)
+   </details>
+2. This will open the simulation window. Allow it to open and load.
+<br /> ![Alt text](./cmra_images/sim_playing.png)
+
+
+
+### Launch ArduPilot
+1. In <b>T2 (ArduPilot Terminal)</b> Launch ArduPilot
+   ```bash
+   sim_vehicle.py -v Rover -f gazebo-rover --model JSON \
+      --add-param-file=../gz_ws/cmra_boat.params -w \
+      -l 40.595009,-79.99974,0,0 \
+      --out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
+   ```
+   <details>
+   <summary>What is the sim_vehicle.py command?</summary>
+
+   `sim_vehicle.py` is a script from ArduPilot for starting a Software-In-The-Loop (SITL) vehicle simulation. The flags here specify the vehicle type (`-v Rover`), the simulation environment (`-f gazebo-rover`), and options such as using a JSON model, starting the vehicle configuration with `--add-param-file`, and setting the starting GPS location with `-l`.
+
+   The `--out=udp:127.0.0.1:14550` and `--out=udp:127.0.0.1:14551` parts send telemetry data over UDP to those ports on your local machine, which allows tools like QGroundControl or other ROS/bridge nodes to connect and interact with the simulated rover in the Gazebo environment.
+
+   This launch script will open a MAVLink Command Console. We will not be using this, so you can minimize it. This console could serve as the robot's control system, but we will use QGroundControl instead.
+   </details>
+
+![Alt text](./cmra_images/ardu_playing.png)
+
+### Launch QGroundControl
+1. In <b>T3 (QGroundControl Terminal)</b> navigate to the application folder
+   ```bash
+   cd QGroundControl/
+   ```
+2. In <b>T3</b> launch QGroundControl
+   ```bash
+   ./QGroundControl-x86_64.AppImage
+   ```
+   <details>
+   <summary>What is the /QGroundControl-x86_64.AppImage command?</summary>
+
+   `./QGroundControl-x86_64.AppImage` runs the QGroundControl application from the current directory. The `./` tells the terminal to execute the file locally, and an `.AppImage` is a self-contained Linux executable that doesn’t need installation.
+
+   QGroundControl is a ground control station used to monitor and control drones/rovers. In this setup, it connects to the simulated vehicle (via the UDP ports in `sim_vehicle.py`) to display telemetry, maps, and cameras, and to allow you to send commands to the Gazebo simulation.
+
+   (optional) Layout the QGroundControl application to cover the right half of your screen. We will need the most screen space for this application.
+
+   ![Alt text](./cmra_images/qgc_connect.png)
+
+   </details>
+
+### Configuring RC in QGroundControl
+1. Plug the gamepad into the computer. (If using Logitech, set it to X mode on the back.)
+2. Launch QGroundControl if you have not already.
+3. Click the QGtroundControl menu button<br /> ![Alt text](./cmra_images/qgc_menu.png)
+4. Click <b>Vehicle Configuration</b>
+5. Click <b>Joystick</b>
+6. Click <b>Buttons</b>
+7. Assign the buttons to the following actions. <br /> ![Alt text](./cmra_images/qgc_joy_buttons.png)
+   1. R1 - Arms boat
+   2. L1 - Disarms boat
+   3. A - Changes boat mode to hold
+   4. X - Changes boat mode to manual
+   5. B - Changes boat mode to auto
+   6. Y - Changes boat mode to RTL
+8. Click <b>Advanced</b>
+9. Modify the following
+    1.  Center stick is zero throttle
+    2.  "Allow negative Thrust" is set to true (checked)
+    3.  Enable further advanced settings is true (checked)
+    4.  "Deadbands" is set to true (checked)
+10. Click <b>Calibration</b>
+11. Calibrate your RC
+12. Press <b>Exit</b> to return to the map.
+
 
 ### Opening a plan in QGroundControl.
 Each mission has a default program that needs to be opened and uploaded to the robot. These steps will use mission0.plan as an example. Other missions will instruct you to open the plan, but will not go into detail.
