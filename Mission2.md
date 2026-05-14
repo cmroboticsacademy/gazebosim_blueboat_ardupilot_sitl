@@ -3,11 +3,11 @@ Plan a mission sequence around an island. Use exclusion zones to keep the vehicl
 
 ### Setup
 Start the simulation with the following launch commands.
-   1. Gazebo (Press play before next step)
+   1. <b>T1 Gazebo Terminal</b>
    ```bash
    ros2 launch move_blueboat mission2a_sim.launch.py
    ```
-   2. ArduPilot
+   2. <b>T2 ArduPilot Terminal</b>
    ```bash
    sim_vehicle.py -v Rover -f gazebo-rover --model JSON \
       --add-param-file=../gz_ws/cmra_boat.params -w \
@@ -18,7 +18,7 @@ Start the simulation with the following launch commands.
    ```
    cd QGroundControl/
    ```
-   4. Launch QGroundControl
+   4. Launch QGroundControl in <b>T3</b>
    ```bash
    ./QGroundControl-x86_64.AppImage
    ```
