@@ -30,7 +30,7 @@ There are two GEO Fences, one for the dock and one for the buoy. The buoy is loc
 ### Creating a GEO Fence
 1. Create a plan by going to Plan Flight in QGroundControl.
 2. Zoom your map out so you can see most of the lake.
-3. Click <b>Fence</b> on the left menu <br /> ![Alt text](./cmra_images/qgc_fence.png)
+3. Click <b>Fence</b> on the right menu <br /> ![Alt text](./cmra_images/qgc_fence.png)
 4. Click <b>Polygon Fence</b>
 5. Fence off the west coast of the lake with the fence. <br /> ![Alt text](./cmra_images/qgc_fence_left.png)
 6. Uncheck <b>Inclusion</b> for this fence. <br /> ![Alt text](./cmra_images/qgc_set_exlude.png)
