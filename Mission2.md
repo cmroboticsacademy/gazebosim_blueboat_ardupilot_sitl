@@ -15,11 +15,15 @@ Plan a mission sequence around an island. Use exclusion zones to keep the vehicl
       -l 40.595009,-79.99974,0,0 \
       --out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
    ```
-   3. QGroundControl
+   3. Change to the QGroundControl Directory in <b>T3 (QGroundControl Terminal)</b>
+   ```
+   cd QGroundControl/
+   ```
+   4. Launch QGroundControl
    ```bash
    ./QGroundControl-x86_64.AppImage
    ```
-4. Open and load <b>mission2a</b> in QGroundControl.
+   5. Open and load <b>mission2a</b> in QGroundControl.
 
 ### Mission2a plan
 There are two GEO Fences, one for the dock and one for the buoy. The buoy is located North of the island.
