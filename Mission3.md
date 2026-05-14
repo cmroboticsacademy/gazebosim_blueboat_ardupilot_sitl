@@ -24,14 +24,18 @@ Enable autonomous data collection over a relatively clear lakebed using a lawnmo
       -l 40.595009,-79.99974,0,0 \
       --out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
    ```
-   3. QGroundControl
+    3. Change to the QGroundControl Directory in <b>T3 (QGroundControl Terminal)</b>
+   ```
+   cd QGroundControl/
+   ```
+   4. Launch QGroundControl
    ```bash
    ./QGroundControl-x86_64.AppImage
    ```
-4. Open and Load <b>mission3.plan</b> in QGroundControl.
+   5. Open and load <b>mission3</b> in QGroundControl.
    
 ### Mission3 plan
-This plan only provides an excusion zone for the dock.
+This plan only provides an exclusion zone for the dock.
 
 ### Create a Survey.
 
