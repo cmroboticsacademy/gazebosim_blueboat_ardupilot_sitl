@@ -100,7 +100,13 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
    </details>
    
    ![Alt text](./cmra_images/ready_launch.png)
-
+   
+## Select a mission
+Select a mission and follow along with the direct instructions.
+Mission 0 -  [Mission 0: Software Setup and Manual Un-docking](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission0.md)
+Mission 1 - [Mission 1: Buoy and Back & Mission 1b: Monitoring the vehicle](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission1.md)
+Mission 2 - [Mission 2a: Channel & Mission 2b: Narrow Channel](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission2.md)
+Mission 3 - [Mission 3: Underwater mapping](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission3.md)
 ## Running the simulation
 
 ### Launch and run Gazebo Simulation
@@ -158,7 +164,7 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
 
    `./QGroundControl-x86_64.AppImage` runs the QGroundControl application from the current directory. The `./` tells the terminal to execute the file locally, and an `.AppImage` is a self-contained Linux executable that doesn’t need installation.
 
-   QGroundControl is a ground control station used to monitor and control drones/rovers. In this setup, it connects to the simulated vehicle (via the UDP ports in `sim_vehicle.py`) to display telemetry, maps, and cameras and to allow you to send commands to the Gazebo simulation.
+   QGroundControl is a ground control station used to monitor and control drones/rovers. In this setup, it connects to the simulated vehicle (via the UDP ports in `sim_vehicle.py`) to display telemetry, maps, and cameras, and to allow you to send commands to the Gazebo simulation.
 
    (optional) Layout the QGroundControl application to cover the right half of your screen. We will need the most screen space for this application.
 
