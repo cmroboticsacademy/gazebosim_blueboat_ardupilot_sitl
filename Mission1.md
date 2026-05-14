@@ -90,7 +90,7 @@ Proceed to implement a second simple-looking waypoint course independently. Moni
    ```bash
    ./QGroundControl-x86_64.AppImage 
    ```
-4. Open and load <b>mission2b.plan</b> in QGroundControl.
+4. Open and load <b>mission1b.plan</b> in QGroundControl.
 
 ### Mission1b plan
 This plan is exactly the same as mission 0. There are two GEO Fences, one for the dock and one for the buoy.
