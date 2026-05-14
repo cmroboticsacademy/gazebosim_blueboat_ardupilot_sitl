@@ -103,10 +103,10 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
    
 ## Select a mission
 Select a mission and follow along with the direct instructions.
-Mission 0 -  [Mission 0: Software Setup and Manual Un-docking](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission0.md)
-Mission 1 - [Mission 1: Buoy and Back & Mission 1b: Monitoring the vehicle](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission1.md)
-Mission 2 - [Mission 2a: Channel & Mission 2b: Narrow Channel](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission2.md)
-Mission 3 - [Mission 3: Underwater mapping](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission3.md)
+- Mission 0 -  [Mission 0: Software Setup and Manual Un-docking](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission0.md)
+- Mission 1 - [Mission 1: Buoy and Back & Mission 1b: Monitoring the vehicle](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission1.md)
+- Mission 2 - [Mission 2a: Channel & Mission 2b: Narrow Channel](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission2.md)
+- Mission 3 - [Mission 3: Underwater mapping](https://github.com/cmroboticsacademy/gazebosim_blueboat_ardupilot_sitl/blob/main/Mission3.md)
 ## Running the simulation
 
 ### Launch and run Gazebo Simulation
@@ -173,7 +173,7 @@ Mission 3 - [Mission 3: Underwater mapping](https://github.com/cmroboticsacademy
    </details>
 
 ### Configuring RC in QGroundControl
-1. Plug the Gampad into the computer. (If using Logitech, set it to X mode on the back.)
+1. Plug the gamepad into the computer. (If using Logitech, set it to X mode on the back.)
 2. Launch QGroundControl if you have not already.
 3. Click the QGtroundControl menu button<br /> ![Alt text](./cmra_images/qgc_menu.png)
 4. Click <b>Vehicle Configuration</b>
@@ -185,7 +185,7 @@ Mission 3 - [Mission 3: Underwater mapping](https://github.com/cmroboticsacademy
    3. A - Changes boat mode to hold
    4. X - Changes boat mode to manual
    5. B - Changes boat mode to auto
-   6. Y - Changes boat more to RTL
+   6. Y - Changes boat mode to RTL
 8. Click <b>Advanced</b>
 9. Modify the following
     1.  Center stick is zero throttle
@@ -208,9 +208,9 @@ To confirm your tech stack is running, you should see the following:
  
  
 ## Resetting the simulation
-You may often need to restart the simulation<. Most of the time, you do not have to rebuild.
+You may need to restart the simulation often. Most of the time, you do not have to rebuild.
 
-1. Click into <b>T1 (Gazebo Terminal)</b> and press `ctl + c`. This will stop the gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
+1. Click into <b>T1 (Gazebo Terminal)</b> and press `ctl + c`. This will stop the Gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
 2. Do the same for <b>T2 (ArduPilot terminal)</b>
 3. After both terminals are stopped, re-run the launch commands. Click into <b>T1</b>. Use the up arrow on your keyboard to load the last executed command. Check that it is the correct launch command, then press Enter.
 4. Do the same for <b>T2</b>
@@ -218,10 +218,10 @@ You may often need to restart the simulation<. Most of the time, you do not have
 Most of the time, you will not have to reset QGroundControl in <b>T3</b>. Follow these steps if needed:
 1. Close the QGroundControl Application
 2. Click into <b>T3 (QGroundControl)</b>, and press `ctl + c`.
-3. Press up to load the last executed command. Confirm it’s correct and press enter.
+3. Press up to load the last executed command. Confirm it’s correct and press Enter.
 
 ## Stopping the simulation
-1. 1. Click into <b>T1 (Gazebo Terminal)</b> and press `ctl + c`. This will stop the gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
+1. 1. Click into <b>T1 (Gazebo Terminal)</b> and press `ctl + c`. This will stop the Gazebo simulation. If the terminal does not stop processing, press `ctl + c` again until you get a terminal line that you can type into.
 2. Do the same for <b>T2 (ArduPilot Terminal)</b>
 3. Close the QGroundControl Application.
 
