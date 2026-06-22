@@ -21,6 +21,10 @@
             <uri>model://ocean_floor/meshes/ocean_floor.obj</uri>
           </mesh>
         </geometry>
+        <material>
+            <ambient>0.8 0.2 0.2 1</ambient>
+            <diffuse>0.360 0.250 0.200 1</diffuse>
+        </material>
       </visual>
     </link>
   </model>
