@@ -75,6 +75,7 @@ class BathymetryMapper(Node):
 
         self.declare_parameter('scan_topic', '/bathymetry/scan')
         self.declare_parameter('odom_topic', '/model/blueboat/odometry')
+        self.declare_parameter('cloud_topic', '/ocean_floor/map_cloud')
         self.declare_parameter('map_frame', 'odom')
         self.declare_parameter('sensor_offset_xyz', [0.0, 0.0, -0.10])
         self.declare_parameter('sensor_offset_rpy', [0.0, -1.57079632679, 0.0])
@@ -84,6 +85,7 @@ class BathymetryMapper(Node):
 
         scan_topic = self.get_parameter('scan_topic').value
         odom_topic = self.get_parameter('odom_topic').value
+        cloud_topic = self.get_parameter('cloud_topic').value
         self.map_frame = self.get_parameter('map_frame').value
         self.sensor_offset_xyz = list(self.get_parameter('sensor_offset_xyz').value)
         self.sensor_offset_rpy = list(self.get_parameter('sensor_offset_rpy').value)
@@ -92,14 +94,16 @@ class BathymetryMapper(Node):
         self.max_range = float(self.get_parameter('max_range').value)
 
         self.latest_odom = None
-        self.cloud_pub = self.create_publisher(PointCloud2, '/ocean_floor/map_cloud', 1)
+        self.cloud_pub = self.create_publisher(PointCloud2, cloud_topic, 1)
         self.scan_sub = self.create_subscription(LaserScan, scan_topic, self.scan_cb, 10)
         self.odom_sub = self.create_subscription(Odometry, odom_topic, self.odom_cb, 20)
 
         self.points: Dict[Tuple[int, int, int], Tuple[float, float, float]] = {}
         self.publish_timer = self.create_timer(1.0, self.publish_cloud)
 
-        self.get_logger().info('Bathymetry mapper started.')
+        self.get_logger().info(
+            f'Bathymetry mapper started. scan={scan_topic}, odom={odom_topic}, cloud={cloud_topic}'
+        )
 
     def odom_cb(self, msg: Odometry):
         self.latest_odom = msg
