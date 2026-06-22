@@ -8,8 +8,12 @@ Panels:
         - /Grid1
         - /BlueBoat 1 Ocean Floor Map1
         - /BlueBoat 2 Ocean Floor Map1
+        - /BlueBoat 3 Ocean Floor Map1
+        - /BlueBoat 4 Ocean Floor Map1
         - /BlueBoat 1 Odometry1
         - /BlueBoat 2 Odometry1
+        - /BlueBoat 3 Odometry1
+        - /BlueBoat 4 Odometry1
       Splitter Ratio: 0.5
     Tree Height: 760
   - Class: rviz_common/Selection
@@ -75,6 +79,42 @@ Visualization Manager:
       Use Fixed Frame: true
       Value: true
 
+    - Class: rviz_default_plugins/PointCloud2
+      Name: BlueBoat 3 Ocean Floor Map
+      Enabled: true
+      Topic:
+        Value: /blueboat3/ocean_floor/map_cloud
+        Depth: 10
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+      Color Transformer: AxisColor
+      Axis: Z
+      Use rainbow: true
+      Size (m): 0.08
+      Style: Flat Squares
+      Alpha: 1
+      Use Fixed Frame: true
+      Value: true
+
+    - Class: rviz_default_plugins/PointCloud2
+      Name: BlueBoat 4 Ocean Floor Map
+      Enabled: true
+      Topic:
+        Value: /blueboat4/ocean_floor/map_cloud
+        Depth: 10
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+      Color Transformer: AxisColor
+      Axis: Z
+      Use rainbow: true
+      Size (m): 0.08
+      Style: Flat Squares
+      Alpha: 1
+      Use Fixed Frame: true
+      Value: true
+
     - Class: rviz_default_plugins/Odometry
       Name: BlueBoat 1 Odometry
       Enabled: true
@@ -92,6 +132,30 @@ Visualization Manager:
       Enabled: true
       Topic:
         Value: /model/blueboat2/odometry
+        Depth: 10
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+      Keep: 200
+      Value: true
+
+    - Class: rviz_default_plugins/Odometry
+      Name: BlueBoat 3 Odometry
+      Enabled: true
+      Topic:
+        Value: /model/blueboat3/odometry
+        Depth: 10
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+      Keep: 200
+      Value: true
+    
+    - Class: rviz_default_plugins/Odometry
+      Name: BlueBoat 4 Odometry
+      Enabled: true
+      Topic:
+        Value: /model/blueboat4/odometry
         Depth: 10
         Reliability Policy: Reliable
         Durability Policy: Volatile

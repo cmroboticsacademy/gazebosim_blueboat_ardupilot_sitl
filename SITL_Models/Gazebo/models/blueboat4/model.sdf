@@ -1,5 +1,5 @@
 <sdf version="1.9">
-  <model name="blueboat3">
+  <model name="blueboat4">
     <link name="base_link">
       <inertial>
         <pose>-0.05 0 -0.15 0 0 0</pose>
@@ -351,7 +351,7 @@
       <sensor name="fpv_camera" type="camera">
         <always_on>true</always_on>
         <update_rate>15</update_rate>
-        <topic>/blueboat3/camera</topic>
+        <topic>/blueboat4/camera</topic>
         <camera>
           <horizontal_fov>1.3962634</horizontal_fov>
           <image>
@@ -367,7 +367,7 @@
         <plugin name="GstCameraPlugin"
                 filename="/home/blueboat_sitl/ardupilot_gazebo/build/libGstCameraPlugin.so">
           <udp_host>127.0.0.1</udp_host>
-          <udp_port>5603</udp_port>
+          <udp_port>5604</udp_port>
           <use_basic_pipeline>true</use_basic_pipeline>
           <use_cuda>false</use_cuda>
         </plugin>
@@ -421,7 +421,7 @@
         <pose>0 0 0 0 0 0</pose>
         <always_on>1</always_on>
         <update_rate>1.0</update_rate>
-        <topic>/blueboat3/navsat</topic>
+        <topic>/blueboat4/navsat</topic>
         <gps>
           <fix>
             <service>1</service>
@@ -453,7 +453,7 @@
         <pose degrees="true">0 0 0 0 90 0</pose>
         <always_on>1</always_on>
         <update_rate>8.0</update_rate>
-        <topic>/blueboat3/bathymetry/scan</topic>
+        <topic>/blueboat4/bathymetry/scan</topic>
         <ray>
           <scan>
             <horizontal>
@@ -497,7 +497,7 @@
 
     <plugin name="gz::sim::systems::Thruster"
             filename="gz-sim-thruster-system">
-      <namespace>blueboat3</namespace>
+      <namespace>blueboat4</namespace>
       <joint_name>motor_port_joint</joint_name>
       <thrust_coefficient>-0.02</thrust_coefficient>
       <fluid_density>1025</fluid_density>
@@ -508,7 +508,7 @@
 
     <plugin name="gz::sim::systems::Thruster"
             filename="gz-sim-thruster-system">
-      <namespace>blueboat3</namespace>
+      <namespace>blueboat4</namespace>
       <joint_name>motor_stbd_joint</joint_name>
       <thrust_coefficient>0.02</thrust_coefficient>
       <fluid_density>1025</fluid_density>
@@ -519,7 +519,7 @@
 
     <plugin name="gz::sim::systems::Hydrodynamics"
             filename="gz-waves1-hydrodynamics-system">
-      <enable>blueboat3::base_link</enable>
+      <enable>blueboat4::base_link</enable>
       <hydrodynamics>
         <damping_on>1</damping_on>
         <viscous_drag_on>1</viscous_drag_on>
@@ -530,7 +530,7 @@
     <plugin name="ArduPilotPlugin"
             filename="ArduPilotPlugin">
       <fdm_addr>127.0.0.1</fdm_addr>
-      <fdm_port_in>9022</fdm_port_in>
+      <fdm_port_in>9032</fdm_port_in>
       <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
       <lock_step>1</lock_step>
       <gazeboXYZToNED degrees="true">0 0 0 180 0 90</gazeboXYZToNED>
@@ -544,7 +544,7 @@
         <servo_min>1000</servo_min>
         <servo_max>2000</servo_max>
         <type>COMMAND</type>
-        <cmd_topic>/model/blueboat3/joint/motor_port_joint/cmd_thrust</cmd_topic>
+        <cmd_topic>/model/blueboat4/joint/motor_port_joint/cmd_thrust</cmd_topic>
       </control>
 
       <control channel="2">
@@ -554,7 +554,7 @@
         <servo_min>1000</servo_min>
         <servo_max>2000</servo_max>
         <type>COMMAND</type>
-        <cmd_topic>/model/blueboat3/joint/motor_stbd_joint/cmd_thrust</cmd_topic>
+        <cmd_topic>/model/blueboat4/joint/motor_stbd_joint/cmd_thrust</cmd_topic>
       </control>
     </plugin>
   </model>
