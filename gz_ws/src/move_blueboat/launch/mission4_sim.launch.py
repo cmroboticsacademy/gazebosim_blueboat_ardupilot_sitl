@@ -22,7 +22,7 @@ def generate_launch_description():
         ExecuteProcess(
             cmd=[
                 'env',
-                'LIBGL_ALWAYS_SOFTWARE=1',
+                # 'LIBGL_ALWAYS_SOFTWARE=1',
                 'gz',
                 'sim',
                 '--force-version',

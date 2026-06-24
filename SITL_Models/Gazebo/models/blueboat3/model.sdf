@@ -29,7 +29,7 @@
           </mesh>
         </geometry>
         <material>
-          <diffuse>0 0 1 1</diffuse>
+          <diffuse>1 0 0 1</diffuse>
           <ambient>1 0 1 1</ambient>
           <specular>0.7 0.7 0.7 1</specular>
           <pbr>
@@ -367,7 +367,7 @@
         <plugin name="GstCameraPlugin"
                 filename="/home/blueboat_sitl/ardupilot_gazebo/build/libGstCameraPlugin.so">
           <udp_host>127.0.0.1</udp_host>
-          <udp_port>5603</udp_port>
+          <udp_port>5608</udp_port>
           <use_basic_pipeline>true</use_basic_pipeline>
           <use_cuda>false</use_cuda>
         </plugin>
