@@ -1,0 +1,25 @@
+newmtl droneMaterial
+ka 1 1 1
+Kd 1 1 1
+Pr 1
+Ks 0 0 0
+Ns 0
+illum 1
+map_Kd /textures/drone_baseColor.png
+
+newmtl cfMaterial
+ka 1 1 1
+Kd 1 1 1
+Pr 1
+Ks 0 0 0
+Ns 0
+illum 1
+map_Kd /textures/drone_CFbaseColor.png
+
+newmtl glassMaterial
+ka 1 1 1
+Kd 0 0 0
+Pr 1
+Ks .2 .2 .2
+Ns .8
+illum 1
