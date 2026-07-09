@@ -1,0 +1,20 @@
+newmtl boatMaterial
+ka 1 1 1
+Kd 1 1 1
+Pr 1
+Ks 0 0 0
+Ns 0
+illum 1
+map_Kd /textures/boat_baseColor.jpeg
+
+newmtl boatMaterial2
+ka 1 1 1
+Kd 1 1 1
+Pr 1
+Ks 0 0 0
+Ns 0
+illum 1
+map_Kd /textures/boat_baseColor2.jpeg
+
+
+

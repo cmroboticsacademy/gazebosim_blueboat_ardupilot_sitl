@@ -1,0 +1,8 @@
+newmtl picnictableMaterial
+ka 1 1 1
+Kd 1 1 1
+Pr 0
+Ks 0 0 0
+Ns 0
+illum 2
+map_Kd /textures/picnictable_baseColor.png
