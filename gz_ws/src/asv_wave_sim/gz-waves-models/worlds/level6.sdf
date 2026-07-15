@@ -54,8 +54,18 @@
       <pose>0 0 0 0 0 0</pose>
       <uri>model://no_waves</uri>
     </include>
+    <include>
+      <name>cmra_terrain</name>
+      <pose>0 0 0 0 0 0</pose>
+      <uri>model://cmra_models/terrain</uri>
+    </include>
 
     <include>
+      <name>cmra_lakefloor</name>
+      <pose>0 0 -7.75 0 0 0</pose>
+      <uri>model://cmra_models/lakefloor</uri>
+    </include>
+    <!-- <include>
       <uri>model://ocean_floor</uri>
       <pose>0 -45 -10 0 0 0</pose>
     </include>
@@ -63,7 +73,7 @@
     <include>
       <uri>model://world_mass</uri>
       <pose>0 0 -6 0 0 0</pose>
-    </include>
+    </include> -->
 
     <!--
       Boat 1 uses the existing SITL_Models/Gazebo/models/blueboat model.
@@ -97,133 +107,175 @@
       <name>blueboat4</name>
       <pose>0 -4 0 0 0 -1.5708</pose>
       <uri>model://blueboat4</uri>
-    </include> -
+    </include>
 
-    <!-- Mission reference buoys. These are far enough from the spawn area
-         that neither boat starts interpenetrating a marker or dock. -->
+    
+    <!-- POSITIVE HAZZARDS -->
+    <include>
+      <name>cmra_airplane</name>
+      <pose>-20 -15 -10 0 0 0</pose>
+      <uri>model://cmra_models/airplane</uri>
+    </include>
+    <include>
+      <name>cmra_boat</name>
+      <pose>-5 -15 -10 0 0 0</pose>
+      <uri>model://cmra_models/boat</uri>
+    </include>
+    <include>
+      <name>cmra_bus</name>
+      <pose>5 -15 -10 0 0 0</pose>
+      <uri>model://cmra_models/bus</uri>
+    </include>
+    <include>
+      <name>cmra_car_wrecked</name>
+      <pose>10 -30 -10 0 0 0</pose>
+      <uri>model://cmra_models/car_wrecked</uri>
+    </include>
+    <include>
+      <name>cmra_drone</name>
+      <pose>-8 -30 -10 0 0 0</pose>
+      <uri>model://cmra_models/drone</uri>
+    </include>
+    <include>
+      <name>cmra_drum</name>
+      <pose>-10 -30 -10 0 0 0</pose>
+      <uri>model://cmra_models/drum</uri>
+    </include>
+    <include>
+      <name>cmra_truck</name>
+      <pose>5 -45 -10 0 0 0</pose>
+      <uri>model://cmra_models/truck</uri>
+    </include>
+
+    <!-- NEGATIVE HAZZARDS -->
+    <include>
+      <name>cmra_canoe</name>
+      <pose>20 -15 -10 0 0 0</pose>
+      <uri>model://cmra_models/canoe</uri>
+    </include>
+    <include>
+      <name>cmra_couch</name>
+      <pose>-5 -30 -10 0 0 0</pose>
+      <uri>model://cmra_models/couch</uri>
+    </include>
+    <include>
+      <name>cmra_picnic_table</name>
+      <pose>-5 -45 -10 0 0 0</pose>
+      <uri>model://cmra_models/picnic_table</uri>
+    </include>
+    <include>
+      <name>cmra_seaweed</name>
+      <pose>0 -45 -10 0 0 0</pose>
+      <uri>model://cmra_models/seaweed</uri>
+    </include>
+
+    <include>
+      <uri>model://dock</uri>
+      <name>dock_1</name>
+      <pose>1.8 1.2 -.1 0 0 -1.5708</pose>
+    </include> 
+
+    <!-- ZONE 1 -->
     <include>
       <uri>model://buoy_marker</uri>
-      <name>buoy_1</name>
-      <pose>-40 -70 0 0 0 0</pose>
+      <name>B1</name>
+      <pose>-40 -80 0 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://buoy_marker</uri>
-      <name>buoy_2</name>
-      <pose>-40 -20 0 0 0 0</pose>
+      <name>B2</name>
+      <pose>-40 -40 0 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://buoy_marker</uri>
-      <name>buoy_3</name>
-      <pose>40 -70 0 0 0 0</pose>
+      <name>B3</name>
+      <pose>40 -80 0 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://buoy_marker</uri>
-      <name>buoy_4</name>
-      <pose>40 -20 0 0 0 0</pose>
+      <name>B4</name>
+      <pose>40 -40 0 0 0 0</pose>
+    </include>
+
+    <!-- ZONE 2 -->
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B5</name>
+      <pose>100 -40 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B6</name>
+      <pose>100 0 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B7</name>
+      <pose>180 -40 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B8</name>
+      <pose>180 0 0 0 0 0</pose>
+    </include>
+
+    <!-- ZONE 3 -->
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B9</name>
+      <pose>150 120 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B10</name>
+      <pose>150 40 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B11</name>
+      <pose>190 120 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B12</name>
+      <pose>190 40 0 0 0 0</pose>
+    </include>
+
+    <!-- ZONE 4 -->
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B13</name>
+      <pose>90 145 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B14</name>
+      <pose>90 185 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B15</name>
+      <pose>170 145 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://buoy_marker</uri>
+      <name>B16</name>
+      <pose>170 185 0 0 0 0</pose>
     </include>
 
     <!-- Underwater test objects retained for level-style mission content. -->
-    <model name="test_cube_1">
-      <static>true</static>
-      <pose>-8 -50 -3.2 0 0 0</pose>
-      <link name="link">
-        <collision name="collision">
-          <geometry>
-            <box>
-              <size>1.5 1.5 1.5</size>
-            </box>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>1.5 1.5 1.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.8 0.2 0.2 1</ambient>
-            <diffuse>0.8 0.2 0.2 1</diffuse>
-          </material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="test_cube_2">
-      <static>true</static>
-      <pose>10 -40 -5 0 0 0</pose>
-      <link name="link">
-        <collision name="collision">
-          <geometry>
-            <box>
-              <size>2.0 2.0 2.0</size>
-            </box>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>2.0 2.0 2.0</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.2 0.8 0.2 1</ambient>
-            <diffuse>0.2 0.8 0.2 1</diffuse>
-          </material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="test_cube_3">
-      <static>true</static>
-      <pose>5 -35 -4 0 0 0</pose>
-      <link name="link">
-        <collision name="collision">
-          <geometry>
-            <box>
-              <size>1.0 1.0 3.0</size>
-            </box>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>1.0 1.0 3.0</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.2 0.2 0.8 1</ambient>
-            <diffuse>0.2 0.2 0.8 1</diffuse>
-          </material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="test_cube_4">
-      <static>true</static>
-      <pose>-15 -50 -3.5 0 0 0</pose>
-      <link name="link">
-        <collision name="collision">
-          <geometry>
-            <box>
-              <size>3.0 1.5 1.5</size>
-            </box>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>3.0 1.5 1.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.9 0.8 0.2 1</ambient>
-            <diffuse>0.9 0.8 0.2 1</diffuse>
-          </material>
-        </visual>
-      </link>
-    </model>
+   
   </world>
 </sdf>

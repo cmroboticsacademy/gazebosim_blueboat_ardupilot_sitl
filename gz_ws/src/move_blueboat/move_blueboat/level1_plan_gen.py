@@ -26,10 +26,25 @@ class QGCFenceUploader(Node):
         # =========================
         self.buoys = [
             # {'name': 'B1', 'east': 115.0,  'north': 150.0},
-            {'name': 'B1', 'east': -40 ,  'north': -45 + -25},
-            {'name': 'B2', 'east': -40,  'north': -45 + 25},
-            {'name': 'B3', 'east': 40,  'north': -45 + -25},
-            {'name': 'B4', 'east': 40,  'north': -45 + 25},
+            {'name': 'B1', 'east': -40 ,  'north': -80}, 
+            {'name': 'B2', 'east': -40,  'north': -40},
+            {'name': 'B3', 'east': 40,  'north': -80},
+            {'name': 'B4', 'east': 40,  'north': -40},
+
+            {'name': 'B5', 'east': 100 , 'north': -40},
+            {'name': 'B6', 'east': 100,  'north': 0},
+            {'name': 'B7', 'east': 180,  'north': -40},
+            {'name': 'B8', 'east': 180,  'north': 0},
+
+            {'name': 'B9', 'east':  150, 'north': 120 },
+            {'name': 'B10', 'east': 150,  'north': 40 },
+            {'name': 'B11', 'east': 190,  'north': 120 },
+            {'name': 'B12', 'east': 190,  'north': 40 },
+
+            {'name': 'B13', 'east':  90, 'north': 145 },
+            {'name': 'B14', 'east': 90,  'north': 185 },
+            {'name': 'B15', 'east': 170,  'north': 145 },
+            {'name': 'B16', 'east': 170,  'north': 185 },
         ]
 
         # =========================

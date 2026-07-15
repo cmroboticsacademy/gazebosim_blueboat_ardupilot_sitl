@@ -5,7 +5,6 @@ Pr 1
 Ks 0 0 0
 Ns 0
 illum 1
-map_Kd /textures/seaweed_baseColor.png
-
+map_Kd textures/seaweed_baseColor.png
 
 

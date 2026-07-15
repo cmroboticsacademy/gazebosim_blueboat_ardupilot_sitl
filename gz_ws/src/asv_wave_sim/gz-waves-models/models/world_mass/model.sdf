@@ -8,19 +8,23 @@
       <collision name="world_land_collision">
         <geometry>
           <mesh>
-            <uri>model://world_mass/meshes/world_land.obj</uri>
+            <uri>model://world_mass/meshes/world_land_collision_high_only_04.obj</uri>
           </mesh>
         </geometry>
-      </collision>
+      </collision>  
 
       <visual name="world_land_visual">
         <cast_shadows>false</cast_shadows>
         <geometry>
           <mesh>
-            <uri>model://world_mass/meshes/world_land.obj</uri>
+            <uri>model://world_mass/meshes/world_land_collision_high_only_04.obj</uri>
           </mesh>
+          <material>
+            <ambient>0.8 0.2 0.2 1</ambient>
+            <diffuse>0.360 0.250 0.200 1</diffuse>
+        </material>
         </geometry>
-      </visual>
+      </visual> 
     </link>
   </model>
 </sdf>

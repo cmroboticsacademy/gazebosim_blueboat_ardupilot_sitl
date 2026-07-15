@@ -5,4 +5,4 @@ Pr 0
 Ks .4 .4 .4
 Ns 1
 illum 2
-map_Kd /textures/truck_baseColor.png
+map_Kd textures/truck_baseColor.png

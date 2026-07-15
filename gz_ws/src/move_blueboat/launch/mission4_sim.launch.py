@@ -43,8 +43,8 @@ def generate_launch_description():
                 '/model/blueboat/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
                 '/bathymetry/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
-                '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                # '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                # '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
 
                 # Boat 2 / ArduPilot instance -I1 / SYSID 2
                 '/model/blueboat2/joint/motor_port_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',
@@ -52,8 +52,8 @@ def generate_launch_description():
                 '/model/blueboat2/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/blueboat2/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
                 '/blueboat2/bathymetry/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
-                '/blueboat2/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/blueboat2/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                # '/blueboat2/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                # '/blueboat2/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
 
                 # Boat 3 / ArduPilot instance -I1 / SYSID 3
                 '/model/blueboat3/joint/motor_port_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',
@@ -61,8 +61,8 @@ def generate_launch_description():
                 '/model/blueboat3/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/blueboat3/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
                 '/blueboat3/bathymetry/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
-                '/blueboat3/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/blueboat3/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                # '/blueboat3/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                # '/blueboat3/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
 
                 # Boat 4 / ArduPilot instance -I1 / SYSID 4
                 '/model/blueboat4/joint/motor_port_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',
@@ -70,8 +70,8 @@ def generate_launch_description():
                 '/model/blueboat4/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/blueboat4/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
                 '/blueboat4/bathymetry/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
-                '/blueboat4/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/blueboat4/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                # '/blueboat4/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                # '/blueboat4/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
             ],
             output='screen',
         ),
@@ -188,6 +188,6 @@ def generate_launch_description():
                     ],
                     output='screen',
                 ),
-            ],
+             ],
         ),
     ])

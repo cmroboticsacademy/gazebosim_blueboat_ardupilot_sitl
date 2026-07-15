@@ -6,13 +6,13 @@
 
     <!-- Original floor -->
     <link name="terrain_link">
-      <collision name="terrain_collision">
+      <!-- <collision name="terrain_collision">
         <geometry>
           <mesh>
-            <uri>model://ocean_floor/meshes/ocean_floor.obj</uri>
+            <uri>model://ocean_floor/meshes/ocean_floor_collision_low.obj</uri>
           </mesh>
         </geometry>
-      </collision>
+      </collision> -->
 
       <visual name="terrain_visual">
         <cast_shadows>false</cast_shadows>
@@ -25,7 +25,7 @@
             <ambient>0.8 0.2 0.2 1</ambient>
             <diffuse>0.360 0.250 0.200 1</diffuse>
         </material>
-      </visual>
+      </visual> 
     </link>
   </model>
 </sdf>

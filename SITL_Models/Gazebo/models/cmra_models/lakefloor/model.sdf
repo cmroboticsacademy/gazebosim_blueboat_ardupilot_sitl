@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="cmra_lakefloor">
+    <static>true</static>
+
+    <link name="lakefloor_link">
+      <collision name="lakefloor_collision">
+        <geometry>
+          <mesh>
+            <uri>model://cmra_models/lakefloor/lakefloor.obj</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </collision>
+
+      <visual name="lakefloor_visual">
+        <geometry>
+          <mesh>
+            <uri>model://cmra_models/lakefloor/lakefloor.obj</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>
