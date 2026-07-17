@@ -82,97 +82,37 @@
     -->
     <include>
       <name>blueboat</name>
-      <pose>0 -0.75 0 0 0 -1.5708</pose>
+      <pose>0 1 0 0 0 -1.5708</pose>
       <uri>model://blueboat</uri>
     </include>
-
-    <!--
-      Boat 2 uses the added SITL_Models/Gazebo/models/blueboat2 model.
-      Its ArduPilotPlugin listens on FDM port 9012, which matches
-      sim_vehicle.py instance -I1. The two boats start side-by-side with
-      enough spacing to avoid initial collision while still appearing next
-      to each other.
-    -->
     <include>
       <name>blueboat2</name>
-      <pose>0 0.75 0 0 0 -1.5708</pose>
+      <pose>0 -1 0 0 0 -1.5708</pose>
       <uri>model://blueboat2</uri>
     </include>
     <include>
       <name>blueboat3</name>
-      <pose>0 -2 0 0 0 -1.5708</pose>
+      <pose>0 -3 0 0 0 -1.5708</pose>
       <uri>model://blueboat3</uri>
     </include>
      <include>
       <name>blueboat4</name>
-      <pose>0 -4 0 0 0 -1.5708</pose>
+      <pose>0 -5 0 0 0 -1.5708</pose>
       <uri>model://blueboat4</uri>
     </include>
 
-    
-    <!-- POSITIVE HAZZARDS -->
-    <include>
-      <name>cmra_airplane</name>
-      <pose>-20 -15 -10 0 0 0</pose>
-      <uri>model://cmra_models/airplane</uri>
-    </include>
-    <include>
-      <name>cmra_boat</name>
-      <pose>-5 -15 -10 0 0 0</pose>
-      <uri>model://cmra_models/boat</uri>
-    </include>
-    <include>
-      <name>cmra_bus</name>
-      <pose>5 -15 -10 0 0 0</pose>
-      <uri>model://cmra_models/bus</uri>
-    </include>
-    <include>
-      <name>cmra_car_wrecked</name>
-      <pose>10 -30 -10 0 0 0</pose>
-      <uri>model://cmra_models/car_wrecked</uri>
-    </include>
-    <include>
-      <name>cmra_drone</name>
-      <pose>-8 -30 -10 0 0 0</pose>
-      <uri>model://cmra_models/drone</uri>
-    </include>
-    <include>
-      <name>cmra_drum</name>
-      <pose>-10 -30 -10 0 0 0</pose>
-      <uri>model://cmra_models/drum</uri>
-    </include>
-    <include>
-      <name>cmra_truck</name>
-      <pose>5 -45 -10 0 0 0</pose>
-      <uri>model://cmra_models/truck</uri>
-    </include>
-
-    <!-- NEGATIVE HAZZARDS -->
-    <include>
-      <name>cmra_canoe</name>
-      <pose>20 -15 -10 0 0 0</pose>
-      <uri>model://cmra_models/canoe</uri>
-    </include>
-    <include>
-      <name>cmra_couch</name>
-      <pose>-5 -30 -10 0 0 0</pose>
-      <uri>model://cmra_models/couch</uri>
-    </include>
-    <include>
-      <name>cmra_picnic_table</name>
-      <pose>-5 -45 -10 0 0 0</pose>
-      <uri>model://cmra_models/picnic_table</uri>
-    </include>
-    <include>
-      <name>cmra_seaweed</name>
-      <pose>0 -45 -10 0 0 0</pose>
-      <uri>model://cmra_models/seaweed</uri>
-    </include>
+    <!--
+      mission4_sim.launch.py replaces the contents between these markers in a
+      temporary copy of this world. Keep both marker comments in this file.
+    -->
+    <!-- MISSION4_HAZARDS_START -->
+    <!-- Seeded hazard includes are inserted here at launch time. -->
+    <!-- MISSION4_HAZARDS_END -->
 
     <include>
       <uri>model://dock</uri>
       <name>dock_1</name>
-      <pose>1.8 1.2 -.1 0 0 -1.5708</pose>
+      <pose>1.8 0 -.1 0 0 -1.5708</pose>
     </include> 
 
     <!-- ZONE 1 -->

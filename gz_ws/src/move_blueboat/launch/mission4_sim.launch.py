@@ -1,8 +1,54 @@
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, TimerAction
+from launch.actions import (
+    DeclareLaunchArgument,
+    ExecuteProcess,
+    LogInfo,
+    OpaqueFunction,
+    TimerAction,
+)
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+from move_blueboat.mission4_world_generator import create_seeded_world
 import os
+
+
+def _launch_seeded_gazebo(context):
+    generated_world = create_seeded_world(
+        LaunchConfiguration('seed').perform(context),
+        LaunchConfiguration('world_template').perform(context),
+    )
+
+    actions = [
+        LogInfo(msg=f'Mission 4 source template: {generated_world.template_path}'),
+        LogInfo(msg=f'Mission 4 hazard seed: {generated_world.seed}'),
+        LogInfo(msg=f'Generated Mission 4 world: {generated_world.world_path}'),
+    ]
+
+    for zone_name in sorted({p.zone.name for p in generated_world.placements}):
+        zone_hazards = [
+            p.entity_name
+            for p in generated_world.placements
+            if p.zone.name == zone_name
+        ]
+        actions.append(LogInfo(
+            msg=f'{zone_name}: {", ".join(zone_hazards)}'
+        ))
+
+    actions.append(ExecuteProcess(
+        cmd=[
+            'env',
+            # 'LIBGL_ALWAYS_SOFTWARE=1',
+            'gz',
+            'sim',
+            '--force-version',
+            '7',
+            '-r',
+            str(generated_world.world_path),
+        ],
+        output='screen',
+    ))
+    return actions
 
 
 def generate_launch_description():
@@ -19,19 +65,23 @@ def generate_launch_description():
     }
 
     return LaunchDescription([
-        ExecuteProcess(
-            cmd=[
-                'env',
-                # 'LIBGL_ALWAYS_SOFTWARE=1',
-                'gz',
-                'sim',
-                '--force-version',
-                '7',
-                '-r',
-                'level6.sdf',
-            ],
-            output='screen',
+        DeclareLaunchArgument(
+            'seed',
+            default_value='',
+            description=(
+                'Integer seed for Mission 4 hazard placement. '
+                'Leave empty to generate a random seed.'
+            ),
         ),
+        DeclareLaunchArgument(
+            'world_template',
+            default_value='',
+            description=(
+                'Absolute path to the editable level6.sdf. When empty, '
+                'the launch searches the current gz_ws source tree first.'
+            ),
+        ),
+        OpaqueFunction(function=_launch_seeded_gazebo),
 
         Node(
             package='ros_ign_bridge',
