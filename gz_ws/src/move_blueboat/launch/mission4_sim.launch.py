@@ -44,6 +44,7 @@ def _launch_seeded_gazebo(context):
             '--force-version',
             '7',
             '-r',
+            # '-s',
             str(generated_world.world_path),
         ],
         output='screen',
