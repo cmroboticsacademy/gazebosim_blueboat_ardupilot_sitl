@@ -192,7 +192,7 @@ def generate_launch_description():
                         'gz',
                         'topic',
                         '-t',
-                        '/camera/enable_streaming',
+                        '/blueboat/camera/enable_streaming',
                         '-m',
                         'gz.msgs.Boolean',
                         '-p',
