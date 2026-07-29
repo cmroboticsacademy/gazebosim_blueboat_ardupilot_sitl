@@ -5,4 +5,4 @@ Pr 0
 Ks 0 0 0
 Ns 0
 illum 2
-map_Kd /textures/car_baseColor.jpeg
+map_Kd textures/car_baseColor.jpeg

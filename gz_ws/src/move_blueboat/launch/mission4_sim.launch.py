@@ -1,8 +1,55 @@
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, TimerAction
+from launch.actions import (
+    DeclareLaunchArgument,
+    ExecuteProcess,
+    LogInfo,
+    OpaqueFunction,
+    TimerAction,
+)
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+from move_blueboat.mission4_world_generator import create_seeded_world
 import os
+
+
+def _launch_seeded_gazebo(context):
+    generated_world = create_seeded_world(
+        LaunchConfiguration('seed').perform(context),
+        LaunchConfiguration('world_template').perform(context),
+    )
+
+    actions = [
+        LogInfo(msg=f'Mission 4 source template: {generated_world.template_path}'),
+        LogInfo(msg=f'Mission 4 hazard seed: {generated_world.seed}'),
+        LogInfo(msg=f'Generated Mission 4 world: {generated_world.world_path}'),
+    ]
+
+    for zone_name in sorted({p.zone.name for p in generated_world.placements}):
+        zone_hazards = [
+            p.entity_name
+            for p in generated_world.placements
+            if p.zone.name == zone_name
+        ]
+        actions.append(LogInfo(
+            msg=f'{zone_name}: {", ".join(zone_hazards)}'
+        ))
+
+    actions.append(ExecuteProcess(
+        cmd=[
+            'env',
+            # 'LIBGL_ALWAYS_SOFTWARE=1',
+            'gz',
+            'sim',
+            '--force-version',
+            '7',
+            '-r',
+            # '-s',
+            str(generated_world.world_path),
+        ],
+        output='screen',
+    ))
+    return actions
 
 
 def generate_launch_description():
@@ -19,19 +66,23 @@ def generate_launch_description():
     }
 
     return LaunchDescription([
-        ExecuteProcess(
-            cmd=[
-                'env',
-                # 'LIBGL_ALWAYS_SOFTWARE=1',
-                'gz',
-                'sim',
-                '--force-version',
-                '7',
-                '-r',
-                'level6.sdf',
-            ],
-            output='screen',
+        DeclareLaunchArgument(
+            'seed',
+            default_value='',
+            description=(
+                'Integer seed for Mission 4 hazard placement. '
+                'Leave empty to generate a random seed.'
+            ),
         ),
+        DeclareLaunchArgument(
+            'world_template',
+            default_value='',
+            description=(
+                'Absolute path to the editable level6.sdf. When empty, '
+                'the launch searches the current gz_ws source tree first.'
+            ),
+        ),
+        OpaqueFunction(function=_launch_seeded_gazebo),
 
         Node(
             package='ros_ign_bridge',
@@ -43,8 +94,8 @@ def generate_launch_description():
                 '/model/blueboat/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
                 '/bathymetry/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
-                '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                # '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                # '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
 
                 # Boat 2 / ArduPilot instance -I1 / SYSID 2
                 '/model/blueboat2/joint/motor_port_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',
@@ -52,8 +103,8 @@ def generate_launch_description():
                 '/model/blueboat2/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/blueboat2/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
                 '/blueboat2/bathymetry/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
-                '/blueboat2/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/blueboat2/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                # '/blueboat2/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                # '/blueboat2/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
 
                 # Boat 3 / ArduPilot instance -I1 / SYSID 3
                 '/model/blueboat3/joint/motor_port_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',
@@ -61,8 +112,8 @@ def generate_launch_description():
                 '/model/blueboat3/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/blueboat3/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
                 '/blueboat3/bathymetry/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
-                '/blueboat3/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/blueboat3/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                # '/blueboat3/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                # '/blueboat3/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
 
                 # Boat 4 / ArduPilot instance -I1 / SYSID 4
                 '/model/blueboat4/joint/motor_port_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',
@@ -70,8 +121,8 @@ def generate_launch_description():
                 '/model/blueboat4/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/blueboat4/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
                 '/blueboat4/bathymetry/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
-                '/blueboat4/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/blueboat4/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                # '/blueboat4/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
+                # '/blueboat4/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
             ],
             output='screen',
         ),
@@ -188,6 +239,6 @@ def generate_launch_description():
                     ],
                     output='screen',
                 ),
-            ],
+             ],
         ),
     ])

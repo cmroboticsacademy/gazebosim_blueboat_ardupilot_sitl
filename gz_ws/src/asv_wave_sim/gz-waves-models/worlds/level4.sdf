@@ -68,9 +68,12 @@
       <uri>model://no_waves</uri>
     </include>
     <include>
-      <uri>model://world_mass</uri>
-      <pose>0 0 -6 0 0 0</pose>
+      <name>cmra_terrain</name>
+      <pose>0 0 0 0 0 0</pose>
+      <uri>model://cmra_models/terrain</uri>
     </include>
+
+
     <include>
       <pose>0 0 0 0 0 -1.5708</pose>
       <uri>model://blueboat</uri>

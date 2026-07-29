@@ -5,7 +5,7 @@ Pr 1
 Ks 0 0 0
 Ns 0
 illum 1
-map_Kd /textures/drone_baseColor.png
+map_Kd textures/drone_baseColor.png
 
 newmtl cfMaterial
 ka 1 1 1
@@ -14,7 +14,7 @@ Pr 1
 Ks 0 0 0
 Ns 0
 illum 1
-map_Kd /textures/drone_CFbaseColor.png
+map_Kd textures/drone_CFbaseColor.png
 
 newmtl glassMaterial
 ka 1 1 1

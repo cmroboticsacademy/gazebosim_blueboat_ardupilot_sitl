@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <model name="bus">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <!-- Source OBJ is Y-up; rotate it into Gazebo's Z-up frame. -->
+        <pose>0 0 0 1.57079632679 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://cmra_models/bus/bus.obj</uri>
+            <scale>0.08 0.08 0.08</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>
