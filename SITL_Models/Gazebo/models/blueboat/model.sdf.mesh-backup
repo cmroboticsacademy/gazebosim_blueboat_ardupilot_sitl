@@ -13,22 +13,13 @@
           <izz>5.6403125</izz>
         </inertia>
       </inertial>
-      
       <collision name="hull_collision">
         <geometry>
           <mesh>
-            <uri>models://blueboat/meshes/blueboat_hull_collision_reduced.stl</uri>
+            <uri>models://blueboat/meshes/blueboat_hull_collision.stl</uri>
           </mesh>
         </geometry>
-      </collision> <!--
-      <collision name="hull_collision">
-        <pose>-0.017 0 -0.136 0 0 0</pose>
-        <geometry>
-          <box>
-            <size>1.10 0.55 0.113</size>
-          </box>
-        </geometry>
-      </collision>-->
+      </collision>
       <visual name="hull_visual">
         <geometry>
           <mesh>
@@ -318,6 +309,7 @@
         </dynamics>
       </axis>
     </joint>
+    
     <!-- Lightweight forward-facing FPV camera -->
     <link name="fpv_camera_link">
       <!-- Mount camera above/forward on the BlueBoat.
@@ -347,26 +339,17 @@
           <diffuse>0.02 0.02 0.02 1</diffuse>
         </material>
       </visual>
-
       <sensor name="fpv_camera" type="camera">
         <always_on>true</always_on>
-
-        <!-- Triggered mode controls the effective frame rate -->
-        <update_rate>16</update_rate>
-
-        <topic>/blueboat/camera/enable_streaming</topic>
-
+        <update_rate>3</update_rate>
+        <topic>/camera</topic>
         <camera>
-
           <horizontal_fov>1.3962634</horizontal_fov>
-
           <image>
             <width>256</width>
             <height>256</height>
             <format>RGB_INT8</format>
-            <anti_aliasing>1</anti_aliasing>
           </image>
-
           <clip>
             <near>0.05</near>
             <far>100</far>

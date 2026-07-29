@@ -1,5 +1,5 @@
 <sdf version="1.9">
-  <model name="blueboat">
+  <model name="blueboat2">
     <link name="base_link">
       <inertial>
         <pose>-0.05 0 -0.15 0 0 0</pose>
@@ -13,22 +13,15 @@
           <izz>5.6403125</izz>
         </inertia>
       </inertial>
-      
+
       <collision name="hull_collision">
         <geometry>
           <mesh>
-            <uri>models://blueboat/meshes/blueboat_hull_collision_reduced.stl</uri>
+            <uri>models://blueboat/meshes/blueboat_hull_collision.stl</uri>
           </mesh>
         </geometry>
-      </collision> <!--
-      <collision name="hull_collision">
-        <pose>-0.017 0 -0.136 0 0 0</pose>
-        <geometry>
-          <box>
-            <size>1.10 0.55 0.113</size>
-          </box>
-        </geometry>
-      </collision>-->
+      </collision>
+
       <visual name="hull_visual">
         <geometry>
           <mesh>
@@ -36,7 +29,7 @@
           </mesh>
         </geometry>
         <material>
-          <diffuse>0 0 1 1</diffuse>
+          <diffuse>0 1 0 1</diffuse>
           <ambient>1 0 1 1</ambient>
           <specular>0.7 0.7 0.7 1</specular>
           <pbr>
@@ -47,6 +40,7 @@
           </pbr>
         </material>
       </visual>
+
       <visual name="aerial_visual">
         <geometry>
           <mesh>
@@ -65,6 +59,7 @@
           </pbr>
         </material>
       </visual>
+
       <visual name="crosstube_visual">
         <geometry>
           <mesh>
@@ -83,6 +78,7 @@
           </pbr>
         </material>
       </visual>
+
       <visual name="flag_visual">
         <geometry>
           <mesh>
@@ -101,6 +97,7 @@
           </pbr>
         </material>
       </visual>
+
       <visual name="frame_asm_fore_visual">
         <geometry>
           <mesh>
@@ -119,6 +116,7 @@
           </pbr>
         </material>
       </visual>
+
       <visual name="frame_asm_aft_visual">
         <geometry>
           <mesh>
@@ -137,6 +135,7 @@
           </pbr>
         </material>
       </visual>
+
       <visual name="hatch_asm_stbd">
         <geometry>
           <mesh>
@@ -155,6 +154,7 @@
           </pbr>
         </material>
       </visual>
+
       <visual name="hatch_asm_port">
         <geometry>
           <mesh>
@@ -173,6 +173,7 @@
           </pbr>
         </material>
       </visual>
+
       <visual name="motor_stbd_visual">
         <geometry>
           <mesh>
@@ -191,6 +192,7 @@
           </pbr>
         </material>
       </visual>
+
       <visual name="motor_port_visual">
         <geometry>
           <mesh>
@@ -250,6 +252,7 @@
         </material>
       </visual>
     </link>
+
     <joint name="motor_stbd_joint" type="revolute">
       <parent>base_link</parent>
       <child>motor_stbd_link</child>
@@ -304,6 +307,7 @@
         </material>
       </visual>
     </link>
+
     <joint name="motor_port_joint" type="revolute">
       <parent>base_link</parent>
       <child>motor_port_link</child>
@@ -318,12 +322,10 @@
         </dynamics>
       </axis>
     </joint>
-    <!-- Lightweight forward-facing FPV camera -->
-    <link name="fpv_camera_link">
-      <!-- Mount camera above/forward on the BlueBoat.
-          Gazebo camera optical axis is generally +X, so this points forward. -->
-      <pose relative_to="base_link">0.55 0 0.28 0 0 0</pose>
 
+
+    <link name="fpv_camera_link">
+      <pose relative_to="base_link">0.55 0 0.28 0 0 0</pose>
       <inertial>
         <mass>0.05</mass>
         <inertia>
@@ -335,7 +337,6 @@
           <iyz>0</iyz>
         </inertia>
       </inertial>
-
       <visual name="fpv_camera_visual">
         <geometry>
           <box>
@@ -347,35 +348,26 @@
           <diffuse>0.02 0.02 0.02 1</diffuse>
         </material>
       </visual>
-
       <sensor name="fpv_camera" type="camera">
         <always_on>true</always_on>
-
-        <!-- Triggered mode controls the effective frame rate -->
-        <update_rate>16</update_rate>
-
-        <topic>/blueboat/camera/enable_streaming</topic>
-
+        <update_rate>3</update_rate>
+        <topic>/blueboat2/camera</topic>
         <camera>
-
           <horizontal_fov>1.3962634</horizontal_fov>
-
           <image>
             <width>256</width>
             <height>256</height>
             <format>RGB_INT8</format>
-            <anti_aliasing>1</anti_aliasing>
           </image>
-
           <clip>
             <near>0.05</near>
             <far>100</far>
           </clip>
         </camera>
         <plugin name="GstCameraPlugin"
-            filename="/home/blueboat_sitl/ardupilot_gazebo/build/libGstCameraPlugin.so">
+                filename="/home/blueboat_sitl/ardupilot_gazebo/build/libGstCameraPlugin.so">
           <udp_host>127.0.0.1</udp_host>
-          <udp_port>5600</udp_port>
+          <udp_port>5602</udp_port>
           <use_basic_pipeline>true</use_basic_pipeline>
           <use_cuda>false</use_cuda>
         </plugin>
@@ -386,7 +378,7 @@
       <parent>base_link</parent>
       <child>fpv_camera_link</child>
     </joint>
-    <!-- sensors -->
+
     <link name="imu_link">
       <inertial>
         <pose>0 0 0 0 0 0</pose>
@@ -406,23 +398,11 @@
         <update_rate>1000.0</update_rate>
       </sensor>
     </link>
-    <joint name="imu_joint" type="revolute">
-      <child>imu_link</child>
+
+    <joint name="imu_joint" type="fixed">
       <parent>base_link</parent>
-      <axis>
-        <xyz>0 0 1</xyz>
-        <limit>
-          <lower>0</lower>
-          <upper>0</upper>
-        </limit>
-        <dynamics>
-          <damping>1.0</damping>
-        </dynamics>
-      </axis>
+      <child>imu_link</child>
     </joint>
-
-
-    <!-- NavSat -->
 
     <link name="navsat_link">
       <pose>0 0 0.05 0 0 0</pose>
@@ -440,8 +420,8 @@
       <sensor name="navsat_sensor" type="navsat">
         <pose>0 0 0 0 0 0</pose>
         <always_on>1</always_on>
-        <update_rate>8.0</update_rate>
-        <topic>navsat</topic>
+        <update_rate>1.0</update_rate>
+        <topic>/blueboat2/navsat</topic>
         <gps>
           <fix>
             <service>1</service>
@@ -450,13 +430,13 @@
         </gps>
       </sensor>
     </link>
+
     <joint name="navsat_joint" type="fixed">
       <parent>imu_link</parent>
       <child>navsat_link</child>
     </joint>
-    <!-- Bathymetry sensor -->
+
     <link name="bathymetry_link">
-      <!-- Put it under the hull, near the middle of the boat -->
       <pose>0.20 0 -0.35 0 0 0</pose>
       <inertial>
         <mass>0.1</mass>
@@ -469,14 +449,11 @@
           <izz>0.0001</izz>
         </inertia>
       </inertial>
-
       <sensor name="bathymetry_sensor" type="gpu_lidar">
-        <!-- Rotate so the scan points downward -->
         <pose degrees="true">0 0 0 0 90 0</pose>
         <always_on>1</always_on>
         <update_rate>8.0</update_rate>
-        <topic>bathymetry/scan</topic>
-
+        <topic>/blueboat2/bathymetry/scan</topic>
         <ray>
           <scan>
             <horizontal>
@@ -498,7 +475,6 @@
             <resolution>0.02</resolution>
           </range>
         </ray>
-
         <visualize>true</visualize>
       </sensor>
     </link>
@@ -507,21 +483,21 @@
       <parent>base_link</parent>
       <child>bathymetry_link</child>
     </joint>
-    <!-- plugins -->
+
     <plugin name="gz::sim::systems::JointStatePublisher"
-      filename="gz-sim-joint-state-publisher-system">
+            filename="gz-sim-joint-state-publisher-system">
     </plugin>
+
     <plugin name="gz::sim::systems::OdometryPublisher"
-      filename="gz-sim-odometry-publisher-system">
+            filename="gz-sim-odometry-publisher-system">
       <odom_frame>odom</odom_frame>
       <robot_base_frame>base_link</robot_base_frame>
       <dimensions>3</dimensions>
     </plugin>
 
-    <!-- left motor thruster cw -->
     <plugin name="gz::sim::systems::Thruster"
-      filename="gz-sim-thruster-system">
-      <namespace>blueboat</namespace>
+            filename="gz-sim-thruster-system">
+      <namespace>blueboat2</namespace>
       <joint_name>motor_port_joint</joint_name>
       <thrust_coefficient>-0.02</thrust_coefficient>
       <fluid_density>1025</fluid_density>
@@ -530,10 +506,9 @@
       <use_angvel_cmd>0</use_angvel_cmd>
     </plugin>
 
-    <!-- right motor thruster ccw -->
     <plugin name="gz::sim::systems::Thruster"
-      filename="gz-sim-thruster-system">
-      <namespace>blueboat</namespace>
+            filename="gz-sim-thruster-system">
+      <namespace>blueboat2</namespace>
       <joint_name>motor_stbd_joint</joint_name>
       <thrust_coefficient>0.02</thrust_coefficient>
       <fluid_density>1025</fluid_density>
@@ -542,36 +517,26 @@
       <use_angvel_cmd>0</use_angvel_cmd>
     </plugin>
 
-    <!-- hydrodynamics plugin -->
-    <plugin name="gz::sim::systems::Hydrodynamics" 
-        filename="gz-waves1-hydrodynamics-system">
-        <enable>blueboat::base_link</enable>
-        <hydrodynamics>
-          <damping_on>1</damping_on>
-          <viscous_drag_on>1</viscous_drag_on>
-          <pressure_drag_on>1</pressure_drag_on>
-        </hydrodynamics>
+    <plugin name="gz::sim::systems::Hydrodynamics"
+            filename="gz-waves1-hydrodynamics-system">
+      <enable>blueboat2::base_link</enable>
+      <hydrodynamics>
+        <damping_on>1</damping_on>
+        <viscous_drag_on>1</viscous_drag_on>
+        <pressure_drag_on>1</pressure_drag_on>
+      </hydrodynamics>
     </plugin>
 
-      <!-- ardupilot plugin -->
     <plugin name="ArduPilotPlugin"
-      filename="ArduPilotPlugin">
+            filename="ArduPilotPlugin">
       <fdm_addr>127.0.0.1</fdm_addr>
-      <fdm_port_in>9002</fdm_port_in>        
+      <fdm_port_in>9012</fdm_port_in>
       <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
       <lock_step>1</lock_step>
       <gazeboXYZToNED degrees="true">0 0 0 180 0 90</gazeboXYZToNED>
       <modelXYZToAirplaneXForwardZDown degrees="true">0 0 0 180 0 0</modelXYZToAirplaneXForwardZDown>
       <imuName>imu_link::imu_sensor</imuName>
-      
 
-      <!--
-        port motor cw
-
-        SERVO1_FUNCTION 73 (ThrottleLeft)
-        SERVO1_MAX 2000
-        SERVO1_MIN 1000
-      -->
       <control channel="0">
         <jointName>motor_port_joint</jointName>
         <multiplier>70</multiplier>
@@ -579,16 +544,9 @@
         <servo_min>1000</servo_min>
         <servo_max>2000</servo_max>
         <type>COMMAND</type>
-        <cmd_topic>/model/blueboat/joint/motor_port_joint/cmd_thrust</cmd_topic>
+        <cmd_topic>/model/blueboat2/joint/motor_port_joint/cmd_thrust</cmd_topic>
       </control>
 
-      <!--
-        stbd motor ccw
-
-        SERVO3_FUNCTION 74 (ThrottleRight)
-        SERVO3_MAX 2000
-        SERVO3_MIN 1000
-      -->
       <control channel="2">
         <jointName>motor_stbd_joint</jointName>
         <multiplier>70</multiplier>
@@ -596,9 +554,8 @@
         <servo_min>1000</servo_min>
         <servo_max>2000</servo_max>
         <type>COMMAND</type>
-        <cmd_topic>/model/blueboat/joint/motor_stbd_joint/cmd_thrust</cmd_topic>
+        <cmd_topic>/model/blueboat2/joint/motor_stbd_joint/cmd_thrust</cmd_topic>
       </control>
     </plugin>
-
   </model>
 </sdf>
