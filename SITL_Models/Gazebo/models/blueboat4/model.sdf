@@ -14,13 +14,22 @@
         </inertia>
       </inertial>
 
+    
       <collision name="hull_collision">
         <geometry>
           <mesh>
-            <uri>models://blueboat/meshes/blueboat_hull_collision.stl</uri>
+            <uri>models://blueboat/meshes/blueboat_hull_collision_reduced.stl</uri>
           </mesh>
         </geometry>
-      </collision>
+      </collision> <!--
+      <collision name="hull_collision">
+        <pose>-0.017 0 -0.136 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>1.10 0.55 0.113</size>
+          </box>
+        </geometry>
+      </collision>-->
 
       <visual name="hull_visual">
         <geometry>
@@ -350,15 +359,23 @@
       </visual>
       <sensor name="fpv_camera" type="camera">
         <always_on>true</always_on>
-        <update_rate>15</update_rate>
+
+        <!-- Triggered mode controls the effective frame rate -->
+        <update_rate>16</update_rate>
+
         <topic>/blueboat4/camera</topic>
+
         <camera>
+
           <horizontal_fov>1.3962634</horizontal_fov>
+
           <image>
-            <width>640</width>
-            <height>360</height>
+            <width>256</width>
+            <height>256</height>
             <format>RGB_INT8</format>
+            <anti_aliasing>1</anti_aliasing>
           </image>
+
           <clip>
             <near>0.05</near>
             <far>100</far>
@@ -367,7 +384,7 @@
         <plugin name="GstCameraPlugin"
                 filename="/home/blueboat_sitl/ardupilot_gazebo/build/libGstCameraPlugin.so">
           <udp_host>127.0.0.1</udp_host>
-          <udp_port>5608</udp_port>
+          <udp_port>5606</udp_port>
           <use_basic_pipeline>true</use_basic_pipeline>
           <use_cuda>false</use_cuda>
         </plugin>

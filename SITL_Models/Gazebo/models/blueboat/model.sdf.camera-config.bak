@@ -352,11 +352,13 @@
         <always_on>true</always_on>
 
         <!-- Triggered mode controls the effective frame rate -->
-        <update_rate>16</update_rate>
+        <update_rate>0</update_rate>
 
-        <topic>/blueboat/camera/enable_streaming</topic>
+        <topic>/blueboat2/camera</topic>
 
         <camera>
+          <triggered>true</triggered>
+          <trigger_topic>/blueboat2/camera/trigger</trigger_topic>
 
           <horizontal_fov>1.3962634</horizontal_fov>
 
