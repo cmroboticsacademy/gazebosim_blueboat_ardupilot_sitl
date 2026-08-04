@@ -467,7 +467,7 @@
         </inertia>
       </inertial>
       <sensor name="bathymetry_sensor" type="gpu_lidar">
-        <pose degrees="true">0 0 0 0 90 0</pose>
+        <pose degrees="true">0 0 -.25 0 90 0</pose>
         <always_on>1</always_on>
         <update_rate>8.0</update_rate>
         <topic>/blueboat4/bathymetry/scan</topic>

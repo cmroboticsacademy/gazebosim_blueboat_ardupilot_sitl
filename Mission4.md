@@ -84,7 +84,10 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
 
    When using a bathymetric LiDAR to scan the ocean floor, the sensor outputs depth measurements that can be represented as a 3D point cloud. In RViz, this appears as a PointCloud2, where each point corresponds to a spot on the seabed. As your vehicle moves, these scans can be accumulated into a larger map, giving you a detailed view of underwater terrain. Proper TF alignment and filtering are important for removing noise and ensuring the map builds accurately over time.
 
+   This sensor simulates a multibeam echosounder. https://en.wikipedia.org/wiki/Multibeam_echosounder
+
    </details>
+   TODO - note seed number
 
 2. Go to your first tab in the Ardupilot terminal
 3. Launch robots 1 at a time. Wait until the robot connects to QGroundControl before launching another.

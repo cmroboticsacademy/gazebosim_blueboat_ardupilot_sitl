@@ -113,7 +113,7 @@ def generate_launch_description():
                 '/blueboat3/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
                 '/blueboat3/bathymetry/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
                 # '/blueboat3/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                # '/blueboat3/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                # '/blueboat3/camera_info@sensor_msenable_streaminggs/msg/CameraInfo@ignition.msgs.CameraInfo',
 
                 # Boat 4 / ArduPilot instance -I1 / SYSID 4
                 '/model/blueboat4/joint/motor_port_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',
@@ -184,61 +184,61 @@ def generate_launch_description():
             output='screen',
         ),
 
-        TimerAction(
-            period=10.0,
-            actions=[
-                ExecuteProcess(
-                    cmd=[
-                        'gz',
-                        'topic',
-                        '-t',
-                        '/blueboat/camera/enable_streaming',
-                        '-m',
-                        'gz.msgs.Boolean',
-                        '-p',
-                        'data: true',
-                    ],
-                    output='screen',
-                ),
-                ExecuteProcess(
-                    cmd=[
-                        'gz',
-                        'topic',
-                        '-t',
-                        '/blueboat2/camera/enable_streaming',
-                        '-m',
-                        'gz.msgs.Boolean',
-                        '-p',
-                        'data: true',
-                    ],
-                    output='screen',
-                ),
-                ExecuteProcess(
-                    cmd=[
-                        'gz',
-                        'topic',
-                        '-t',
-                        '/blueboat3/camera/enable_streaming',
-                        '-m',
-                        'gz.msgs.Boolean',
-                        '-p',
-                        'data: true',
-                    ],
-                    output='screen',
-                ),
-                ExecuteProcess(
-                    cmd=[
-                        'gz',
-                        'topic',
-                        '-t',
-                        '/blueboat4/camera/enable_streaming',
-                        '-m',
-                        'gz.msgs.Boolean',
-                        '-p',
-                        'data: true',
-                    ],
-                    output='screen',
-                ),
-             ],
-        ),
+        # TimerAction(
+        #     period=10.0,
+        #     actions=[
+        #         ExecuteProcess(
+        #             cmd=[
+        #                 'gz',
+        #                 'topic',
+        #                 '-t',
+        #                 '/blueboat/camera/enable_streaming',
+        #                 '-m',
+        #                 'gz.msgs.Boolean',
+        #                 '-p',
+        #                 'data: true',
+        #             ],
+        #             output='screen',
+        #         ),
+        #         ExecuteProcess(
+        #             cmd=[
+        #                 'gz',
+        #                 'topic',
+        #                 '-t',
+        #                 '/blueboat2/camera/enable_streaming',
+        #                 '-m',
+        #                 'gz.msgs.Boolean',
+        #                 '-p',
+        #                 'data: true',
+        #             ],
+        #             output='screen',
+        #         ),
+        #         ExecuteProcess(
+        #             cmd=[
+        #                 'gz',
+        #                 'topic',
+        #                 '-t',
+        #                 '/blueboat3/camera/enable_streaming',
+        #                 '-m',
+        #                 'gz.msgs.Boolean',
+        #                 '-p',
+        #                 'data: true',
+        #             ],
+        #             output='screen',
+        #         ),
+        #         ExecuteProcess(
+        #             cmd=[
+        #                 'gz',
+        #                 'topic',
+        #                 '-t',
+        #                 '/blueboat4/camera/enable_streaming',
+        #                 '-m',
+        #                 'gz.msgs.Boolean',
+        #                 '-p',
+        #                 'data: true',
+        #             ],
+        #             output='screen',
+        #         ),
+        #      ],
+        # ),
     ])
