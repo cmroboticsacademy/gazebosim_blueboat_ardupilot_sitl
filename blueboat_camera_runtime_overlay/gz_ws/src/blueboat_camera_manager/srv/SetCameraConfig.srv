@@ -1,0 +1,9 @@
+string[] cameras
+uint32 width
+uint32 height
+float32 fps
+uint32 bitrate_kbps
+bool preserve_aspect
+---
+bool success
+string message

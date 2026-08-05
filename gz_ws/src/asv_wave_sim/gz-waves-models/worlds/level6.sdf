@@ -101,6 +101,13 @@
       <uri>model://blueboat4</uri>
     </include>
 
+    <!-- Disabled unless camera_mode:=single enables its stream. -->
+    <!-- <include>
+      <name>blueboat_camera_pod</name>
+      <pose>0 -5 0.28 0 0 -1.5708</pose>
+      <uri>model://blueboat_camera_pod</uri>
+    </include> -->
+
     <!--
       mission4_sim.launch.py replaces the contents between these markers in a
       temporary copy of this world. Keep both marker comments in this file.

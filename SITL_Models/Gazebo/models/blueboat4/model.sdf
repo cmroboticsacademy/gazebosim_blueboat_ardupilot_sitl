@@ -359,34 +359,38 @@
       </visual>
       <sensor name="fpv_camera" type="camera">
         <always_on>true</always_on>
-
-        <!-- Triggered mode controls the effective frame rate -->
-        <update_rate>16</update_rate>
-
-        <topic>/blueboat4/camera</topic>
-
+        <!-- The sensor stays at a fixed maximum source resolution. The custom
+             stream plugin changes encoded output size and trigger rate live. -->
+        <update_rate>30</update_rate>
+        <topic>/blueboat4/camera/image</topic>
         <camera>
-
+          <triggered>true</triggered>
+          <trigger_topic>/blueboat4/camera/trigger</trigger_topic>
           <horizontal_fov>1.3962634</horizontal_fov>
-
           <image>
-            <width>256</width>
-            <height>256</height>
+            <width>640</width>
+            <height>480</height>
             <format>RGB_INT8</format>
             <anti_aliasing>1</anti_aliasing>
           </image>
-
           <clip>
             <near>0.05</near>
             <far>100</far>
           </clip>
         </camera>
-        <plugin name="GstCameraPlugin"
-                filename="/home/blueboat_sitl/ardupilot_gazebo/build/libGstCameraPlugin.so">
+        <plugin name="BlueBoatGstCameraPlugin"
+                filename="libBlueBoatGstCameraPlugin.so">
+          <image_topic>/blueboat4/camera/image</image_topic>
+          <enable_topic>/blueboat4/camera/enable_streaming</enable_topic>
+          <config_topic>/blueboat4/camera/stream_config</config_topic>
+          <trigger_topic>/blueboat4/camera/trigger</trigger_topic>
           <udp_host>127.0.0.1</udp_host>
           <udp_port>5606</udp_port>
-          <use_basic_pipeline>true</use_basic_pipeline>
-          <use_cuda>false</use_cuda>
+          <output_width>256</output_width>
+          <output_height>256</output_height>
+          <output_fps>16</output_fps>
+          <bitrate_kbps>800</bitrate_kbps>
+          <preserve_aspect>false</preserve_aspect>
         </plugin>
       </sensor>
     </link>

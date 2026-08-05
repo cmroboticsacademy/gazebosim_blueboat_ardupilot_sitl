@@ -1,0 +1,12 @@
+blueboat_camera_manager:
+  ros__parameters:
+    mode: four
+    startup_delay: 10.0
+    startup_retries: 5
+    startup_retry_period: 1.0
+    default_width: 256
+    default_height: 256
+    default_fps: 16.0
+    default_bitrate_kbps: 800
+    default_preserve_aspect: false
+    single_default_target: blueboat

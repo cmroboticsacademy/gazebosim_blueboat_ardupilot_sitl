@@ -8,6 +8,7 @@ from launch.actions import (
 )
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from ament_index_python.packages import get_package_share_directory
 from move_blueboat.mission4_world_generator import create_seeded_world
 import os
@@ -82,12 +83,39 @@ def generate_launch_description():
                 'the launch searches the current gz_ws source tree first.'
             ),
         ),
+        DeclareLaunchArgument(
+            'camera_mode',
+            default_value='four',
+            choices=['four', 'single'],
+            description='four: ports 5600/5602/5604/5606; single: movable pod on 5600',
+        ),
+        DeclareLaunchArgument('camera_start_delay', default_value='10.0'),
+        DeclareLaunchArgument('camera_startup_retries', default_value='5'),
+        DeclareLaunchArgument('camera_width', default_value='256'),
+        DeclareLaunchArgument('camera_height', default_value='256'),
+        DeclareLaunchArgument('camera_fps', default_value='16.0'),
+        DeclareLaunchArgument('camera_bitrate_kbps', default_value='800'),
+        DeclareLaunchArgument('camera_preserve_aspect', default_value='false'),
+        DeclareLaunchArgument('camera_single_target', default_value='blueboat'),
         OpaqueFunction(function=_launch_seeded_gazebo),
 
         Node(
             package='ros_ign_bridge',
             executable='parameter_bridge',
             arguments=[
+                # Runtime camera controls (ROS 2 -> Gazebo Transport)
+                '/blueboat/camera/enable_streaming@std_msgs/msg/Bool@ignition.msgs.Boolean',
+                '/blueboat/camera/stream_config@std_msgs/msg/String@ignition.msgs.StringMsg',
+                '/blueboat2/camera/enable_streaming@std_msgs/msg/Bool@ignition.msgs.Boolean',
+                '/blueboat2/camera/stream_config@std_msgs/msg/String@ignition.msgs.StringMsg',
+                '/blueboat3/camera/enable_streaming@std_msgs/msg/Bool@ignition.msgs.Boolean',
+                '/blueboat3/camera/stream_config@std_msgs/msg/String@ignition.msgs.StringMsg',
+                '/blueboat4/camera/enable_streaming@std_msgs/msg/Bool@ignition.msgs.Boolean',
+                '/blueboat4/camera/stream_config@std_msgs/msg/String@ignition.msgs.StringMsg',
+                '/camera_pod/camera/enable_streaming@std_msgs/msg/Bool@ignition.msgs.Boolean',
+                '/camera_pod/camera/stream_config@std_msgs/msg/String@ignition.msgs.StringMsg',
+                '/camera_pod/target@std_msgs/msg/String@ignition.msgs.StringMsg',
+
                 # Boat 1 / ArduPilot instance -I0 / SYSID 1
                 '/model/blueboat/joint/motor_port_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',
                 '/model/blueboat/joint/motor_stbd_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',
@@ -125,6 +153,31 @@ def generate_launch_description():
                 # '/blueboat4/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
             ],
             output='screen',
+        ),
+
+        Node(
+            package='blueboat_camera_manager',
+            executable='camera_manager_node',
+            name='blueboat_camera_manager',
+            output='screen',
+            parameters=[{
+                'mode': LaunchConfiguration('camera_mode'),
+                'startup_delay': ParameterValue(
+                    LaunchConfiguration('camera_start_delay'), value_type=float),
+                'startup_retries': ParameterValue(
+                    LaunchConfiguration('camera_startup_retries'), value_type=int),
+                'default_width': ParameterValue(
+                    LaunchConfiguration('camera_width'), value_type=int),
+                'default_height': ParameterValue(
+                    LaunchConfiguration('camera_height'), value_type=int),
+                'default_fps': ParameterValue(
+                    LaunchConfiguration('camera_fps'), value_type=float),
+                'default_bitrate_kbps': ParameterValue(
+                    LaunchConfiguration('camera_bitrate_kbps'), value_type=int),
+                'default_preserve_aspect': ParameterValue(
+                    LaunchConfiguration('camera_preserve_aspect'), value_type=bool),
+                'single_default_target': LaunchConfiguration('camera_single_target'),
+            }],
         ),
 
         Node(
