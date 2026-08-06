@@ -114,7 +114,7 @@ def generate_launch_description():
                 '/blueboat4/camera/stream_config@std_msgs/msg/String@ignition.msgs.StringMsg',
                 '/camera_pod/camera/enable_streaming@std_msgs/msg/Bool@ignition.msgs.Boolean',
                 '/camera_pod/camera/stream_config@std_msgs/msg/String@ignition.msgs.StringMsg',
-                '/camera_pod/target@std_msgs/msg/String@ignition.msgs.StringMsg',
+                # '/camera_pod/target@std_msgs/msg/String@ignition.msgs.StringMsg',
 
                 # Boat 1 / ArduPilot instance -I0 / SYSID 1
                 '/model/blueboat/joint/motor_port_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double',

@@ -9,4 +9,6 @@ blueboat_camera_manager:
     default_fps: 16.0
     default_bitrate_kbps: 800
     default_preserve_aspect: false
+    default_lag_seconds: 0.0
+    maximum_lag_seconds: 30.0
     single_default_target: blueboat

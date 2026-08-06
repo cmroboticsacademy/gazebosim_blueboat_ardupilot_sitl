@@ -32,6 +32,12 @@
 
 namespace blueboat_camera_manager
 {
+namespace
+{
+constexpr double kMaximumLagSeconds = 30.0;
+constexpr double kDelayQueueMarginSeconds = 2.0;
+}
+
 struct StreamConfig
 {
   unsigned int width{256};
@@ -39,6 +45,7 @@ struct StreamConfig
   double fps{16.0};
   unsigned int bitrateKbps{800};
   bool preserveAspect{false};
+  double lagSeconds{0.0};
 };
 
 class BlueBoatGstCameraPlugin final:
@@ -91,6 +98,8 @@ public:
       initial.bitrateKbps = _sdf->Get<unsigned int>("bitrate_kbps");
     if (_sdf->HasElement("preserve_aspect"))
       initial.preserveAspect = _sdf->Get<bool>("preserve_aspect");
+    if (_sdf->HasElement("lag_seconds"))
+      initial.lagSeconds = _sdf->Get<double>("lag_seconds");
 
     if (!this->ValidateConfig(initial))
     {
@@ -107,7 +116,8 @@ public:
         [this]() { this->Shutdown(); });
 
     gzmsg << "BlueBoatGstCameraPlugin configured for UDP "
-          << this->udpHost << ":" << this->udpPort << "\n";
+          << this->udpHost << ":" << this->udpPort
+          << " with " << initial.lagSeconds << " seconds lag\n";
   }
 
   void PreUpdate(
@@ -189,8 +199,10 @@ private:
   {
     return _cfg.width >= 16 && _cfg.height >= 16 &&
       (_cfg.width % 2u) == 0u && (_cfg.height % 2u) == 0u &&
-      std::isfinite(_cfg.fps) && _cfg.fps > 0.0 && _cfg.fps <= 30.0 &&
-      _cfg.bitrateKbps >= 100 && _cfg.bitrateKbps <= 50000;
+      std::isfinite(_cfg.fps) && _cfg.fps > 0.0 && _cfg.fps <= 60.0 &&
+      _cfg.bitrateKbps >= 100 && _cfg.bitrateKbps <= 50000 &&
+      std::isfinite(_cfg.lagSeconds) && _cfg.lagSeconds >= 0.0 &&
+      _cfg.lagSeconds <= kMaximumLagSeconds;
   }
 
   static std::string Trim(std::string _value)
@@ -245,6 +257,8 @@ private:
           candidate.fps = std::stod(value);
         else if (key == "bitrate_kbps")
           candidate.bitrateKbps = static_cast<unsigned int>(std::stoul(value));
+        else if (key == "lag_seconds")
+          candidate.lagSeconds = std::stod(value);
         else if (key == "preserve_aspect")
         {
           if (!ParseBool(value, candidate.preserveAspect))
@@ -267,6 +281,7 @@ private:
   {
     if (this->shuttingDown)
       return;
+
     StreamConfig next;
     if (!this->ParseConfig(_msg.data(), next))
     {
@@ -288,7 +303,8 @@ private:
 
     gzmsg << "BlueBoatGstCameraPlugin config set to "
           << next.width << "x" << next.height << " @ " << next.fps
-          << " Hz, bitrate " << next.bitrateKbps << " kbps\n";
+          << " Hz, bitrate " << next.bitrateKbps << " kbps, lag "
+          << next.lagSeconds << " seconds\n";
   }
 
   void OnEnable(const gz::msgs::Boolean &_msg)
@@ -492,6 +508,13 @@ private:
     const unsigned int capsFps = std::max(
       1u, static_cast<unsigned int>(std::round(_cfg.fps)));
     const unsigned int keyInterval = capsFps;
+    const auto lagNanoseconds = static_cast<std::int64_t>(
+      std::llround(_cfg.lagSeconds * static_cast<double>(GST_SECOND)));
+    const auto queueNanoseconds = static_cast<std::uint64_t>(
+      std::llround(
+        (_cfg.lagSeconds + kDelayQueueMarginSeconds) *
+        static_cast<double>(GST_SECOND)));
+
     std::ostringstream pipelineText;
     pipelineText
       << "appsrc name=blueboat_source is-live=true block=false "
@@ -504,10 +527,25 @@ private:
       << "! x264enc tune=zerolatency speed-preset=ultrafast bitrate="
       << _cfg.bitrateKbps << " key-int-max=" << keyInterval << " "
       << "! h264parse config-interval=-1 "
-      << "! rtph264pay config-interval=1 pt=96 "
-      << "! udpsink host=" << this->udpHost
-      << " port=" << this->udpPort
-      << " sync=false async=false";
+      << "! rtph264pay config-interval=1 pt=96 ";
+
+    if (lagNanoseconds > 0)
+    {
+      pipelineText
+        << "! queue max-size-buffers=0 max-size-bytes=0 max-size-time="
+        << queueNanoseconds << " leaky=downstream "
+        << "! udpsink host=" << this->udpHost
+        << " port=" << this->udpPort
+        << " sync=true async=false ts-offset=" << lagNanoseconds;
+    }
+    else
+    {
+      // Preserve the pre-lag zero-latency sink path exactly when lag is disabled.
+      pipelineText
+        << "! udpsink host=" << this->udpHost
+        << " port=" << this->udpPort
+        << " sync=false async=false";
+    }
 
     GError *error = nullptr;
     GstElement *pipeline = gst_parse_launch(pipelineText.str().c_str(), &error);
@@ -561,10 +599,8 @@ private:
       this->pipeline = nullptr;
       this->gstLoop = nullptr;
     }
-    if (source)
-      gst_object_unref(source);
-    if (loop)
-      g_main_loop_unref(loop);
+    gst_object_unref(source);
+    g_main_loop_unref(loop);
     gst_object_unref(pipeline);
     this->pipelineThreadRunning = false;
   }

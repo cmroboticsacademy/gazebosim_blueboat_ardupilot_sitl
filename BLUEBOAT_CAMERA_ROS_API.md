@@ -45,13 +45,22 @@ source ~/gz_ws/install/setup.bash
 
 ros2 launch move_blueboat mission4_sim.launch.py \
   camera_mode:=four \
-  camera_start_delay:=10.0 \
+  camera_start_delay:=5.0 \
+  camera_width:=1280 \
+  camera_height:=720 \
+  camera_fps:=60.0 \
+  camera_bitrate_kbps:=50000 \
+  camera_preserve_aspect:=true
+```
+
+ros2 launch move_blueboat mission4_sim.launch.py \
+  camera_mode:=four \
+  camera_start_delay:=5.0 \
   camera_width:=256 \
   camera_height:=256 \
-  camera_fps:=16.0 \
-  camera_bitrate_kbps:=800 \
-  camera_preserve_aspect:=false
-```
+  camera_fps:=30.0 \
+  camera_bitrate_kbps:=1000 \
+  camera_preserve_aspect:=true
 
 In this mode, the `select_camera` service is rejected because each boat already has its own stream.
 
@@ -155,13 +164,12 @@ Show the installed interface:
 ros2 interface show blueboat_camera_manager/srv/SetCameraConfig
 ```
 
-Configure all cameras active for the current mode:
 
 ```bash
 ros2 service call \
   /blueboat_camera_manager/set_config \
   blueboat_camera_manager/srv/SetCameraConfig \
-  "{cameras: ['all'], width: 320, height: 240, fps: 30.0, bitrate_kbps: 1400, preserve_aspect: true}"
+  "{cameras: ['all'], width: 256, height: 256, fps: 30.0, bitrate_kbps: 1400, preserve_aspect: true}"
 ```
 
 Configure one physical camera:

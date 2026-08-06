@@ -21,6 +21,7 @@ pkg_check_modules(GSTREAMER REQUIRED IMPORTED_TARGET
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SetCameraConfig.srv"
   "srv/SetCameraEnabled.srv"
+  "srv/SetCameraLag.srv"
   "srv/SelectCamera.srv"
 )
 

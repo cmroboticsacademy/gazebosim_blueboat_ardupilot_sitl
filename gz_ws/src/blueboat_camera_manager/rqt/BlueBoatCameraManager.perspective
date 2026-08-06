@@ -1,0 +1,120 @@
+{
+  "keys": {},
+  "groups": {
+    "pluginmanager": {
+      "keys": {
+        "running-plugins": {
+          "repr": "{'rqt_service_caller/ServiceCaller': [1, 2, 3]}",
+          "type": "repr"
+        }
+      },
+      "groups": {
+        "plugin__rqt_service_caller__ServiceCaller__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__ServiceCallerWidget": {
+              "keys": {
+                "dock_widget_title": {
+                  "repr": "'BlueBoat Camera Settings'",
+                  "type": "repr"
+                },
+                "dockable": {
+                  "repr": "True",
+                  "type": "repr"
+                },
+                "parent": {
+                  "repr": "None",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {
+                "current_service_name": {
+                  "repr": "'/blueboat_camera_manager/set_config'",
+                  "type": "repr"
+                },
+                "splitter_orientation": {
+                  "repr": "2",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            }
+          }
+        },
+        "plugin__rqt_service_caller__ServiceCaller__2": {
+          "keys": {},
+          "groups": {
+            "dock_widget__ServiceCallerWidget": {
+              "keys": {
+                "dock_widget_title": {
+                  "repr": "'BlueBoat Lag Time'",
+                  "type": "repr"
+                },
+                "dockable": {
+                  "repr": "True",
+                  "type": "repr"
+                },
+                "parent": {
+                  "repr": "None",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {
+                "current_service_name": {
+                  "repr": "'/blueboat_camera_manager/set_lag'",
+                  "type": "repr"
+                },
+                "splitter_orientation": {
+                  "repr": "2",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            }
+          }
+        },
+        "plugin__rqt_service_caller__ServiceCaller__3": {
+          "keys": {},
+          "groups": {
+            "dock_widget__ServiceCallerWidget": {
+              "keys": {
+                "dock_widget_title": {
+                  "repr": "'BlueBoat Current Values'",
+                  "type": "repr"
+                },
+                "dockable": {
+                  "repr": "True",
+                  "type": "repr"
+                },
+                "parent": {
+                  "repr": "None",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {
+                "current_service_name": {
+                  "repr": "'/blueboat_camera_manager/status'",
+                  "type": "repr"
+                },
+                "splitter_orientation": {
+                  "repr": "2",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

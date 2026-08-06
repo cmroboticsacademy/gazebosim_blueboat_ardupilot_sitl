@@ -1,5 +1,0 @@
-string[] cameras
-bool enabled
----
-bool success
-string message

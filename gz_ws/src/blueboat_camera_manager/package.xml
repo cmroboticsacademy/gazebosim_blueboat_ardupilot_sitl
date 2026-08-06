@@ -2,8 +2,8 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>blueboat_camera_manager</name>
-  <version>0.1.0</version>
-  <description>Runtime ROS 2 control and Gazebo plugins for BlueBoat camera streams.</description>
+  <version>0.2.0</version>
+  <description>Runtime ROS 2 control, artificial lag, and Gazebo plugins for BlueBoat camera streams.</description>
   <maintainer email="support@cmroboticsacademy.com">CMRA</maintainer>
   <license>Apache-2.0</license>
 
