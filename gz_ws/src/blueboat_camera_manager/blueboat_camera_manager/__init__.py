@@ -1,1 +1,1 @@
-"""Runtime control for BlueBoat Gazebo camera streams."""
+"""BlueBoat ROS 2 camera management package."""

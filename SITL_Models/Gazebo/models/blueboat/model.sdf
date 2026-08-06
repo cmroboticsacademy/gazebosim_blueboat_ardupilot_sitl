@@ -350,10 +350,10 @@
 
       <sensor name="fpv_camera" type="camera">
         <always_on>true</always_on>
-        <!-- The sensor stays at a fixed maximum source resolution. The custom
-             stream plugin changes encoded output size and trigger rate live. -->
-        <update_rate>30</update_rate>
-        <topic>/blueboat/camera/image</topic>
+        <!-- Raw frames are bridged to ROS 2. The trigger plugin controls only
+             sensor enable state and source frame rate; ROS handles config and lag. -->
+        <update_rate>60</update_rate>
+        <topic>/blueboat/camera/image_raw</topic>
         <camera>
           <triggered>true</triggered>
           <trigger_topic>/blueboat/camera/trigger</trigger_topic>
@@ -369,19 +369,12 @@
             <far>100</far>
           </clip>
         </camera>
-        <plugin name="BlueBoatGstCameraPlugin"
-                filename="libBlueBoatGstCameraPlugin.so">
-          <image_topic>/blueboat/camera/image</image_topic>
+        <plugin name="BlueBoatCameraTriggerPlugin"
+                filename="libBlueBoatCameraTriggerPlugin.so">
           <enable_topic>/blueboat/camera/enable_streaming</enable_topic>
           <config_topic>/blueboat/camera/stream_config</config_topic>
           <trigger_topic>/blueboat/camera/trigger</trigger_topic>
-          <udp_host>127.0.0.1</udp_host>
-          <udp_port>5600</udp_port>
-          <output_width>256</output_width>
-          <output_height>256</output_height>
           <output_fps>16</output_fps>
-          <bitrate_kbps>800</bitrate_kbps>
-          <preserve_aspect>false</preserve_aspect>
         </plugin>
       </sensor>
     </link>

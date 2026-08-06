@@ -1,7 +1,4 @@
-# Camera names: blueboat, blueboat2, blueboat3, blueboat4, camera_pod,
-# all, or all_boats. An empty list is treated as all active cameras.
 string[] cameras
-# Artificial output delay in seconds. Zero disables artificial delay.
 float64 lag_seconds
 ---
 bool success

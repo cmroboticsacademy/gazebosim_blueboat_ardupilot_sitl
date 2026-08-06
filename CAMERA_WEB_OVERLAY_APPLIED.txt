@@ -1,0 +1,52 @@
+BlueBoat ROS camera and web overlay applied.
+Target repository commit inspected: 99ca6efaade50b5e0c5523650b7738f5ebc100e9
+Repository HEAD at install: 99ca6efaade50b5e0c5523650b7738f5ebc100e9
+Applied UTC: 20260806T151137378286Z
+Backup: /home/cmra/cmra_sim/gazebosim_blueboat_ardupilot_sitl_camera_backup_20260806T151137378286Z
+
+Patched models:
+  SITL_Models/Gazebo/models/blueboat/model.sdf
+  SITL_Models/Gazebo/models/blueboat2/model.sdf
+  SITL_Models/Gazebo/models/blueboat3/model.sdf
+  SITL_Models/Gazebo/models/blueboat4/model.sdf
+World camera-pod block removed: True
+
+Removed obsolete paths:
+  gz_ws/src/blueboat_camera_manager/rqt
+  gz_ws/src/blueboat_camera_manager/src/BlueBoatGstCameraPlugin.cc
+  gz_ws/src/blueboat_camera_manager/src/BlueBoatCameraFollowerPlugin.cc
+  gz_ws/src/blueboat_camera_manager/srv/SelectCamera.srv
+  SITL_Models/Gazebo/models/blueboat_camera_pod
+  gz_ws/camera_view.sh
+  gz_ws/camera_view1.sdp
+  gz_ws/camera_view2.sdp
+  gz_ws/camera_view3.sdp
+  gz_ws/camera_view4.sdp
+  gz_ws/configure_blueboat_cameras.py
+  gz_ws/mission4_video_grid.sh
+  gz_ws/mission4_video_grid_v2.sh
+  gz_ws/mission4_video_grid_v3_full_side_by_side.sh
+  gz_ws/mission4_view_camera_port.sh
+
+Copied overlay paths:
+  BLUEBOAT_CAMERA_ROS_API.md
+  BLUEBOAT_CAMERA_WEB.md
+  CAMERA_LAG.md
+  gz_ws/src/blueboat_camera_manager/CMakeLists.txt
+  gz_ws/src/blueboat_camera_manager/LICENSE
+  gz_ws/src/blueboat_camera_manager/blueboat_camera_manager/__init__.py
+  gz_ws/src/blueboat_camera_manager/blueboat_camera_manager/camera_manager_node.py
+  gz_ws/src/blueboat_camera_manager/blueboat_camera_manager/camera_web_node.py
+  gz_ws/src/blueboat_camera_manager/config/camera_manager.yaml
+  gz_ws/src/blueboat_camera_manager/hooks/blueboat_camera_manager.dsv.in
+  gz_ws/src/blueboat_camera_manager/hooks/blueboat_camera_manager.sh.in
+  gz_ws/src/blueboat_camera_manager/launch/camera_manager.launch.py
+  gz_ws/src/blueboat_camera_manager/package.xml
+  gz_ws/src/blueboat_camera_manager/src/BlueBoatCameraTriggerPlugin.cc
+  gz_ws/src/blueboat_camera_manager/srv/SetCameraConfig.srv
+  gz_ws/src/blueboat_camera_manager/srv/SetCameraEnabled.srv
+  gz_ws/src/blueboat_camera_manager/srv/SetCameraLag.srv
+  gz_ws/src/blueboat_camera_manager/web/app.js
+  gz_ws/src/blueboat_camera_manager/web/index.html
+  gz_ws/src/blueboat_camera_manager/web/style.css
+  gz_ws/src/move_blueboat/launch/mission4_sim.launch.py

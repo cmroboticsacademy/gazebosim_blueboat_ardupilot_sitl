@@ -1,14 +1,20 @@
 blueboat_camera_manager:
   ros__parameters:
-    mode: four
-    startup_delay: 10.0
+    mode: 4
+    startup_delay: 5.0
     startup_retries: 5
     startup_retry_period: 1.0
     default_width: 256
     default_height: 256
     default_fps: 16.0
-    default_bitrate_kbps: 800
-    default_preserve_aspect: false
+    default_preserve_aspect: true
     default_lag_seconds: 0.0
     maximum_lag_seconds: 30.0
-    single_default_target: blueboat
+    maximum_buffer_mb_per_camera: 256.0
+
+blueboat_camera_web:
+  ros__parameters:
+    address: 127.0.0.1
+    port: 8080
+    jpeg_quality: 80
+    service_timeout_seconds: 5.0

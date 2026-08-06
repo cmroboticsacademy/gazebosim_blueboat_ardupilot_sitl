@@ -9,50 +9,40 @@ find_package(ament_cmake REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(gz-sim7 REQUIRED)
-find_package(OpenCV REQUIRED COMPONENTS core imgproc)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GSTREAMER REQUIRED IMPORTED_TARGET
-  gstreamer-1.0
-  gstreamer-app-1.0
-)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SetCameraConfig.srv"
   "srv/SetCameraEnabled.srv"
   "srv/SetCameraLag.srv"
-  "srv/SelectCamera.srv"
 )
 
-add_library(BlueBoatGstCameraPlugin SHARED
-  src/BlueBoatGstCameraPlugin.cc
+add_library(BlueBoatCameraTriggerPlugin SHARED
+  src/BlueBoatCameraTriggerPlugin.cc
 )
-target_compile_features(BlueBoatGstCameraPlugin PUBLIC cxx_std_17)
-target_include_directories(BlueBoatGstCameraPlugin PRIVATE ${OpenCV_INCLUDE_DIRS})
-target_link_libraries(BlueBoatGstCameraPlugin PRIVATE
-  gz-sim7::gz-sim7
-  ${OpenCV_LIBRARIES}
-  PkgConfig::GSTREAMER
-)
-
-add_library(BlueBoatCameraFollowerPlugin SHARED
-  src/BlueBoatCameraFollowerPlugin.cc
-)
-target_compile_features(BlueBoatCameraFollowerPlugin PUBLIC cxx_std_17)
-target_link_libraries(BlueBoatCameraFollowerPlugin PRIVATE gz-sim7::gz-sim7)
+target_compile_features(BlueBoatCameraTriggerPlugin PUBLIC cxx_std_17)
+target_link_libraries(BlueBoatCameraTriggerPlugin PRIVATE gz-sim7::gz-sim7)
 
 install(PROGRAMS
   blueboat_camera_manager/camera_manager_node.py
   DESTINATION lib/${PROJECT_NAME}
   RENAME camera_manager_node
 )
+install(PROGRAMS
+  blueboat_camera_manager/camera_web_node.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME camera_web_node
+)
 install(TARGETS
-  BlueBoatGstCameraPlugin
-  BlueBoatCameraFollowerPlugin
+  BlueBoatCameraTriggerPlugin
   LIBRARY DESTINATION lib
 )
-install(DIRECTORY launch config
+install(DIRECTORY launch config web
   DESTINATION share/${PROJECT_NAME}
 )
 install(FILES LICENSE DESTINATION share/${PROJECT_NAME})
