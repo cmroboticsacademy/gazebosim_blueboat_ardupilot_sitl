@@ -82,7 +82,6 @@ def _bridge_arguments():
             [
                 f"{prefix}/enable_streaming@std_msgs/msg/Bool]ignition.msgs.Boolean",
                 f"{prefix}/stream_config@std_msgs/msg/String]ignition.msgs.StringMsg",
-                f"{prefix}/image_raw@sensor_msgs/msg/Image[ignition.msgs.Image",
             ]
         )
 
@@ -159,7 +158,17 @@ def generate_launch_description():
         DeclareLaunchArgument("camera_width", default_value="256"),
         DeclareLaunchArgument("camera_height", default_value="256"),
         DeclareLaunchArgument("camera_fps", default_value="16.0"),
+        DeclareLaunchArgument("camera_bitrate_kbps", default_value="800"),
         DeclareLaunchArgument("camera_preserve_aspect", default_value="true"),
+        DeclareLaunchArgument("camera_opencv_threads", default_value="1"),
+        DeclareLaunchArgument(
+            "camera_process_without_subscribers",
+            default_value="false",
+            description=(
+                "When false, skip resize/lag work until an RViz, web preview, "
+                "Foxglove, recorder, or other ROS subscriber needs the output."
+            ),
+        ),
         DeclareLaunchArgument(
             "camera_lag",
             default_value="0.0",
@@ -170,7 +179,42 @@ def generate_launch_description():
         DeclareLaunchArgument("camera_web", default_value="true"),
         DeclareLaunchArgument("camera_web_address", default_value="127.0.0.1"),
         DeclareLaunchArgument("camera_web_port", default_value="8080"),
-        DeclareLaunchArgument("camera_web_jpeg_quality", default_value="80"),
+        DeclareLaunchArgument("camera_web_jpeg_quality", default_value="72"),
+        DeclareLaunchArgument(
+            "camera_web_preview_fps",
+            default_value="0.0",
+            description=(
+                "Maximum browser MJPEG FPS. Zero follows every processed "
+                "ROS frame without web-side throttling."
+            ),
+        ),
+        DeclareLaunchArgument(
+            "camera_manage_image_bridges",
+            default_value="true",
+            description=(
+                "Start a Gazebo-to-ROS image bridge only while each camera "
+                "is enabled, so disabled cameras lose their Gazebo subscriber."
+            ),
+        ),
+        DeclareLaunchArgument(
+            "camera_image_bridge_package",
+            default_value="ros_gz_bridge",
+            description=(
+                "Bridge package used by per-camera image bridge processes. "
+                "Use ros_ign_bridge only on installations without ros_gz_bridge."
+            ),
+        ),
+        DeclareLaunchArgument(
+            "camera_set_gazebo_sensor_rate",
+            default_value="true",
+            description=(
+                "Set each Gazebo sensor update rate to its configured FPS "
+                "instead of leaving the sensor scheduled at its SDF maximum."
+            ),
+        ),
+        DeclareLaunchArgument(
+            "camera_gazebo_rate_timeout_ms", default_value="750"
+        ),
         DeclareLaunchArgument(
             "camera_foxglove",
             default_value="false",
@@ -210,17 +254,42 @@ def generate_launch_description():
                     "default_fps": ParameterValue(
                         LaunchConfiguration("camera_fps"), value_type=float
                     ),
+                    "default_bitrate_kbps": ParameterValue(
+                        LaunchConfiguration("camera_bitrate_kbps"), value_type=int
+                    ),
                     "default_preserve_aspect": ParameterValue(
                         LaunchConfiguration("camera_preserve_aspect"), value_type=bool
                     ),
                     "default_lag_seconds": ParameterValue(
                         LaunchConfiguration("camera_lag"), value_type=float
                     ),
+                    "opencv_threads": ParameterValue(
+                        LaunchConfiguration("camera_opencv_threads"), value_type=int
+                    ),
+                    "process_without_subscribers": ParameterValue(
+                        LaunchConfiguration("camera_process_without_subscribers"),
+                        value_type=bool,
+                    ),
                     "maximum_lag_seconds": ParameterValue(
                         LaunchConfiguration("camera_max_lag"), value_type=float
                     ),
                     "maximum_buffer_mb_per_camera": ParameterValue(
                         LaunchConfiguration("camera_max_buffer_mb"), value_type=float
+                    ),
+                    "manage_image_bridges": ParameterValue(
+                        LaunchConfiguration("camera_manage_image_bridges"),
+                        value_type=bool,
+                    ),
+                    "image_bridge_package": LaunchConfiguration(
+                        "camera_image_bridge_package"
+                    ),
+                    "set_gazebo_sensor_rate": ParameterValue(
+                        LaunchConfiguration("camera_set_gazebo_sensor_rate"),
+                        value_type=bool,
+                    ),
+                    "gazebo_sensor_rate_timeout_ms": ParameterValue(
+                        LaunchConfiguration("camera_gazebo_rate_timeout_ms"),
+                        value_type=int,
                     ),
                 }
             ],
@@ -239,6 +308,12 @@ def generate_launch_description():
                     ),
                     "jpeg_quality": ParameterValue(
                         LaunchConfiguration("camera_web_jpeg_quality"), value_type=int
+                    ),
+                    "preview_max_fps": ParameterValue(
+                        LaunchConfiguration("camera_web_preview_fps"), value_type=float
+                    ),
+                    "opencv_threads": ParameterValue(
+                        LaunchConfiguration("camera_opencv_threads"), value_type=int
                     ),
                 }
             ],

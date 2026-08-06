@@ -1,81 +1,69 @@
 # BlueBoat ROS 2 camera manager and local website
 
-## What changed
+## Camera activation and Gazebo RTF
 
-- `camera_mode` is now numeric: `1`, `2`, `3`, or `4`.
-  - `1`: `blueboat`
-  - `2`: `blueboat`, `blueboat2`
-  - `3`: adds `blueboat3`
-  - `4`: adds `blueboat4`
-- The single movable camera-pod mode is removed.
-- RQT camera management and the UDP/SDP camera ports are removed.
-- Each enabled camera publishes standard ROS 2 topics:
-  - `/<boat>/camera/image`
-  - `/<boat>/camera/camera_info`
-- The raw Gazebo bridge topics are `/<boat>/camera/image_raw`.
-- Boat camera sensors remain fixed at a `640x480` raw render size; larger ROS
-  output sizes are upscaled and do not add source detail.
-- A local website provides camera selection, enable/disable, resolution, FPS,
-  aspect-ratio, and lag controls plus live MJPEG tiles.
-- Foxglove Bridge is optional and uses one WebSocket port instead of one UDP
-  port per camera.
+The base parameter bridge no longer subscribes permanently to all four Gazebo
+image topics. The camera manager starts a dedicated `ros_gz_bridge`
+`parameter_bridge` process only for a camera that is both inside `camera_mode`
+and enabled. Disabling a camera publishes the disable command and terminates its
+image bridge. With no image subscriber, Gazebo can omit that rendering sensor
+from its scheduled sensor set.
+
+The manager also requests Gazebo's built-in `<image topic>/set_rate` service so
+the sensor update schedule follows the configured FPS rather than remaining at
+the SDF maximum of 60 Hz. The trigger plugin remains as an additional gate.
+
+Four simultaneous feeds still require four Gazebo camera renders. Disabling
+unused cameras, lowering FPS, and lowering the Gazebo source resolution are the
+changes that affect Gazebo rendering cost. Output size changes occur after the
+fixed 640x480 Gazebo render and therefore mostly affect ROS/web CPU and memory.
+
+## Web UI
+
+The interface contains:
+
+1. a multi-camera selector with **Select all active BlueBoats**;
+2. one status card per boat;
+3. shared batch controls for activeness, FPS, size, bitrate, lag, and scaling;
+4. an **Active camera feeds** grid containing every enabled camera.
+
+The feeds open automatically and follow every processed ROS frame by default.
+The browser does not intentionally drop frames when
+`camera_web_preview_fps:=0.0`. The web node still creates image subscriptions
+only while a browser is actually viewing the MJPEG endpoint.
+
+The bitrate option controls JPEG compression for the browser feed. ROS
+`sensor_msgs/Image` topics remain uncompressed.
 
 ## Dependencies
 
-Use the same ROS distribution already configured for this project:
-
 ```bash
 sudo apt update
-sudo apt install -y \
-  ros-$ROS_DISTRO-cv-bridge \
-  python3-opencv \
-  python3-numpy
+sudo apt install -y python3-opencv python3-numpy
 ```
 
-Optional Foxglove bridge:
+Optional Foxglove:
 
 ```bash
 sudo apt install -y ros-$ROS_DISTRO-foxglove-bridge
 ```
 
-The GStreamer packages that were required only for camera UDP streaming are no
-longer required by `blueboat_camera_manager`.
-
-## Build
+## Rebuild inside Docker
 
 ```bash
-cd gazebosim_blueboat_ardupilot_sitl/gz_ws
+cd ~/gz_ws
 source /opt/ros/$ROS_DISTRO/setup.bash
-rosdep install --from-paths src --ignore-src -r -y
+
 colcon build \
   --symlink-install \
   --merge-install \
   --packages-select blueboat_camera_manager move_blueboat \
   --cmake-clean-cache
+
 source install/setup.bash
 ```
 
-If this workspace previously built the old camera interfaces and CMake reports
-stale generated files, remove only the old package build directory and rebuild:
-
-```bash
-rm -rf build/blueboat_camera_manager
-colcon build --symlink-install --merge-install \
-  --packages-select blueboat_camera_manager move_blueboat
-source install/setup.bash
-```
-
-## Launch Mission 4
-
-Example with two cameras and a default 0.5 second lag:
-
-```bash
-ros2 launch move_blueboat mission4_sim.launch.py \
-  camera_mode:=2 \
-  camera_lag:=0.5
-```
-
-Full camera arguments:
+## Launch
 
 ```bash
 ros2 launch move_blueboat mission4_sim.launch.py \
@@ -84,103 +72,73 @@ ros2 launch move_blueboat mission4_sim.launch.py \
   camera_width:=256 \
   camera_height:=256 \
   camera_fps:=16.0 \
+  camera_bitrate_kbps:=800 \
   camera_preserve_aspect:=true \
   camera_lag:=0.0 \
+  camera_opencv_threads:=1 \
+  camera_process_without_subscribers:=false \
+  camera_manage_image_bridges:=true \
+  camera_image_bridge_package:=ros_gz_bridge \
+  camera_set_gazebo_sensor_rate:=true \
   camera_web:=true \
   camera_web_address:=127.0.0.1 \
-  camera_web_port:=8080
+  camera_web_port:=8080 \
+  camera_web_preview_fps:=0.0
 ```
 
-Open:
+Open `http://127.0.0.1:8080`.
 
-```text
-http://127.0.0.1:8080
-```
-
-The web server binds to localhost by default. To access it from another machine,
-set `camera_web_address:=0.0.0.0` and use normal network/firewall precautions.
-
-## RViz
-
-Add an RViz **Camera** display and select:
-
-```text
-/blueboat/camera/image
-```
-
-Its matching camera-info topic is:
-
-```text
-/blueboat/camera/camera_info
-```
-
-Use the corresponding `blueboat2`, `blueboat3`, or `blueboat4` namespace for the
-other boats. The image topic is enabled/disabled, resized, frame-limited, and
-delayed by the same manager used by the website.
-The manager also derives `odom` to `<boat>/camera_optical_frame` transforms from
-each boat's odometry, so the RViz **Camera** display receives both calibrated
-`CameraInfo` and a transformable optical frame.
-
-## Optional Foxglove
-
-Install the Foxglove bridge dependency, then launch with:
+If the installation exposes only the compatibility package, launch with:
 
 ```bash
-ros2 launch move_blueboat mission4_sim.launch.py \
-  camera_mode:=4 \
-  camera_foxglove:=true
+camera_image_bridge_package:=ros_ign_bridge
 ```
 
-Connect Foxglove to:
+## Verify true Gazebo deactivation
 
-```text
-ws://127.0.0.1:8765
-```
-
-## ROS 2 services
+Check the manager state:
 
 ```bash
-ros2 service call /blueboat_camera_manager/set_enabled \
-  blueboat_camera_manager/srv/SetCameraEnabled \
-  "{cameras: [blueboat], enabled: true}"
-
-ros2 service call /blueboat_camera_manager/set_config \
-  blueboat_camera_manager/srv/SetCameraConfig \
-  "{cameras: [blueboat], width: 640, height: 480, fps: 30.0, preserve_aspect: true}"
-
-ros2 service call /blueboat_camera_manager/set_lag \
-  blueboat_camera_manager/srv/SetCameraLag \
-  "{cameras: [blueboat], lag_seconds: 1.5}"
-
-ros2 service call /blueboat_camera_manager/status std_srvs/srv/Trigger "{}"
+ros2 service call /blueboat_camera_manager/status \
+  std_srvs/srv/Trigger "{}"
 ```
 
-`all` selects the cameras active in the chosen numeric mode. A request for a boat
-outside that mode is rejected.
+For an enabled camera, state should contain:
 
-## Lag buffer guard
+```json
+"image_bridge_running": true
+```
 
-Lag is implemented after resize and frame-rate limiting. The manager estimates
-the raw delayed-frame memory required per camera and rejects a combination over
-`camera_max_buffer_mb` (256 MiB by default). Reduce resolution, FPS, or lag if a
-request is rejected.
-
-## Smoke test
-
-After launch, verify the manager and first camera:
+After disabling it through the UI, the value should become false. Confirm the
+Gazebo image topic has no subscriber:
 
 ```bash
-ros2 service call /blueboat_camera_manager/status std_srvs/srv/Trigger "{}"
-ros2 topic hz /blueboat/camera/image
-ros2 topic echo --once /blueboat/camera/camera_info
+gz topic -i -t /blueboat/camera/image_raw
 ```
 
-Then open the local web page and toggle `blueboat` off and on. The image topic
-rate should stop and resume. In RViz, add a **Camera** display and choose
-`/blueboat/camera/image`.
+Confirm the child bridge disappears from the process list:
 
-## Installer backup
+```bash
+pgrep -af 'parameter_bridge.*blueboat/camera/image_raw'
+```
 
-`apply.sh` creates a timestamped backup directory beside the repository before
-changing source files. It also writes `CAMERA_WEB_OVERLAY_APPLIED.txt` in the
-repository with the exact backup path and installed path list.
+The other non-camera bridge remains running normally.
+
+## Compare RTF
+
+Use a repeatable test and allow several seconds after each change:
+
+```bash
+gz topic -e -t /stats | grep -m 10 real_time_factor
+```
+
+Compare these states:
+
+1. all four cameras enabled;
+2. only `blueboat` enabled;
+3. all cameras disabled.
+
+If RTF remains unchanged after `image_bridge_running` becomes false, inspect
+other rendering sensors. The world also contains GPU bathymetry lidars and wave
+visual rendering, which may dominate the rendering cost on a particular GPU or
+Docker configuration.

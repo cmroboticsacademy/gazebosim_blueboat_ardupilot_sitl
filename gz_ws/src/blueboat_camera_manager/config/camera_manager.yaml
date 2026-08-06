@@ -7,8 +7,11 @@ blueboat_camera_manager:
     default_width: 256
     default_height: 256
     default_fps: 16.0
+    default_bitrate_kbps: 800
     default_preserve_aspect: true
     default_lag_seconds: 0.0
+    opencv_threads: 1
+    process_without_subscribers: false
     maximum_lag_seconds: 30.0
     maximum_buffer_mb_per_camera: 256.0
 
@@ -16,5 +19,7 @@ blueboat_camera_web:
   ros__parameters:
     address: 127.0.0.1
     port: 8080
-    jpeg_quality: 80
+    jpeg_quality: 72
+    preview_max_fps: 8.0
+    opencv_threads: 1
     service_timeout_seconds: 5.0

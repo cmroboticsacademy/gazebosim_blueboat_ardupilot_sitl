@@ -11,55 +11,91 @@
     <div>
       <p class="eyebrow">CMRA Mission 4</p>
       <h1>BlueBoat Camera Control</h1>
-      <p class="subtitle">ROS 2 camera controls and live local streams</p>
+      <p class="subtitle">Batch controls, live statistics, and full-rate active feeds</p>
     </div>
     <div id="connection" class="status waiting">Connecting</div>
   </header>
 
   <main>
-    <section class="utility panel">
-      <div class="utility-heading">
+    <section class="panel target-panel">
+      <div class="section-heading">
         <div>
-          <h2>Camera utility</h2>
+          <h2>Target cameras</h2>
           <p id="modeSummary">Waiting for camera manager...</p>
         </div>
         <button id="refreshButton" class="secondary" type="button">Refresh</button>
       </div>
 
+      <label class="select-all-row">
+        <input id="selectAllInput" type="checkbox">
+        <span>Select all active BlueBoats</span>
+      </label>
+      <div id="cameraSelector" class="camera-selector" aria-label="Target cameras"></div>
+      <p id="selectedSummary" class="selected-summary">No cameras selected.</p>
+    </section>
+<section class="panel settings-panel">
+      <div class="section-heading">
+        <div>
+          <h2>Apply settings</h2>
+          <p>Only fields changed from “No change” are sent to the selected boats.</p>
+        </div>
+      </div>
+
       <div class="controls">
         <label>
-          Boat camera
-          <select id="cameraSelect"></select>
-        </label>
-        <label>
-          Streaming
-          <select id="enabledSelect">
-            <option value="true">Enabled</option>
-            <option value="false">Disabled</option>
+          Activeness
+          <select id="activeSelect">
+            <option value="">No change</option>
+            <option value="true">Enable camera</option>
+            <option value="false">Disable camera</option>
           </select>
         </label>
+
         <label>
-          Configuration
-          <select id="presetSelect">
-            <option value="256x256">256 x 256</option>
-            <option value="640x480">640 x 480</option>
-            <option value="1280x720">1280 x 720</option>
-            <option value="custom">Custom</option>
-          </select>
-        </label>
-        <label>
-          Frame rate
+          FPS
           <select id="fpsSelect">
+            <option value="">No change</option>
+            <option value="4">4 FPS</option>
             <option value="8">8 FPS</option>
+            <option value="12">12 FPS</option>
             <option value="16">16 FPS</option>
             <option value="24">24 FPS</option>
             <option value="30">30 FPS</option>
             <option value="60">60 FPS</option>
           </select>
         </label>
+
+        <label>
+          Size
+          <select id="sizeSelect">
+            <option value="">No change</option>
+            <option value="160x120">160 × 120</option>
+            <option value="256x256">256 × 256</option>
+            <option value="320x240">320 × 240</option>
+            <option value="640x480">640 × 480</option>
+            <option value="1280x720">1280 × 720</option>
+            <option value="custom">Custom</option>
+          </select>
+        </label>
+
+        <label>
+          Preview bitrate
+          <select id="bitrateSelect">
+            <option value="">No change</option>
+            <option value="250">250 kbps</option>
+            <option value="500">500 kbps</option>
+            <option value="800">800 kbps</option>
+            <option value="1200">1,200 kbps</option>
+            <option value="2000">2,000 kbps</option>
+            <option value="4000">4,000 kbps</option>
+            <option value="8000">8,000 kbps</option>
+          </select>
+        </label>
+
         <label>
           Lag
           <select id="lagSelect">
+            <option value="">No change</option>
             <option value="0">No lag</option>
             <option value="0.25">0.25 seconds</option>
             <option value="0.5">0.5 seconds</option>
@@ -70,43 +106,58 @@
             <option value="custom">Custom</option>
           </select>
         </label>
-        <label class="toggle-row">
-          <input id="aspectInput" type="checkbox" checked>
-          Preserve aspect ratio
+
+        <label>
+          Scaling
+          <select id="aspectSelect">
+            <option value="">No change</option>
+            <option value="true">Preserve aspect</option>
+            <option value="false">Stretch to size</option>
+          </select>
         </label>
       </div>
 
-      <div id="customControls" class="custom-controls hidden">
-        <label>Width <input id="widthInput" type="number" min="16" max="1920" step="2"></label>
-        <label>Height <input id="heightInput" type="number" min="16" max="1080" step="2"></label>
+      <div id="customSizeControls" class="custom-controls hidden">
+        <label>Width <input id="widthInput" type="number" min="16" max="1920" step="2" value="256"></label>
+        <label>Height <input id="heightInput" type="number" min="16" max="1080" step="2" value="256"></label>
       </div>
-      <div id="customLagControl" class="custom-controls hidden">
-        <label>Lag seconds <input id="lagInput" type="number" min="0" max="30" step="0.05"></label>
+      <div id="customLagControls" class="custom-controls hidden">
+        <label>Lag seconds <input id="lagInput" type="number" min="0" max="30" step="0.05" value="0"></label>
       </div>
 
       <div class="actions">
-        <button id="applyButton" type="button">Apply camera settings</button>
+        <button id="applyButton" type="button">Apply to selected BlueBoats</button>
         <span id="feedback" role="status"></span>
       </div>
 
-      <div class="topic-note">
-        <strong>RViz:</strong>
-        <code id="imageTopic">/blueboat/camera/image</code>
-        <span>with</span>
-        <code id="infoTopic">/blueboat/camera/camera_info</code>
-        <span>Raw source: 640 x 480</span>
+      <div class="performance-note">
+        <strong>Performance:</strong>
+        Disabling a camera now stops its dedicated Gazebo-to-ROS image bridge, removing the Gazebo image subscriber.
+        Active feeds below follow every processed ROS frame without web-side FPS throttling. Bitrate applies only to MJPEG compression; ROS image topics remain uncompressed.
       </div>
     </section>
-
-    <section class="stream-section">
+    
+    <section class="camera-section">
       <div class="section-heading">
         <div>
-          <h2>Enabled camera streams</h2>
-          <p>Streams appear only when their ROS output is enabled.</p>
+          <h2>Camera status</h2>
+          <p>Statistics refresh without changing the settings form below.</p>
         </div>
       </div>
-      <div id="streamGrid" class="stream-grid"></div>
-      <div id="emptyState" class="empty panel hidden">No camera streams are enabled.</div>
+      <div id="cameraCards" class="camera-grid"></div>
+    </section>
+
+    
+
+    <section class="camera-section feeds-section">
+      <div class="section-heading">
+        <div>
+          <h2>Active camera feeds</h2>
+          <p>Every enabled camera is shown automatically at the full processed ROS topic rate.</p>
+        </div>
+      </div>
+      <p id="cameraFeedsEmpty" class="empty-feeds">No cameras are enabled.</p>
+      <div id="cameraFeeds" class="feeds-grid"></div>
     </section>
   </main>
 

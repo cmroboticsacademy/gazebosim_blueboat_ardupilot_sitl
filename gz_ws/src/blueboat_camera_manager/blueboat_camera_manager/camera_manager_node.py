@@ -5,6 +5,10 @@ from __future__ import annotations
 
 import json
 import math
+import os
+import signal
+import subprocess
+import threading
 import time
 from collections import deque
 from copy import deepcopy
@@ -13,7 +17,6 @@ from typing import Deque, Iterable
 
 import cv2
 import numpy as np
-from cv_bridge import CvBridge, CvBridgeError
 from geometry_msgs.msg import TransformStamped
 import rclpy
 from rclpy.node import Node
@@ -63,6 +66,7 @@ class CameraConfig:
     width: int
     height: int
     fps: float
+    bitrate_kbps: int
     preserve_aspect: bool
 
 
@@ -99,14 +103,29 @@ class BlueBoatCameraManager(Node):
         self.declare_parameter("default_width", 256)
         self.declare_parameter("default_height", 256)
         self.declare_parameter("default_fps", 16.0)
+        self.declare_parameter("default_bitrate_kbps", 800)
         self.declare_parameter("default_preserve_aspect", True)
         self.declare_parameter("default_lag_seconds", 0.0)
+        self.declare_parameter("opencv_threads", 1)
+        self.declare_parameter("process_without_subscribers", False)
         self.declare_parameter("maximum_lag_seconds", 30.0)
         self.declare_parameter("maximum_buffer_mb_per_camera", 256.0)
+        self.declare_parameter("manage_image_bridges", True)
+        self.declare_parameter("image_bridge_package", "ros_gz_bridge")
+        self.declare_parameter("image_bridge_reconcile_period", 1.0)
+        self.declare_parameter("set_gazebo_sensor_rate", True)
+        self.declare_parameter("gazebo_sensor_rate_timeout_ms", 750)
 
         self.mode = int(self.get_parameter("mode").value)
         if self.mode not in (1, 2, 3, 4):
             raise ValueError("camera manager mode must be 1, 2, 3, or 4")
+
+        cv2.setNumThreads(
+            max(1, int(self.get_parameter("opencv_threads").value))
+        )
+        self._process_without_subscribers = bool(
+            self.get_parameter("process_without_subscribers").value
+        )
 
         self._maximum_lag = float(
             self.get_parameter("maximum_lag_seconds").value
@@ -132,10 +151,35 @@ class BlueBoatCameraManager(Node):
             * 1024
         )
 
+        self._manage_image_bridges = bool(
+            self.get_parameter("manage_image_bridges").value
+        )
+        self._image_bridge_package = str(
+            self.get_parameter("image_bridge_package").value
+        ).strip() or "ros_gz_bridge"
+        self._image_bridge_reconcile_period = max(
+            0.25,
+            float(
+                self.get_parameter("image_bridge_reconcile_period").value
+            ),
+        )
+        self._set_gazebo_sensor_rate = bool(
+            self.get_parameter("set_gazebo_sensor_rate").value
+        )
+        self._gazebo_sensor_rate_timeout_ms = max(
+            100,
+            min(5000, int(
+                self.get_parameter("gazebo_sensor_rate_timeout_ms").value
+            )),
+        )
+
         default_config = CameraConfig(
             width=int(self.get_parameter("default_width").value),
             height=int(self.get_parameter("default_height").value),
             fps=float(self.get_parameter("default_fps").value),
+            bitrate_kbps=int(
+                self.get_parameter("default_bitrate_kbps").value
+            ),
             preserve_aspect=bool(
                 self.get_parameter("default_preserve_aspect").value
             ),
@@ -154,7 +198,6 @@ class BlueBoatCameraManager(Node):
         if memory_error:
             raise ValueError(f"invalid default camera buffer: {memory_error}")
 
-        self._bridge = CvBridge()
         self._tf_broadcaster = TransformBroadcaster(self)
         self._configs = {name: default_config for name in self.BOATS}
         self._lags = {name: default_lag for name in self.BOATS}
@@ -164,9 +207,39 @@ class BlueBoatCameraManager(Node):
             name: deque() for name in self.BOATS
         }
         self._last_conversion_error = {name: 0.0 for name in self.BOATS}
+        self._received_frames = {name: 0 for name in self.BOATS}
+        self._accepted_frames = {name: 0 for name in self.BOATS}
+        self._published_frames = {name: 0 for name in self.BOATS}
+        self._dropped_fps_frames = {name: 0 for name in self.BOATS}
+        self._skipped_no_subscriber_frames = {name: 0 for name in self.BOATS}
+        self._last_raw_monotonic = {name: -1.0 for name in self.BOATS}
+        self._stats_previous = {
+            name: (0, 0, 0, 0, 0) for name in self.BOATS
+        }
+        self._stats_rates = {
+            name: {
+                "input_fps": 0.0,
+                "processed_fps": 0.0,
+                "output_fps": 0.0,
+                "fps_dropped_per_second": 0.0,
+                "no_subscriber_skipped_per_second": 0.0,
+            }
+            for name in self.BOATS
+        }
+        self._stats_previous_time = time.monotonic()
         self._latest_transforms: dict[str, TransformStamped | None] = {
             name: None for name in self.BOATS
         }
+        self._image_bridge_processes: dict[
+            str, subprocess.Popen | None
+        ] = {name: None for name in self.BOATS}
+        self._image_bridge_last_exit = {name: None for name in self.BOATS}
+        self._sensor_rate_applied: dict[str, float | None] = {
+            name: None for name in self.BOATS
+        }
+        self._sensor_rate_last_attempt = {name: -1.0 for name in self.BOATS}
+        self._sensor_rate_last_error = {name: "" for name in self.BOATS}
+        self._sensor_rate_in_flight = {name: False for name in self.BOATS}
 
         self._enable_publishers = {}
         self._config_publishers = {}
@@ -264,6 +337,10 @@ class BlueBoatCameraManager(Node):
         self._start_time = time.monotonic()
         self._startup_timer = self.create_timer(0.2, self._startup_tick)
         self._release_timer = self.create_timer(0.01, self._release_due_frames)
+        self._bridge_timer = self.create_timer(
+            self._image_bridge_reconcile_period,
+            self._reconcile_image_bridges,
+        )
         self._state_timer = self.create_timer(1.0, self._publish_state)
         self._publish_state()
 
@@ -322,6 +399,8 @@ class BlueBoatCameraManager(Node):
             return "fps must be finite and greater than zero"
         if config.fps > 60.0:
             return "fps must be no more than 60"
+        if config.bitrate_kbps < 64 or config.bitrate_kbps > 20000:
+            return "bitrate_kbps must be between 64 and 20000"
         return None
 
     def _validate_lag(self, lag_seconds: float) -> str | None:
@@ -361,6 +440,7 @@ class BlueBoatCameraManager(Node):
         return (
             f"width={config.width};height={config.height};"
             f"fps={config.fps:.6g};"
+            f"bitrate_kbps={config.bitrate_kbps};"
             f"preserve_aspect="
             f"{'true' if config.preserve_aspect else 'false'}"
         )
@@ -369,16 +449,172 @@ class BlueBoatCameraManager(Node):
         message = String()
         message.data = self._config_payload(self._configs[name])
         self._config_publishers[name].publish(message)
+        self._apply_gazebo_sensor_rate(name, self._configs[name].fps)
+
+    def _image_bridge_argument(self, name: str) -> str:
+        endpoint = self.ENDPOINTS[name]
+        return (
+            f"{endpoint.raw_topic}@sensor_msgs/msg/Image"
+            "[ignition.msgs.Image"
+        )
+
+    def _image_bridge_running(self, name: str) -> bool:
+        process = self._image_bridge_processes[name]
+        if process is None:
+            return False
+        exit_code = process.poll()
+        if exit_code is None:
+            return True
+        self._image_bridge_last_exit[name] = exit_code
+        self._image_bridge_processes[name] = None
+        return False
+
+    def _start_image_bridge(self, name: str) -> None:
+        if not self._manage_image_bridges or self._image_bridge_running(name):
+            return
+        command = [
+            "ros2",
+            "run",
+            self._image_bridge_package,
+            "parameter_bridge",
+            self._image_bridge_argument(name),
+            "--ros-args",
+            "-r",
+            f"__node:={name}_camera_image_bridge",
+        ]
+        try:
+            process = subprocess.Popen(
+                command,
+                env=os.environ.copy(),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                start_new_session=True,
+            )
+        except OSError as error:
+            self.get_logger().error(
+                f"Could not start image bridge for {name}: {error}"
+            )
+            self._image_bridge_last_exit[name] = -1
+            return
+        self._image_bridge_processes[name] = process
+        self._image_bridge_last_exit[name] = None
+        self.get_logger().info(
+            f"Started on-demand Gazebo image bridge for {name} "
+            f"(pid {process.pid})"
+        )
+
+    def _stop_image_bridge(self, name: str) -> None:
+        process = self._image_bridge_processes[name]
+        if process is None:
+            return
+        if process.poll() is None:
+            try:
+                os.killpg(process.pid, signal.SIGTERM)
+                process.wait(timeout=0.75)
+            except (ProcessLookupError, subprocess.TimeoutExpired):
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                try:
+                    process.wait(timeout=0.25)
+                except subprocess.TimeoutExpired:
+                    pass
+        self._image_bridge_last_exit[name] = process.poll()
+        self._image_bridge_processes[name] = None
+        self.get_logger().info(
+            f"Stopped Gazebo image bridge for {name}; "
+            "the Gazebo camera now has no image subscriber"
+        )
+
+    def _apply_gazebo_sensor_rate(
+        self, name: str, fps: float, *, force: bool = False
+    ) -> None:
+        if not self._set_gazebo_sensor_rate:
+            return
+        current = self._sensor_rate_applied[name]
+        if current is not None and abs(current - fps) < 1e-6 and not force:
+            return
+        if self._sensor_rate_in_flight[name]:
+            return
+        now = time.monotonic()
+        if (
+            not force
+            and self._sensor_rate_last_attempt[name] >= 0.0
+            and now - self._sensor_rate_last_attempt[name] < 1.0
+        ):
+            return
+        self._sensor_rate_last_attempt[name] = now
+        self._sensor_rate_in_flight[name] = True
+        service = f"{self.ENDPOINTS[name].raw_topic}/set_rate"
+
+        def request_rate() -> None:
+            command = [
+                "gz",
+                "service",
+                "-s",
+                service,
+                "--reqtype",
+                "gz.msgs.Double",
+                "--reptype",
+                "gz.msgs.Empty",
+                "--timeout",
+                str(self._gazebo_sensor_rate_timeout_ms),
+                "--req",
+                f"data: {fps:.6g}",
+            ]
+            try:
+                result = subprocess.run(
+                    command,
+                    check=False,
+                    capture_output=True,
+                    text=True,
+                    timeout=(
+                        self._gazebo_sensor_rate_timeout_ms / 1000.0 + 1.0
+                    ),
+                )
+                if result.returncode == 0:
+                    self._sensor_rate_applied[name] = float(fps)
+                    self._sensor_rate_last_error[name] = ""
+                else:
+                    detail = (
+                        result.stderr or result.stdout or "service failed"
+                    ).strip()
+                    self._sensor_rate_last_error[name] = detail[-300:]
+            except (OSError, subprocess.TimeoutExpired) as error:
+                self._sensor_rate_last_error[name] = str(error)
+            finally:
+                self._sensor_rate_in_flight[name] = False
+
+        threading.Thread(
+            target=request_rate,
+            name=f"{name}-gazebo-rate",
+            daemon=True,
+        ).start()
+
+    def _reconcile_image_bridges(self) -> None:
+        active = set(self._active_camera_names())
+        for name in self.BOATS:
+            desired = name in active and self._enabled[name]
+            if desired:
+                self._apply_gazebo_sensor_rate(name, self._configs[name].fps)
+                self._start_image_bridge(name)
+            else:
+                self._stop_image_bridge(name)
 
     def _publish_enabled(self, names: Iterable[str], enabled: bool) -> None:
         message = Bool()
         message.data = enabled
         for name in names:
+            if enabled:
+                self._apply_gazebo_sensor_rate(name, self._configs[name].fps)
+                self._start_image_bridge(name)
             self._enable_publishers[name].publish(message)
             self._enabled[name] = enabled
             self._last_accepted[name] = -1.0
             if not enabled:
                 self._queues[name].clear()
+                self._stop_image_bridge(name)
         self._publish_state()
 
     def _publish_lag_status(self, name: str) -> None:
@@ -485,25 +721,96 @@ class BlueBoatCameraManager(Node):
         shifted.sec, shifted.nanosec = divmod(total_nanoseconds, 1_000_000_000)
         return shifted
 
+    @staticmethod
+    def _image_to_bgr(message: Image) -> np.ndarray:
+        """Create a BGR uint8 view/copy without the cv_bridge ABI layer."""
+        width = int(message.width)
+        height = int(message.height)
+        encoding = str(message.encoding).lower()
+        channels_by_encoding = {
+            "bgr8": 3,
+            "8uc3": 3,
+            "rgb8": 3,
+            "bgra8": 4,
+            "rgba8": 4,
+            "mono8": 1,
+            "8uc1": 1,
+        }
+        channels = channels_by_encoding.get(encoding)
+        if channels is None:
+            raise ValueError(f"unsupported image encoding '{message.encoding}'")
+        row_bytes = width * channels
+        step = int(message.step) or row_bytes
+        if width <= 0 or height <= 0 or step < row_bytes:
+            raise ValueError("invalid image dimensions or row step")
+        raw = np.frombuffer(message.data, dtype=np.uint8)
+        required = step * height
+        if raw.size < required:
+            raise ValueError(
+                f"image buffer has {raw.size} bytes; expected at least {required}"
+            )
+        pixels = raw[:required].reshape(height, step)[:, :row_bytes]
+        pixels = pixels.reshape(height, width, channels)
+        if encoding in ("bgr8", "8uc3"):
+            return np.ascontiguousarray(pixels)
+        if encoding == "rgb8":
+            return cv2.cvtColor(pixels, cv2.COLOR_RGB2BGR)
+        if encoding == "bgra8":
+            return cv2.cvtColor(pixels, cv2.COLOR_BGRA2BGR)
+        if encoding == "rgba8":
+            return cv2.cvtColor(pixels, cv2.COLOR_RGBA2BGR)
+        return cv2.cvtColor(pixels, cv2.COLOR_GRAY2BGR)
+
+    @staticmethod
+    def _bgr_to_image(source: np.ndarray, original: Image, frame_id: str) -> Image:
+        contiguous = np.ascontiguousarray(source, dtype=np.uint8)
+        height, width = contiguous.shape[:2]
+        message = Image()
+        message.header.stamp = original.header.stamp
+        message.header.frame_id = frame_id
+        message.height = height
+        message.width = width
+        message.encoding = "bgr8"
+        message.is_bigendian = 0
+        message.step = width * 3
+        message.data = contiguous.tobytes()
+        return message
+
+    def _has_output_subscribers(self, name: str) -> bool:
+        return (
+            self._image_publishers[name].get_subscription_count() > 0
+            or self._camera_info_publishers[name].get_subscription_count() > 0
+        )
+
     def _on_raw_image(self, name: str, message: Image) -> None:
+        now = time.monotonic()
+        self._received_frames[name] += 1
+        self._last_raw_monotonic[name] = now
         if not self._enabled[name]:
             return
+        if (
+            not self._process_without_subscribers
+            and not self._has_output_subscribers(name)
+        ):
+            self._queues[name].clear()
+            self._skipped_no_subscriber_frames[name] += 1
+            return
 
-        now = time.monotonic()
         config = self._configs[name]
         period = 1.0 / config.fps
         last = self._last_accepted[name]
         if last >= 0.0 and now - last + 1e-9 < period:
+            self._dropped_fps_frames[name] += 1
             return
         self._last_accepted[name] = now
 
         try:
-            source = self._bridge.imgmsg_to_cv2(
-                message, desired_encoding="bgr8"
-            )
+            source = self._image_to_bgr(message)
             output = self._resize(source, config)
-            processed = self._bridge.cv2_to_imgmsg(output, encoding="bgr8")
-        except (CvBridgeError, cv2.error, ValueError) as error:
+            processed = self._bgr_to_image(
+                output, message, f"{name}/camera_optical_frame"
+            )
+        except (cv2.error, ValueError) as error:
             if now - self._last_conversion_error[name] > 2.0:
                 self.get_logger().error(
                     f"Failed to process {name} camera frame: {error}"
@@ -511,13 +818,13 @@ class BlueBoatCameraManager(Node):
                 self._last_conversion_error[name] = now
             return
 
-        processed.header.stamp = message.header.stamp
-        processed.header.frame_id = f"{name}/camera_optical_frame"
+        self._accepted_frames[name] += 1
         camera_info = self._make_camera_info(name, processed)
         lag = self._lags[name]
         if lag <= 0.0:
             self._image_publishers[name].publish(processed)
             self._camera_info_publishers[name].publish(camera_info)
+            self._published_frames[name] += 1
             return
 
         delayed_stamp = self._shift_stamp(processed.header.stamp, lag)
@@ -608,6 +915,7 @@ class BlueBoatCameraManager(Node):
 
                 self._image_publishers[name].publish(frame.image)
                 self._camera_info_publishers[name].publish(frame.camera_info)
+                self._published_frames[name] += 1
 
     def _on_set_config(self, request, response):
         names, error = self._resolve_names(request.cameras)
@@ -620,6 +928,7 @@ class BlueBoatCameraManager(Node):
             width=int(request.width),
             height=int(request.height),
             fps=float(request.fps),
+            bitrate_kbps=int(request.bitrate_kbps),
             preserve_aspect=bool(request.preserve_aspect),
         )
         validation = self._validate_config(config)
@@ -638,12 +947,14 @@ class BlueBoatCameraManager(Node):
             self._configs[name] = config
             self._queues[name].clear()
             self._last_accepted[name] = -1.0
+            self._sensor_rate_applied[name] = None
             self._publish_control_config(name)
 
         response.success = True
         response.message = (
             f"configured {', '.join(names)} to "
-            f"{config.width}x{config.height} at {config.fps:g} Hz"
+            f"{config.width}x{config.height} at {config.fps:g} Hz "
+            f"with {config.bitrate_kbps} kbps web preview target"
         )
         self._publish_state()
         return response
@@ -706,10 +1017,39 @@ class BlueBoatCameraManager(Node):
         if error:
             self.get_logger().error(f"Rejected {name} lag update: {error}")
 
+    def _refresh_stats(self) -> None:
+        now = time.monotonic()
+        elapsed = now - self._stats_previous_time
+        if elapsed < 0.5:
+            return
+        for name in self.BOATS:
+            current = (
+                self._received_frames[name],
+                self._accepted_frames[name],
+                self._published_frames[name],
+                self._dropped_fps_frames[name],
+                self._skipped_no_subscriber_frames[name],
+            )
+            previous = self._stats_previous[name]
+            self._stats_rates[name] = {
+                "input_fps": (current[0] - previous[0]) / elapsed,
+                "processed_fps": (current[1] - previous[1]) / elapsed,
+                "output_fps": (current[2] - previous[2]) / elapsed,
+                "fps_dropped_per_second": (current[3] - previous[3]) / elapsed,
+                "no_subscriber_skipped_per_second": (
+                    current[4] - previous[4]
+                ) / elapsed,
+            }
+            self._stats_previous[name] = current
+        self._stats_previous_time = now
+
     def _state(self) -> dict:
+        self._refresh_stats()
         active = self._active_camera_names()
         cameras = {}
+        now = time.monotonic()
         for name, endpoint in self.ENDPOINTS.items():
+            last_raw = self._last_raw_monotonic[name]
             cameras[name] = {
                 "active": name in active,
                 "enabled": self._enabled[name],
@@ -719,11 +1059,48 @@ class BlueBoatCameraManager(Node):
                 "image_topic": endpoint.image_topic,
                 "camera_info_topic": endpoint.camera_info_topic,
                 "queued_frames": len(self._queues[name]),
+                "output_subscribers": self._image_publishers[
+                    name
+                ].get_subscription_count(),
+                "image_bridge_running": self._image_bridge_running(name),
+                "image_bridge_pid": (
+                    None
+                    if self._image_bridge_processes[name] is None
+                    else self._image_bridge_processes[name].pid
+                ),
+                "image_bridge_last_exit": self._image_bridge_last_exit[name],
+                "gazebo_sensor_rate_requested": self._configs[name].fps,
+                "gazebo_sensor_rate_applied": self._sensor_rate_applied[name],
+                "gazebo_sensor_rate_error": self._sensor_rate_last_error[name],
+                "gazebo_sensor_rate_in_flight": (
+                    self._sensor_rate_in_flight[name]
+                ),
+                "stats": {
+                    **self._stats_rates[name],
+                    "last_raw_age_seconds": (
+                        None
+                        if last_raw < 0.0
+                        else max(0.0, now - last_raw)
+                    ),
+                    "received_frames": self._received_frames[name],
+                    "processed_frames": self._accepted_frames[name],
+                    "published_frames": self._published_frames[name],
+                    "skipped_without_subscribers": (
+                        self._skipped_no_subscriber_frames[name]
+                    ),
+                },
             }
         return {
             "mode": self.mode,
             "active_cameras": list(active),
             "maximum_lag_seconds": self._maximum_lag,
+            "maximum_buffer_mb_per_camera": (
+                self._maximum_buffer_bytes / (1024 * 1024)
+            ),
+            "process_without_subscribers": self._process_without_subscribers,
+            "manage_image_bridges": self._manage_image_bridges,
+            "image_bridge_package": self._image_bridge_package,
+            "set_gazebo_sensor_rate": self._set_gazebo_sensor_rate,
             "cameras": cameras,
         }
 
@@ -742,7 +1119,11 @@ class BlueBoatCameraManager(Node):
             self._publish_enabled(self.BOATS, False)
             rclpy.spin_once(self, timeout_sec=0.05)
             time.sleep(0.05)
-        self.get_logger().info("Published camera shutdown commands")
+        for name in self.BOATS:
+            self._stop_image_bridge(name)
+        self.get_logger().info(
+            "Published camera shutdown commands and stopped image bridges"
+        )
 
 
 def main(args=None) -> None:
