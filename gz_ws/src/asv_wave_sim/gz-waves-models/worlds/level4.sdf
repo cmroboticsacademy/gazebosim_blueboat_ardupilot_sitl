@@ -76,7 +76,8 @@
 
     <include>
       <pose>0 0 0 0 0 -1.5708</pose>
-      <uri>model://blueboat</uri>
+      <uri>model://blueboat_lite</uri>
+      <name>blueboat</name>
     </include>
     <include>
       <uri>model://dock</uri>
@@ -197,7 +198,7 @@
 
     <!-- <include>
       <pose>1 0 0 0 0 0</pose>
-      <uri>model://blueboat</uri>
+      <uri>model://blueboat_lite</uri>
     </include> -->
 
     <!-- <include>
@@ -214,7 +215,7 @@
     <!--BLUE BOAT OK-->
     <!-- <include>
       <pose>15 0 0 0 0 0</pose>
-      <uri>model://blueboat</uri>
+      <uri>model://blueboat_lite</uri>
     </include> -->
 
     <!-- <include>

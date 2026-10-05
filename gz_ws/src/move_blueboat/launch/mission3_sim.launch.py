@@ -51,6 +51,7 @@ def generate_launch_description():
             arguments=['-d', rviz_config],
             output='screen'
         ),
+        # GstCameraPlugin streams directly to QGC on UDP 5600.
         TimerAction(
             period=10.0,
             actions=[

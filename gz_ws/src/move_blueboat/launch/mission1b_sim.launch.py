@@ -20,14 +20,12 @@ def generate_launch_description():
                 '/model/blueboat/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/navsat@sensor_msgs/msg/NavSatFix@ignition.msgs.NavSat',
                 # camera
-                '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                '/model/blueboat/link/qgc_camera_link/sensor/qgc_camera/image@sensor_msgs/msg/Image[gz.msgs.Image',
-                # lidar
-                # '/laser_scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
+                '/camera@sensor_msgs/msg/Image[ignition.msgs.Image',
+                '/camera/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo',
             ],
             output='screen'
         ),
+        # GstCameraPlugin streams directly to QGC on UDP 5600.
         TimerAction(
             period=10.0,
             actions=[

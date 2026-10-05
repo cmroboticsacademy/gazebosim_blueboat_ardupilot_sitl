@@ -1,4 +1,10 @@
 ## Mission 3: Underwater mapping
+
+This mission loads `level5.sdf` using **blueboat_qgc (bathymetry LiDAR enabled)**. View the forward camera
+in QGroundControl using **UDP h.264 on port 5600**. See
+[QGC video setup](./README.md#qgc-video-for-missions-0-3) for settings and startup
+troubleshooting. The boat instance remains `blueboat`; use the existing SITL commands below.
+
 Enable autonomous data collection over a relatively clear lakebed using a lawnmower pattern and side-scan sonar.
 
 ## Workstation preparation

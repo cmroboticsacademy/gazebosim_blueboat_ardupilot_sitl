@@ -3,7 +3,7 @@
 This bundle replaces the fixed hazard grid in `level6.sdf` with launch-time,
 seeded placement inside the four buoy zones. It preserves the existing four
 boats, Gazebo/ArduPilot bridges, bathymetry mappers, RViz configuration, dock,
-terrain, lake floor, buoys, and delayed camera-stream startup.
+terrain, lake floor, buoys, and the Mission 4 camera-app workflow.
 
 The repository's actual launch filename is `mission4_sim.launch.py`.
 
@@ -147,7 +147,9 @@ clear validation error.
 4. Gazebo 7 starts with the absolute path to that temporary world.
 5. The existing ROS–Gazebo parameter bridge starts for all four boats.
 6. The four existing bathymetry mapper nodes and RViz start unchanged.
-7. After 10 seconds, the existing four camera streaming commands run unchanged.
+7. The camera manager enables the selected fleet cameras after its configured
+   startup delay (5 seconds by default); the web app serves previews and controls
+   at `http://127.0.0.1:8080`. See [Mission 4](./Mission4.md#fleet-camera-app).
 
 The source `level6.sdf` no longer displays the old fixed grid. Do not delete or
 rename the two `MISSION4_HAZARDS_*` marker comments; the generator uses them as
