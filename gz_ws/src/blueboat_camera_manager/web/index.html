@@ -32,8 +32,7 @@
       </label>
       <div id="cameraSelector" class="camera-selector" aria-label="Target cameras"></div>
       <p id="selectedSummary" class="selected-summary">No cameras selected.</p>
-    </section>
-<section class="panel settings-panel">
+      <section class="panel settings-panel">
       <div class="section-heading">
         <div>
           <h2>Apply settings</h2>
@@ -130,11 +129,17 @@
         <span id="feedback" role="status"></span>
       </div>
 
-      <div class="performance-note">
-        <strong>Performance:</strong>
-        Disabling a camera now stops its dedicated Gazebo-to-ROS image bridge, removing the Gazebo image subscriber.
-        Active feeds below follow every processed ROS frame without web-side FPS throttling. Bitrate applies only to MJPEG compression; ROS image topics remain uncompressed.
+    </section>
+    </section>
+    <section class="camera-section feeds-section">
+      <div class="section-heading">
+        <div>
+          <h2>Active camera feeds</h2>
+          <p>Every enabled camera is shown automatically at the full processed ROS topic rate.</p>
+        </div>
       </div>
+      <p id="cameraFeedsEmpty" class="empty-feeds">No cameras are enabled.</p>
+      <div id="cameraFeeds" class="feeds-grid"></div>
     </section>
     
     <section class="camera-section">
@@ -149,16 +154,7 @@
 
     
 
-    <section class="camera-section feeds-section">
-      <div class="section-heading">
-        <div>
-          <h2>Active camera feeds</h2>
-          <p>Every enabled camera is shown automatically at the full processed ROS topic rate.</p>
-        </div>
-      </div>
-      <p id="cameraFeedsEmpty" class="empty-feeds">No cameras are enabled.</p>
-      <div id="cameraFeeds" class="feeds-grid"></div>
-    </section>
+    
   </main>
 
   <script src="/app.js"></script>

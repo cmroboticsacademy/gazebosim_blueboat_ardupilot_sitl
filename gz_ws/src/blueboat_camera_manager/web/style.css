@@ -91,6 +91,7 @@ button.secondary { background: #142a45; border: 1px solid #345273; }
 
 .feeds-section {
   margin-top: 1.5rem;
+
 }
 
 .feeds-grid {
@@ -101,7 +102,9 @@ button.secondary { background: #142a45; border: 1px solid #345273; }
 
 .feed-card {
   min-width: 0;
+  max-width: 800px;
   overflow: hidden;
+  padding: 20px;
 }
 
 .feed-heading {
@@ -123,7 +126,7 @@ button.secondary { background: #142a45; border: 1px solid #345273; }
 }
 
 .feed-image {
-  aspect-ratio: 4 / 3;
+  /* aspect-ratio: 4 / 3; */
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -131,6 +134,7 @@ button.secondary { background: #142a45; border: 1px solid #345273; }
   border-radius: 0.7rem;
   background: #05080c;
   margin-bottom: 0.7rem;
+
 }
 
 .feed-image img {
