@@ -284,13 +284,6 @@
           <izz>0.1</izz>
         </inertia>
       </inertial>
-      <collision name="prop_collision">
-        <geometry>
-          <mesh>
-            <uri>models://blueboat/meshes/blueboat_prop_port.dae</uri>
-          </mesh>
-        </geometry>
-      </collision>
       <visual name="prop_visual">
         <geometry>
           <mesh>
@@ -377,7 +370,7 @@
           <enable_topic>/blueboat4/camera/enable_streaming</enable_topic>
           <config_topic>/blueboat4/camera/stream_config</config_topic>
           <trigger_topic>/blueboat4/camera/trigger</trigger_topic>
-          <output_fps>60</output_fps>
+          <output_fps>16</output_fps>
         </plugin>
       </sensor>
     </link>

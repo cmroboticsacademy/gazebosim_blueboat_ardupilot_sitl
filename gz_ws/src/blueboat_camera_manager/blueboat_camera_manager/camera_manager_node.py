@@ -458,12 +458,27 @@ class BlueBoatCameraManager(Node):
             "[ignition.msgs.Image"
         )
 
+    @staticmethod
+    def _process_group_exists(process_group_id: int) -> bool:
+        try:
+            os.killpg(process_group_id, 0)
+        except ProcessLookupError:
+            return False
+        except PermissionError:
+            return True
+        return True
+
     def _image_bridge_running(self, name: str) -> bool:
         process = self._image_bridge_processes[name]
         if process is None:
             return False
         exit_code = process.poll()
         if exit_code is None:
+            return True
+        # ros2 run is a wrapper around the actual bridge executable. If the
+        # wrapper exits before its child, keep tracking the process group so
+        # shutdown can still clean up the remaining parameter_bridge process.
+        if self._process_group_exists(process.pid):
             return True
         self._image_bridge_last_exit[name] = exit_code
         self._image_bridge_processes[name] = None
@@ -507,19 +522,44 @@ class BlueBoatCameraManager(Node):
         process = self._image_bridge_processes[name]
         if process is None:
             return
-        if process.poll() is None:
+
+        process_group_id = process.pid
+        if (
+            process.poll() is None
+            or self._process_group_exists(process_group_id)
+        ):
             try:
-                os.killpg(process.pid, signal.SIGTERM)
-                process.wait(timeout=0.75)
-            except (ProcessLookupError, subprocess.TimeoutExpired):
+                os.killpg(process_group_id, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+
+            deadline = time.monotonic() + 0.75
+            while (
+                self._process_group_exists(process_group_id)
+                and time.monotonic() < deadline
+            ):
+                if process.poll() is None:
+                    try:
+                        process.wait(timeout=0.05)
+                    except subprocess.TimeoutExpired:
+                        pass
+                else:
+                    time.sleep(0.05)
+
+            # The ros2 CLI wrapper can exit before parameter_bridge. Escalate
+            # against the whole process group, not just the wrapper PID.
+            if self._process_group_exists(process_group_id):
                 try:
-                    os.killpg(process.pid, signal.SIGKILL)
+                    os.killpg(process_group_id, signal.SIGKILL)
                 except ProcessLookupError:
                     pass
+
+            if process.poll() is None:
                 try:
                     process.wait(timeout=0.25)
                 except subprocess.TimeoutExpired:
                     pass
+
         self._image_bridge_last_exit[name] = process.poll()
         self._image_bridge_processes[name] = None
         self.get_logger().info(
@@ -1115,14 +1155,26 @@ class BlueBoatCameraManager(Node):
         return response
 
     def shutdown_streams(self) -> None:
-        for _ in range(3):
-            self._publish_enabled(self.BOATS, False)
-            rclpy.spin_once(self, timeout_sec=0.05)
-            time.sleep(0.05)
+        # ROS may already have marked the context as shut down by the time the
+        # finally block runs. Publishing disable commands is best-effort, but
+        # child-process cleanup must always happen.
+        published_shutdown = False
+        if rclpy.ok():
+            for _ in range(3):
+                self._publish_enabled(self.BOATS, False)
+                rclpy.spin_once(self, timeout_sec=0.05)
+                time.sleep(0.05)
+            published_shutdown = True
+
         for name in self.BOATS:
             self._stop_image_bridge(name)
+
         self.get_logger().info(
-            "Published camera shutdown commands and stopped image bridges"
+            (
+                "Published camera shutdown commands and stopped image bridges"
+                if published_shutdown
+                else "Stopped image bridges after ROS context shutdown"
+            )
         )
 
 
@@ -1134,8 +1186,7 @@ def main(args=None) -> None:
     except KeyboardInterrupt:
         pass
     finally:
-        if rclpy.ok():
-            node.shutdown_streams()
+        node.shutdown_streams()
         node.destroy_node()
         if rclpy.ok():
             rclpy.shutdown()

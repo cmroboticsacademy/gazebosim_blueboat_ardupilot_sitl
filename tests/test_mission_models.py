@@ -10,6 +10,12 @@ ROOT = Path(__file__).resolve().parents[1]
 MODELS = ROOT / 'SITL_Models/Gazebo/models'
 WORLDS = ROOT / 'gz_ws/src/asv_wave_sim/gz-waves-models/worlds'
 LAUNCHES = ROOT / 'gz_ws/src/move_blueboat/launch'
+WAVE_MODELS = ROOT / 'gz_ws/src/asv_wave_sim/gz-waves-models/models'
+CAMERA_MANAGER = (
+    ROOT
+    / 'gz_ws/src/blueboat_camera_manager/blueboat_camera_manager'
+    / 'camera_manager_node.py'
+)
 MISSION_LEVELS = {'0': 1, '1a': 1, '1b': 2, '2a': 3, '2b': 4, '3': 5}
 
 
@@ -137,8 +143,68 @@ class MissionModelTests(unittest.TestCase):
                 camera = sdf.find('.//sensor[@type="camera"]')
                 self.assertEqual(camera.findtext('topic'), f'/{resource}/camera/image_raw')
                 self.assertEqual(camera.findtext('camera/triggered'), 'true')
-                self.assertEqual(camera.find('plugin').get('filename'), 'libBlueBoatCameraTriggerPlugin.so')
-                self.assertIsNotNone(sdf.find('.//sensor[@type="gpu_lidar"]'))
+                self.assertEqual(camera.findtext('update_rate'), '60')
+                plugin = camera.find('plugin')
+                self.assertEqual(plugin.get('filename'), 'libBlueBoatCameraTriggerPlugin.so')
+                self.assertEqual(plugin.findtext('output_fps'), '16')
+                sensor_types = {
+                    sensor.get('type') for sensor in sdf.findall('.//sensor')
+                }
+                self.assertTrue(
+                    {'camera', 'imu', 'navsat', 'gpu_lidar'}.issubset(
+                        sensor_types
+                    )
+                )
+                self.assertEqual(
+                    sdf.findall('.//collision[@name="prop_collision"]'), []
+                )
+
+
+    def test_no_waves_keeps_buoyancy_without_dynamic_wave_work(self):
+        sdf = ET.parse(
+            WAVE_MODELS / 'no_waves' / 'model.sdf'
+        ).getroot().find('model')
+        wave_model = sdf.find(
+            "plugin[@name='gz::sim::systems::WavesModel']"
+        )
+        self.assertIsNotNone(wave_model)
+        self.assertEqual(wave_model.findtext('static'), '1')
+        wave = wave_model.find('wave')
+        self.assertEqual(wave.findtext('algorithm'), 'sinusoid')
+        self.assertEqual(float(wave.findtext('amplitude')), 0.0)
+        self.assertLessEqual(int(wave.findtext('cell_count')), 8)
+        self.assertIsNone(
+            sdf.find(".//plugin[@name='gz::sim::systems::WavesVisual']")
+        )
+        self.assertIsNotNone(sdf.find('link/visual/geometry/plane'))
+
+        for level in (1, 3, 4, 5, 6):
+            with self.subTest(level=level):
+                world = ET.parse(
+                    WORLDS / f'level{level}.sdf'
+                ).getroot().find('world')
+                uris = {
+                    inc.findtext('uri') for inc in world.findall('include')
+                }
+                self.assertIn('model://no_waves', uris)
+
+    def test_camera_manager_always_runs_bridge_cleanup(self):
+        tree = ast.parse(CAMERA_MANAGER.read_text())
+        main = next(
+            node for node in tree.body
+            if isinstance(node, ast.FunctionDef) and node.name == 'main'
+        )
+        spin_try = next(
+            node for node in main.body if isinstance(node, ast.Try)
+        )
+        shutdown_calls = [
+            statement for statement in spin_try.finalbody
+            if isinstance(statement, ast.Expr)
+            and isinstance(statement.value, ast.Call)
+            and isinstance(statement.value.func, ast.Attribute)
+            and statement.value.func.attr == 'shutdown_streams'
+        ]
+        self.assertEqual(len(shutdown_calls), 1)
 
 
 if __name__ == '__main__':
