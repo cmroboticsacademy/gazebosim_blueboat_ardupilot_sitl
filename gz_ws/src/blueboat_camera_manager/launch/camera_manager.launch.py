@@ -15,6 +15,7 @@ def generate_launch_description():
                 "mode", default_value="4", choices=["1", "2", "3", "4"]
             ),
             DeclareLaunchArgument("startup_delay", default_value="0.0"),
+            DeclareLaunchArgument("start_enabled", default_value="false"),
             DeclareLaunchArgument("default_width", default_value="256"),
             DeclareLaunchArgument("default_height", default_value="256"),
             DeclareLaunchArgument("default_fps", default_value="16.0"),
@@ -44,6 +45,9 @@ def generate_launch_description():
                         ),
                         "startup_delay": ParameterValue(
                             LaunchConfiguration("startup_delay"), value_type=float
+                        ),
+                        "start_enabled": ParameterValue(
+                            LaunchConfiguration("start_enabled"), value_type=bool
                         ),
                         "default_width": ParameterValue(
                             LaunchConfiguration("default_width"), value_type=int

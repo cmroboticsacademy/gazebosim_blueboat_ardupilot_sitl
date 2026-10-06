@@ -150,11 +150,20 @@ def generate_launch_description():
             default_value="4",
             choices=["1", "2", "3", "4"],
             description=(
-                "Number of boat cameras to activate: 1=[blueboat], "
-                "2=[blueboat, blueboat2], and so on."
+                "Number of boat cameras available to the manager: "
+                "1=[blueboat], 2=[blueboat, blueboat2], and so on. "
+                "Cameras still start disabled by default."
             ),
         ),
         DeclareLaunchArgument("camera_start_delay", default_value="5.0"),
+        DeclareLaunchArgument(
+            "camera_start_enabled",
+            default_value="false",
+            description=(
+                "Automatically enable cameras selected by camera_mode after "
+                "startup. False keeps them off until enabled by the manager."
+            ),
+        ),
         DeclareLaunchArgument("camera_startup_retries", default_value="5"),
         DeclareLaunchArgument("camera_width", default_value="256"),
         DeclareLaunchArgument("camera_height", default_value="256"),
@@ -242,6 +251,10 @@ def generate_launch_description():
                     ),
                     "startup_delay": ParameterValue(
                         LaunchConfiguration("camera_start_delay"), value_type=float
+                    ),
+                    "start_enabled": ParameterValue(
+                        LaunchConfiguration("camera_start_enabled"),
+                        value_type=bool,
                     ),
                     "startup_retries": ParameterValue(
                         LaunchConfiguration("camera_startup_retries"), value_type=int

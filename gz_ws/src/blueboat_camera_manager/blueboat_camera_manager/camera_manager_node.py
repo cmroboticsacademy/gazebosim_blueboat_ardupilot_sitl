@@ -100,6 +100,7 @@ class BlueBoatCameraManager(Node):
         self.declare_parameter("startup_delay", 5.0)
         self.declare_parameter("startup_retries", 5)
         self.declare_parameter("startup_retry_period", 1.0)
+        self.declare_parameter("start_enabled", False)
         self.declare_parameter("default_width", 256)
         self.declare_parameter("default_height", 256)
         self.declare_parameter("default_fps", 16.0)
@@ -119,6 +120,9 @@ class BlueBoatCameraManager(Node):
         self.mode = int(self.get_parameter("mode").value)
         if self.mode not in (1, 2, 3, 4):
             raise ValueError("camera manager mode must be 1, 2, 3, or 4")
+        self._start_enabled = bool(
+            self.get_parameter("start_enabled").value
+        )
 
         cv2.setNumThreads(
             max(1, int(self.get_parameter("opencv_threads").value))
@@ -345,10 +349,12 @@ class BlueBoatCameraManager(Node):
         self._publish_state()
 
         self.get_logger().info(
-            "Camera mode %d activates [%s]; default lag %.3f seconds"
+            "Camera mode %d manages [%s]; cameras start %s; "
+            "default lag %.3f seconds"
             % (
                 self.mode,
                 ", ".join(self._active_camera_names()),
+                "enabled" if self._start_enabled else "disabled",
                 default_lag,
             )
         )
@@ -670,17 +676,29 @@ class BlueBoatCameraManager(Node):
             return
 
         active = self._active_camera_names()
-        inactive = tuple(name for name in self.BOATS if name not in active)
         for name in self.BOATS:
             self._publish_control_config(name)
             self._publish_lag_status(name)
-        self._publish_enabled(inactive, False)
-        self._publish_enabled(active, True)
+
+        # Camera trigger plugins already initialize disabled. Keep that state
+        # unless automatic startup was explicitly requested. This also avoids
+        # a later startup retry overriding a camera the user enabled manually.
+        if self._start_enabled:
+            inactive = tuple(
+                name for name in self.BOATS if name not in active
+            )
+            self._publish_enabled(inactive, False)
+            self._publish_enabled(active, True)
 
         self._startup_attempt += 1
         if self._startup_attempt == 1:
             self.get_logger().info(
-                "Published initial camera configuration and enable commands"
+                (
+                    "Published initial camera configuration and enable commands"
+                    if self._start_enabled
+                    else "Published initial camera configuration; "
+                    "cameras remain disabled until enabled by the manager"
+                )
             )
         if self._startup_attempt < self._startup_retries:
             self.destroy_timer(self._startup_timer)
@@ -1132,6 +1150,7 @@ class BlueBoatCameraManager(Node):
             }
         return {
             "mode": self.mode,
+            "start_enabled": self._start_enabled,
             "active_cameras": list(active),
             "maximum_lag_seconds": self._maximum_lag,
             "maximum_buffer_mb_per_camera": (

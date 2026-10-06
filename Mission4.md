@@ -98,6 +98,22 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
    </details>
    TODO - note seed number
 
+   <details>
+   <summary>Mission 4 cameras</summary>
+
+   Mission 4 cameras start disabled by default to reduce simulation load.
+   Open the camera manager at `http://127.0.0.1:8080` and enable only the
+   cameras you need. The default `camera_mode:=4` makes all four cameras
+   available to the manager, but it does not automatically turn them on.
+
+   To restore the previous automatic startup behavior, launch with:
+
+   ```bash
+   ros2 launch move_blueboat mission4_sim.launch.py camera_start_enabled:=true
+   ```
+
+   </details>
+
 2. Go to your first tab in the Ardupilot terminal
 3. Launch robots 1 at a time. Wait until the robot connects to QGroundControl before launching another.
    1. TAB 1

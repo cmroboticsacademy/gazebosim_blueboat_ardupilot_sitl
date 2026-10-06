@@ -188,6 +188,39 @@ class MissionModelTests(unittest.TestCase):
                 }
                 self.assertIn('model://no_waves', uris)
 
+    def test_mission4_cameras_start_disabled_and_remain_controllable(self):
+        manager_source = CAMERA_MANAGER.read_text()
+        manager_tree = ast.parse(manager_source)
+        declarations = [
+            call for call in ast.walk(manager_tree)
+            if isinstance(call, ast.Call)
+            and isinstance(call.func, ast.Attribute)
+            and call.func.attr == 'declare_parameter'
+            and len(call.args) >= 2
+        ]
+        start_enabled = next(
+            call for call in declarations
+            if ast.literal_eval(call.args[0]) == 'start_enabled'
+        )
+        self.assertFalse(ast.literal_eval(start_enabled.args[1]))
+        self.assertIn('SetCameraEnabled', manager_source)
+        self.assertIn('if self._start_enabled:', manager_source)
+
+        launch_source = (LAUNCHES / 'mission4_sim.launch.py').read_text()
+        launch_tree = ast.parse(launch_source)
+        launch_args = calls(launch_tree, 'DeclareLaunchArgument')
+        start_arg = next(
+            call for call in launch_args
+            if ast.literal_eval(call.args[0]) == 'camera_start_enabled'
+        )
+        self.assertEqual(
+            ast.literal_eval(keyword(start_arg, 'default_value')), 'false'
+        )
+        self.assertIn('"start_enabled": ParameterValue(', launch_source)
+        self.assertIn(
+            'LaunchConfiguration("camera_start_enabled")', launch_source
+        )
+
     def test_camera_manager_always_runs_bridge_cleanup(self):
         tree = ast.parse(CAMERA_MANAGER.read_text())
         main = next(
