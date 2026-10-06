@@ -1,10 +1,5 @@
 # Mission 0 - Mission 0: Software Setup and Manual Un-docking
 
-This mission loads `level1.sdf` using **blueboat_lite (no LiDAR)**. View the forward camera
-in QGroundControl using **UDP h.264 on port 5600**. See
-[QGC video setup](./README.md#qgc-video-for-missions-0-3) for settings and startup
-troubleshooting. The boat instance remains `blueboat`; use the existing SITL commands below.
-
 Learn and practice the steps to start up the simulation. Understand the relationship between the simulator setup and the real-world hardware and software configuration. Verify the vehicle responds by manually driving it away from the dock, then back.
 
 ## Workstation preparation

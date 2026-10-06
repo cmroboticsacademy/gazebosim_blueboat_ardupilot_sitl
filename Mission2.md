@@ -1,9 +1,5 @@
 ## Mission 2a: Channel
 
-This mission loads `level3.sdf` (2a) and `level4.sdf` (2b) using **blueboat_lite (no LiDAR)**. View the forward camera
-in QGroundControl using **UDP h.264 on port 5600**. See
-[QGC video setup](./README.md#qgc-video-for-missions-0-3) for settings and startup
-troubleshooting. The boat instance remains `blueboat`; use the existing SITL commands below.
 
 Plan a mission sequence around an island. Use exclusion zones to keep the vehicle away from known navigational hazards.
 

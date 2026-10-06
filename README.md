@@ -1,83 +1,5 @@
 # BlueBoat simulation SITL with GazeboSim and QGC
 
-## Mission models and camera workflows
-
-| Mission | Launch file | World | Boat resource | LiDAR | Camera viewer |
-| --- | --- | --- | --- | --- | --- |
-| 0 | `mission0_sim.launch.py` | `level1.sdf` | `blueboat_lite` | None | QGC, UDP 5600 |
-| 1a | `mission1a_sim.launch.py` | `level1.sdf` | `blueboat_lite` | None | QGC, UDP 5600 |
-| 1b | `mission1b_sim.launch.py` | `level2.sdf` | `blueboat_lite` | None | QGC, UDP 5600 |
-| 2a | `mission2a_sim.launch.py` | `level3.sdf` | `blueboat_lite` | None | QGC, UDP 5600 |
-| 2b | `mission2b_sim.launch.py` | `level4.sdf` | `blueboat_lite` | None | QGC, UDP 5600 |
-| 3 | `mission3_sim.launch.py` | `level5.sdf` | `blueboat_qgc` | Bathymetry | QGC, UDP 5600; mapping in RViz |
-| 4 | `mission4_sim.launch.py` | Generated from `level6.sdf` | `blueboat`, `blueboat2`, `blueboat3`, `blueboat4` | Bathymetry on each boat | Camera app at `http://127.0.0.1:8080` |
-
-The two single-boat resources live in `SITL_Models/Gazebo/models/` and share the
-existing `blueboat/meshes/` assets. Worlds 1-5 explicitly name their boat instance
-`blueboat`, preserving the motor, odometry, GPS and ArduPilot SITL configuration.
-The lite resource removes the bathymetry sensor link and joint entirely.
-Mission 3 retains `/bathymetry/scan`, its mapper and RViz. Mission 4 retains the
-camera manager, web app, camera controls and fleet models from `camera-app`.
-Run one mission at a time; stop the previous launch before starting another.
-
-### QGC video for Missions 0-3
-
-1. Run the mission's existing `ros2 launch move_blueboat ...` command below.
-2. Open QGroundControl **Application Settings → Video** (under **General** in
-   some versions).
-3. Select **UDP h.264 Video Stream** / **UDP h.264** as the video source.
-4. Set the UDP port to **5600**, or the UDP URL to **0.0.0.0:5600** when the
-   application asks for an address and port. Set the aspect ratio to **1.0** for
-   the square camera image. If available, turn off **Disabled When Disarmed**
-   to view the camera before arming.
-5. Return to Fly View and allow at least 10 seconds for camera startup.
-
-The camera publishes continuous 256×256 images at 16 Hz on `/camera`.
-`GstCameraPlugin` encodes H.264/RTP and sends it to `127.0.0.1:5600`; the launch
-enables it on `/camera/enable_streaming` after 10 seconds. These models do not
-require the camera app or its trigger plugin. The Docker container's existing
-host networking lets QGC on the host receive the stream. MAVLink telemetry
-continues to use the separate 14550/14551 ports.
-Missions 0-2 also bridge `/camera` and `/camera/camera_info` into ROS for optional
-image viewers. Mission 3 streams directly to QGC while its ROS bridge handles
-bathymetry and navigation.
-
-If Gazebo takes longer than the startup delay, enable the stream again from a
-terminal inside the container once the world is running:
-
-```bash
-gz topic -t /camera/enable_streaming -m gz.msgs.Boolean -p 'data: true'
-```
-
-If Gazebo reports that `libGstCameraPlugin.so` cannot be loaded, check the existing
-ArduPilot Gazebo build at `/home/blueboat_sitl/ardupilot_gazebo/build` and its
-`GZ_SIM_SYSTEM_PLUGIN_PATH` entry. This plugin is already built by the project's
-Dockerfile. See the [QGC video settings guide](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/settings_view/video.html).
-
-### Updating an existing checkout
-
-On the host, fetch and switch to the cohort branch:
-
-```bash
-git fetch origin
-git switch cohort-prep
-```
-
-Inside the running container, rebuild the changed launch files and source the
-workspace in each simulation terminal:
-
-```bash
-cd ~/gz_ws
-colcon build --symlink-install --packages-select move_blueboat
-source install/setup.bash
-source gazebo_exports.sh
-```
-
-The new models and world files are read from the mounted source folders; no mesh
-copy or new Docker image is needed for this change. For Mission 4, retain the
-camera-app build/setup prerequisites and follow [Mission 4](./Mission4.md).
-
-
 ## Workstation preparation
 1. Open 3 terminal windows. Press `win_key`, start typing `terminal`. Open the application when it appears. To open another terminal window, right-click the terminal app icon on the left toolbar. Select `New Window`.
 2. Recommended: Use the layout below
@@ -328,3 +250,57 @@ cd ../gz_ws/
 ```bash
 gz sim --force-version 7 -g
 ```
+## Mission models and camera workflows
+
+| Mission | Launch file | World | Boat resource | LiDAR | Camera viewer |
+| --- | --- | --- | --- | --- | --- |
+| 0 | `mission0_sim.launch.py` | `level1.sdf` | `blueboat_lite` | None | QGC, UDP 5600 |
+| 1a | `mission1a_sim.launch.py` | `level1.sdf` | `blueboat_lite` | None | QGC, UDP 5600 |
+| 1b | `mission1b_sim.launch.py` | `level2.sdf` | `blueboat_lite` | None | QGC, UDP 5600 |
+| 2a | `mission2a_sim.launch.py` | `level3.sdf` | `blueboat_lite` | None | QGC, UDP 5600 |
+| 2b | `mission2b_sim.launch.py` | `level4.sdf` | `blueboat_lite` | None | QGC, UDP 5600 |
+| 3 | `mission3_sim.launch.py` | `level5.sdf` | `blueboat_qgc` | Bathymetry | QGC, UDP 5600; mapping in RViz |
+| 4 | `mission4_sim.launch.py` | Generated from `level6.sdf` | `blueboat`, `blueboat2`, `blueboat3`, `blueboat4` | Bathymetry on each boat | Camera app at `http://127.0.0.1:8080` |
+
+The two single-boat resources live in `SITL_Models/Gazebo/models/` and share the
+existing `blueboat/meshes/` assets. Worlds 1-5 explicitly name their boat instance
+`blueboat`, preserving the motor, odometry, GPS and ArduPilot SITL configuration.
+The lite resource removes the bathymetry sensor link and joint entirely.
+Mission 3 retains `/bathymetry/scan`, its mapper and RViz. Mission 4 retains the
+camera manager, web app, camera controls and fleet models from `camera-app`.
+Run one mission at a time; stop the previous launch before starting another.
+
+### QGC video for Missions 0-3
+
+1. Run the mission's existing `ros2 launch move_blueboat ...` command below.
+2. Open QGroundControl **Application Settings → Video** (under **General** in
+   some versions).
+3. Select **UDP h.264 Video Stream** / **UDP h.264** as the video source.
+4. Set the UDP port to **5600**, or the UDP URL to **0.0.0.0:5600** when the
+   application asks for an address and port. Set the aspect ratio to **1.0** for
+   the square camera image. If available, turn off **Disabled When Disarmed**
+   to view the camera before arming.
+5. Return to Fly View and allow at least 10 seconds for camera startup.
+
+The camera publishes continuous 256×256 images at 16 Hz on `/camera`.
+`GstCameraPlugin` encodes H.264/RTP and sends it to `127.0.0.1:5600`; the launch
+enables it on `/camera/enable_streaming` after 10 seconds. These models do not
+require the camera app or its trigger plugin. The Docker container's existing
+host networking lets QGC on the host receive the stream. MAVLink telemetry
+continues to use the separate 14550/14551 ports.
+Missions 0-2 also bridge `/camera` and `/camera/camera_info` into ROS for optional
+image viewers. Mission 3 streams directly to QGC while its ROS bridge handles
+bathymetry and navigation.
+
+If Gazebo takes longer than the startup delay, enable the stream again from a
+terminal inside the container once the world is running:
+
+```bash
+gz topic -t /camera/enable_streaming -m gz.msgs.Boolean -p 'data: true'
+```
+
+If Gazebo reports that `libGstCameraPlugin.so` cannot be loaded, check the existing
+ArduPilot Gazebo build at `/home/blueboat_sitl/ardupilot_gazebo/build` and its
+`GZ_SIM_SYSTEM_PLUGIN_PATH` entry. This plugin is already built by the project's
+Dockerfile. See the [QGC video settings guide](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/settings_view/video.html).
+

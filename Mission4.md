@@ -1,29 +1,6 @@
 ## Mission 4: SWARM mapping
 Control 4 blueboats to scan the lake and find hazzardess materials.
 
-This mission uses `level6.sdf` as the seeded world template and keeps the existing
-`blueboat`, `blueboat2`, `blueboat3` and `blueboat4` models with bathymetry LiDAR.
-The camera workflow uses the **camera app**. QGroundControl still controls the
-vehicles and displays telemetry.
-
-### Fleet camera app
-
-After launching `mission4_sim.launch.py`, open **http://127.0.0.1:8080** on the
-host. The launch starts the camera manager and web app automatically, with all
-four cameras enabled by default. Use the app to preview each boat and adjust
-camera settings. No QGC UDP video setting is required for this mission.
-
-To choose how many cameras to start:
-
-```bash
-ros2 launch move_blueboat mission4_sim.launch.py camera_mode:=4
-```
-
-`camera_mode` accepts `1`, `2`, `3` or `4`. For example, `camera_mode:=2` enables
-`blueboat` and `blueboat2`. This changes the camera count, not the fleet size.
-The launch keeps its camera-app defaults: 256×256 output at 16 Hz and a 5-second
-camera startup delay. Stop the earlier mission launch before starting the fleet.
-
 ## Workstation preparation
 1. Open 3 terminal windows. Press `win_key`, start typing `terminal`. Open the application when it appears. To open another terminal window, right-click the terminal app icon on the left toolbar. Select `New Window`.
 2. Recommended: Use the layout below
