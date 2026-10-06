@@ -77,6 +77,15 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
    ```bash
    ros2 launch move_blueboat mission4_sim.launch.py
    ```
+   2. Record the seed number. Write down the seed number from the logs.
+   <details><summary>Seed Number</summary>
+      This world is generated using a seed number. You can reload the world exactly how it was originally loadded using this seed number. 
+      ```
+       ros2 launch move_blueboat mission4_sim.launch.py seed:=3187462051
+       ```
+       This command will load world 3187462051. If you do not provide a seed number one will be randomly assigned. Make sure you note it down when you open the world. 
+   </details>
+
    <details>
    <summary>RViz</summary>
 
