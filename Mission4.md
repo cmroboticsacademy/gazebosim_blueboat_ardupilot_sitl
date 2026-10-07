@@ -197,6 +197,9 @@ Mission 4 plan includes 32 buoys. They are in sets of 4. Each set creates a box.
 
 ## Mission 4 Findings Map
 
+For complete ROS bag replay instructions, see [Findings Map README](./gz_ws/src/move_blueboat/findings_web/README.md).
+
+
 Mission 4 includes a standalone local findings map for post-mission bag replay.
 It listens for RViz **Publish Point** clicks on `/clicked_point`, converts the
 clicked `odom` coordinate to WGS84 latitude / longitude, and places the
