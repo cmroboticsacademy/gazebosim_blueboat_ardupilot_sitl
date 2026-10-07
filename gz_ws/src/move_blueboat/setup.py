@@ -17,6 +17,7 @@ setup(
         # Include launch directory
         (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
         (os.path.join('share', package_name, 'rviz'), glob('rviz/*.rviz')),
+        (os.path.join('share', package_name, 'findings_web'), glob('findings_web/*')),
         # Include any other directories here
     ],
     install_requires=['setuptools', 'tf2_ros'],
@@ -49,6 +50,7 @@ setup(
             'level1_plan_gen = move_blueboat.level1_plan_gen:main',
             'level3_plan_gen = move_blueboat.level3_plan_gen:main',
             'bathymetry_mapper = move_blueboat.bathymetry_mapper:main',
+            'mission4_findings_web = move_blueboat.mission4_findings_web:main',
         ],
     },
 )

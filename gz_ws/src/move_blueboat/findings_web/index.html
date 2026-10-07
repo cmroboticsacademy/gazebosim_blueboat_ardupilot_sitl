@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mission 4 Findings Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">CMRA Mission 4</p>
+      <h1>Findings Map</h1>
+      <p>Click a suspected object with RViz Publish Point. It appears here automatically.</p>
+    </div>
+    <div id="connectionStatus" class="status waiting">Connecting</div>
+  </header>
+
+  <main class="layout">
+    <section class="map-panel">
+      <div id="map" aria-label="Mission 4 geographic findings map"></div>
+      <div class="map-footer">
+        <label><input id="followLatest" type="checkbox" checked> Follow newest finding</label>
+        <span id="mapMessage">Waiting for /clicked_point...</span>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <section class="summary">
+        <div><strong id="findingCount">0</strong><span>Findings</span></div>
+        <div><strong id="classifiedCount">0</strong><span>Classified</span></div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <div>
+            <h2>Findings</h2>
+            <p>Newest RViz click appears first.</p>
+          </div>
+        </div>
+        <div id="findingsList" class="findings-list">
+          <p class="empty">No findings yet.</p>
+        </div>
+      </section>
+
+      <section class="editor">
+        <h2>Selected finding</h2>
+        <p id="selectedCoordinates" class="coordinates">Select a finding to classify it.</p>
+        <form id="findingForm">
+          <label>
+            Classification
+            <select id="classification" disabled>
+              <option value="unclassified">Unclassified</option>
+              <option value="hazard">Hazard</option>
+              <option value="non-hazard">Non-hazard</option>
+            </select>
+          </label>
+          <label>
+            Object guess
+            <input id="objectGuess" maxlength="80" placeholder="Truck, drum, canoe..." disabled>
+          </label>
+          <label>
+            Confidence <span id="confidenceValue">50%</span>
+            <input id="confidence" type="range" min="0" max="100" value="50" disabled>
+          </label>
+          <label>
+            Notes
+            <textarea id="notes" rows="3" maxlength="500" disabled></textarea>
+          </label>
+          <div class="actions">
+            <button id="saveButton" type="submit" disabled>Save finding</button>
+            <button id="deleteButton" type="button" class="danger" disabled>Delete</button>
+          </div>
+          <p id="formMessage" class="form-message" role="status"></p>
+        </form>
+      </section>
+
+      <section class="exports">
+        <a class="button-link secondary" href="/api/export.csv">Export CSV</a>
+        <a class="button-link secondary" href="/api/export.json">Export JSON</a>
+        <button id="clearButton" class="ghost danger" type="button">Clear findings</button>
+      </section>
+    </aside>
+  </main>
+
+  <footer>
+    Satellite tiles are geographic context at the Mission 4 WGS84 anchor. The
+    custom Gazebo lake terrain does not necessarily match real-world imagery.
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

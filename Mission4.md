@@ -195,3 +195,70 @@ Mission 4 plan includes 32 buoys. They are in sets of 4. Each set creates a box.
 6. Deploy robot
 7. Repeat these steps for the reminaing robots
 
+## Mission 4 Findings Map
+
+Mission 4 includes a standalone local findings map for post-mission bag replay.
+It listens for RViz **Publish Point** clicks on `/clicked_point`, converts the
+clicked `odom` coordinate to WGS84 latitude / longitude, and places the
+finding on a geographic map. It also draws all four BlueBoat paths from the
+replayed odometry topics.
+
+The app uses the Mission 4 world origin and heading by default:
+
+```text
+Latitude:  40.595009
+Longitude: -79.999740
+Heading:   180 degrees
+```
+
+After pulling this branch, rebuild and source the workspace:
+
+```bash
+cd ~/gz_ws
+colcon build --merge-install
+source install/setup.bash
+```
+
+Start the findings map:
+
+```bash
+ros2 launch move_blueboat mission4_findings.launch.py
+```
+
+Open a browser on the host computer:
+
+```text
+http://127.0.0.1:8090
+```
+
+The service binds to localhost by default.
+
+During replay:
+
+1. Run the four bathymetry mappers and RViz.
+2. Play the Mission 4 bag.
+3. When a suspected object appears, pause `ros2 bag play` with the space bar.
+4. In RViz select **Publish Point** and click the suspected object.
+5. The point automatically appears in the Findings Map.
+6. Classify it as **Hazard**, **Non-hazard**, or leave it **Unclassified**.
+7. Add an object guess, confidence value, and optional notes.
+8. Save the finding, then resume the bag.
+9. Repeat for each suspected object.
+10. Export the final result as CSV or JSON from the app.
+
+The satellite layer is real-world imagery at Mission 4's WGS84 anchor. It is
+useful geographic context, but the custom Gazebo lake terrain does not
+necessarily match the real-world satellite scene at that coordinate.
+
+The default conversion parameters can be overridden if the Mission 4
+`<spherical_coordinates>` block changes:
+
+```bash
+ros2 launch move_blueboat mission4_findings.launch.py \
+  latitude_deg:=40.595009 \
+  longitude_deg:=-79.999740 \
+  heading_deg:=180.0
+```
+
+The app also offers a street-map layer and displays the four replayed odometry
+tracks so findings can be reviewed relative to each boat's survey path.
