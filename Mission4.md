@@ -211,7 +211,7 @@ The app uses the Mission 4 world origin and heading by default:
 ```text
 Latitude:  40.595009
 Longitude: -79.999740
-Heading:   180 degrees
+Replay map heading: 0 degrees
 ```
 
 After pulling this branch, rebuild and source the workspace:
@@ -253,14 +253,19 @@ The satellite layer is real-world imagery at Mission 4's WGS84 anchor. It is
 useful geographic context, but the custom Gazebo lake terrain does not
 necessarily match the real-world satellite scene at that coordinate.
 
-The default conversion parameters can be overridden if the Mission 4
-`<spherical_coordinates>` block changes:
+The Findings Map uses the replayed RViz / odometry axes directly by default
+(`+X = East`, `+Y = North`). This is intentionally separate from the
+Gazebo world's `heading_deg=180`; applying that world heading again would
+rotate the replayed map by 180 degrees.
+
+The map conversion can still be overridden for a different bag or odometry
+frame:
 
 ```bash
 ros2 launch move_blueboat mission4_findings.launch.py \
   latitude_deg:=40.595009 \
   longitude_deg:=-79.999740 \
-  heading_deg:=180.0
+  heading_deg:=0.0
 ```
 
 The app also offers a street-map layer and displays the four replayed odometry

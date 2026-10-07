@@ -435,15 +435,31 @@ The app stores:
 - Confidence
 - Notes
 
-The coordinate conversion uses the Mission 4 geographic definition:
+The coordinate conversion uses the Mission 4 geographic origin:
 
 ```text
 Latitude:  40.595009
 Longitude: -79.999740
-Heading:   180 degrees
+Replay map heading: 0 degrees
 ```
 
-These values match the Mission 4 world by default.
+The replay map heading is intentionally `0` even though the Gazebo world's
+`<spherical_coordinates>` block contains `<heading_deg>180</heading_deg>`.
+The Findings Map is converting the replayed `/model/.../odometry` X/Y
+coordinates used by RViz. Applying the world's 180-degree spherical heading
+again rotates both axes a second time.
+
+For the standard Mission 4 bag replay:
+
+```text
++X = East
+-X = West
++Y = North
+-Y = South
+```
+
+The `heading_deg` launch argument remains available for bags that use a
+different odometry convention.
 
 ---
 
@@ -766,25 +782,27 @@ geographic background will not display.
 
 ## Map markers appear in the wrong geographic location
 
-The default Findings Map conversion assumes the Mission 4 world contains:
+The standard Mission 4 bag replay maps the RViz / odometry axes directly:
 
-```xml
-<spherical_coordinates>
-  <world_frame_orientation>ENU</world_frame_orientation>
-  <latitude_deg>40.595009</latitude_deg>
-  <longitude_deg>-79.99974</longitude_deg>
-  <elevation>0</elevation>
-  <heading_deg>180</heading_deg>
-</spherical_coordinates>
+```text
++X = East
++Y = North
+heading_deg = 0
 ```
 
-If those values change, launch the app with the new values:
+This replay-map heading is separate from Gazebo's world
+`<spherical_coordinates>` heading. Do not copy the world's
+`heading_deg=180` into the Findings Map for the standard Mission 4 replay;
+doing that rotates the boat paths and findings by 180 degrees.
+
+If another bag uses a rotated odometry frame, override only the Findings Map
+conversion:
 
 ```bash
 ros2 launch move_blueboat mission4_findings.launch.py \
   latitude_deg:=40.595009 \
   longitude_deg:=-79.999740 \
-  heading_deg:=180.0
+  heading_deg:=0.0
 ```
 
 ---

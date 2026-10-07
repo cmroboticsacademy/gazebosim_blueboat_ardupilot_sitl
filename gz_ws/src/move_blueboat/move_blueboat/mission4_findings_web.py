@@ -43,7 +43,7 @@ class Mission4FindingsWeb(Node):
         self.declare_parameter("port", 8090)
         self.declare_parameter("latitude_deg", 40.595009)
         self.declare_parameter("longitude_deg", -79.999740)
-        self.declare_parameter("heading_deg", 180.0)
+        self.declare_parameter("heading_deg", 0.0)
         self.declare_parameter("elevation_m", 0.0)
         self.declare_parameter("path_min_distance_m", 0.75)
         self.declare_parameter("max_path_points_per_boat", 5000)
@@ -107,7 +107,7 @@ class Mission4FindingsWeb(Node):
             f"http://{self.address}:{self.port}"
         )
         self.get_logger().info(
-            "Origin %.6f, %.6f; heading %.1f deg"
+            "Origin %.6f, %.6f; replay map heading %.1f deg"
             % (self.latitude_deg, self.longitude_deg, self.heading_deg)
         )
 

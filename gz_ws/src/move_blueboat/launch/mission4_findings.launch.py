@@ -14,7 +14,7 @@ def generate_launch_description():
             DeclareLaunchArgument("port", default_value="8090"),
             DeclareLaunchArgument("latitude_deg", default_value="40.595009"),
             DeclareLaunchArgument("longitude_deg", default_value="-79.999740"),
-            DeclareLaunchArgument("heading_deg", default_value="180.0"),
+            DeclareLaunchArgument("heading_deg", default_value="0.0"),
             DeclareLaunchArgument("path_min_distance_m", default_value="0.75"),
             Node(
                 package="move_blueboat",

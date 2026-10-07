@@ -19,23 +19,23 @@ def load_geo_module():
 
 
 class Mission4FindingsTests(unittest.TestCase):
-    def test_heading_180_matches_mission4_axis_orientation(self):
+    def test_replay_odom_axes_map_directly_to_east_and_north(self):
         geo = load_geo_module()
         lat0 = 40.595009
         lon0 = -79.999740
 
-        lat, lon = geo.local_to_wgs84(0.0, 0.0, lat0, lon0, 180.0)
+        lat, lon = geo.local_to_wgs84(0.0, 0.0, lat0, lon0, 0.0)
         self.assertAlmostEqual(lat, lat0, places=10)
         self.assertAlmostEqual(lon, lon0, places=10)
 
-        _, west_lon = geo.local_to_wgs84(
-            10.0, 0.0, lat0, lon0, 180.0
+        _, east_lon = geo.local_to_wgs84(
+            10.0, 0.0, lat0, lon0, 0.0
         )
-        south_lat, _ = geo.local_to_wgs84(
-            0.0, 10.0, lat0, lon0, 180.0
+        north_lat, _ = geo.local_to_wgs84(
+            0.0, 10.0, lat0, lon0, 0.0
         )
-        self.assertLess(west_lon, lon0)
-        self.assertLess(south_lat, lat0)
+        self.assertGreater(east_lon, lon0)
+        self.assertGreater(north_lat, lat0)
 
     def test_web_node_contract_and_assets_are_installed(self):
         setup = (PKG / "setup.py").read_text()
@@ -50,6 +50,10 @@ class Mission4FindingsTests(unittest.TestCase):
         for boat in ("blueboat", "blueboat2", "blueboat3", "blueboat4"):
             self.assertIn(f'"/model/{boat}/odometry"', node)
         self.assertIn('executable="mission4_findings_web"', launch)
+        self.assertIn(
+            'DeclareLaunchArgument("heading_deg", default_value="0.0")',
+            launch,
+        )
         self.assertIn("World_Imagery", app)
         self.assertIn("/api/state", app)
         self.assertIn("Publish Point", index)
