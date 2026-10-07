@@ -10,6 +10,7 @@
   var selectedId = null;
   var latestSeenId = 0;
   var currentState = null;
+  var formDirty = false;
   var markers = {};
   var paths = {};
   var map = null;
@@ -151,10 +152,12 @@
     });
     if (!item) {
       selectedId = null;
+      formDirty = false;
       updateEditor(null);
       return;
     }
     selectedId = id;
+    formDirty = false;
     updateEditor(item);
     renderList(currentState);
     if (pan && map) {
@@ -237,7 +240,13 @@
       var selected = state.findings.find(function (item) {
         return item.id === selectedId;
       });
-      updateEditor(selected || null);
+      if (!selected) {
+        selectedId = null;
+        formDirty = false;
+        updateEditor(null);
+      } else if (!formDirty) {
+        updateEditor(selected);
+      }
     }
 
     var newest = state.findings.length ?
@@ -246,8 +255,10 @@
       latestSeenId = newest.id;
       mapMessage.textContent =
         "Finding " + newest.id + " received from RViz /clicked_point";
-      if (followLatest.checked || selectedId === null) {
+      if ((followLatest.checked || selectedId === null) && !formDirty) {
         selectFinding(newest.id, true);
+      } else if (formDirty) {
+        mapMessage.textContent += " — unsaved form kept selected";
       }
     } else if (!newest) {
       mapMessage.textContent = "Waiting for /clicked_point...";
@@ -283,6 +294,17 @@
     return payload;
   }
 
+  function markFormDirty() {
+    if (selectedId === null) return;
+    formDirty = true;
+    formMessage.textContent = "Unsaved changes.";
+  }
+
+  [classification, objectGuess, confidence, notes].forEach(function (control) {
+    control.addEventListener("input", markFormDirty);
+    control.addEventListener("change", markFormDirty);
+  });
+
   confidence.addEventListener("input", function () {
     confidenceValue.textContent = confidence.value + "%";
   });
@@ -290,14 +312,19 @@
   form.addEventListener("submit", async function (event) {
     event.preventDefault();
     if (selectedId === null) return;
+    var savingId = selectedId;
     formMessage.textContent = "Saving...";
     try {
-      await postJson("/api/findings/" + selectedId, {
+      var updated = await postJson("/api/findings/" + savingId, {
         classification: classification.value,
         object_guess: objectGuess.value,
         confidence: Number(confidence.value),
         notes: notes.value
       });
+      if (selectedId === savingId) {
+        formDirty = false;
+        updateEditor(updated);
+      }
       formMessage.textContent = "Saved.";
       await refreshOnce();
     } catch (error) {
@@ -311,6 +338,7 @@
     try {
       await postJson("/api/findings/" + selectedId + "/delete", {});
       selectedId = null;
+      formDirty = false;
       updateEditor(null);
       await refreshOnce();
     } catch (error) {
@@ -324,6 +352,7 @@
       await postJson("/api/clear", {});
       selectedId = null;
       latestSeenId = 0;
+      formDirty = false;
       updateEditor(null);
       await refreshOnce();
     } catch (error) {

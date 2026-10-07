@@ -58,6 +58,16 @@ class Mission4FindingsTests(unittest.TestCase):
         self.assertIn("/api/state", app)
         self.assertIn("Publish Point", index)
 
+    def test_findings_polling_does_not_overwrite_unsaved_form(self):
+        app = (PKG / "findings_web/app.js").read_text()
+
+        self.assertIn("var formDirty = false;", app)
+        self.assertIn("} else if (!formDirty) {", app)
+        self.assertIn("function markFormDirty()", app)
+        self.assertIn('formMessage.textContent = "Unsaved changes.";', app)
+        self.assertIn("&& !formDirty", app)
+        self.assertIn("formDirty = false;", app)
+
 
 if __name__ == "__main__":
     unittest.main()
