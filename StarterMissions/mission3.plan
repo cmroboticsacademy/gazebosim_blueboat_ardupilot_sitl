@@ -1,0 +1,98 @@
+{
+    "fileType": "Plan",
+    "geoFence": {
+        "circles": [
+            {
+                "circle": {
+                    "center": [
+                        40.594378899999995,
+                        -80.0002141
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            },
+            {
+                "circle": {
+                    "center": [
+                        40.594828899999996,
+                        -80.0002141
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            },
+            {
+                "circle": {
+                    "center": [
+                        40.594378899999995,
+                        -79.9992658
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            },
+            {
+                "circle": {
+                    "center": [
+                        40.594828899999996,
+                        -79.9992658
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            }
+        ],
+        "polygons": [
+            {
+                "inclusion": false,
+                "polygon": [
+                    [
+                        40.5950522,
+                        -79.9997376
+                    ],
+                    [
+                        40.5949982,
+                        -79.9997376
+                    ],
+                    [
+                        40.5949981,
+                        -79.9997139
+                    ],
+                    [
+                        40.5950522,
+                        -79.9997139
+                    ]
+                ],
+                "version": 1
+            }
+        ],
+        "version": 2
+    },
+    "groundStation": "QGroundControl",
+    "mission": {
+        "cruiseSpeed": 1.34112,
+        "firmwareType": 3,
+        "globalPlanAltitudeMode": 0,
+        "hoverSpeed": 5,
+        "items": [
+        ],
+        "plannedHomePosition": [
+            null,
+            null,
+            null
+        ],
+        "vehicleType": 10,
+        "version": 2
+    },
+    "rallyPoints": {
+        "points": [
+        ],
+        "version": 2
+    },
+    "version": 1
+}

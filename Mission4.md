@@ -109,7 +109,7 @@ In this section, you will enter the Docker container in <b>T2 (ArduPilot Termina
    To restore the previous automatic startup behavior, launch with:
 
    ```bash
-   ros2 launch move_blueboat mission4_sim.launch.py camera_start_enabled:=true
+   ros2 launch move_blueboat mission4_sim.launch.py camera_start_enabled:=false
    ```
 
    </details>

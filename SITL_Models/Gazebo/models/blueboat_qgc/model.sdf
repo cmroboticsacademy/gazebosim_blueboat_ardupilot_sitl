@@ -224,13 +224,6 @@
           <izz>0.1</izz>
         </inertia>
       </inertial>
-      <collision name="prop_collision">
-        <geometry>
-          <mesh>
-            <uri>model://blueboat/meshes/blueboat_prop_stbd.dae</uri>
-          </mesh>
-        </geometry>
-      </collision>
       <visual name="prop_visual">
         <geometry>
           <mesh>

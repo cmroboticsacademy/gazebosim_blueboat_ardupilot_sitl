@@ -1,0 +1,186 @@
+{
+    "fileType": "Plan",
+    "geoFence": {
+        "circles": [
+            {
+                "circle": {
+                    "center": [
+                        40.595819,
+                        -79.99914729999999
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            },
+            {
+                "circle": {
+                    "center": [
+                        40.595801,
+                        -79.99912359999999
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            },
+            {
+                "circle": {
+                    "center": [
+                        40.595783,
+                        -79.99909989999999
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            },
+            {
+                "circle": {
+                    "center": [
+                        40.595765,
+                        -79.99907619999999
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            },
+            {
+                "circle": {
+                    "center": [
+                        40.595746999999996,
+                        -79.99905249999999
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            },
+            {
+                "circle": {
+                    "center": [
+                        40.595729,
+                        -79.99902879999999
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            },
+            {
+                "circle": {
+                    "center": [
+                        40.595711,
+                        -79.99900509999999
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            },
+            {
+                "circle": {
+                    "center": [
+                        40.595693,
+                        -79.99898139999999
+                    ],
+                    "radius": 5
+                },
+                "inclusion": false,
+                "version": 1
+            }
+        ],
+        "polygons": [
+            {
+                "inclusion": false,
+                "polygon": [
+                    [
+                        40.5950522,
+                        -79.9997376
+                    ],
+                    [
+                        40.5949982,
+                        -79.9997376
+                    ],
+                    [
+                        40.5949981,
+                        -79.9997139
+                    ],
+                    [
+                        40.5950522,
+                        -79.9997139
+                    ]
+                ],
+                "version": 1
+            },
+            {
+                "inclusion": false,
+                "polygon": [
+                    [
+                        40.595729,
+                        -79.99834729999999
+                    ],
+                    [
+                        40.595729,
+                        -79.9968657
+                    ],
+                    [
+                        40.595909,
+                        -79.9968657
+                    ],
+                    [
+                        40.595909,
+                        -79.99834729999999
+                    ]
+                ],
+                "version": 1
+            },
+            {
+                "inclusion": true,
+                "polygon": [
+                    [
+                        40.59705390088183,
+                        -80.0004745713665
+                    ],
+                    [
+                        40.59707660524669,
+                        -79.99721278364203
+                    ],
+                    [
+                        40.59423869764249,
+                        -79.99717345705224
+                    ],
+                    [
+                        40.59406911528432,
+                        -80.00035659161773
+                    ]
+                ],
+                "version": 1
+            }
+        ],
+        "version": 2
+    },
+    "groundStation": "QGroundControl",
+    "mission": {
+        "cruiseSpeed": 1.34112,
+        "firmwareType": 3,
+        "globalPlanAltitudeMode": 0,
+        "hoverSpeed": 5,
+        "items": [
+        ],
+        "plannedHomePosition": [
+            null,
+            null,
+            null
+        ],
+        "vehicleType": 10,
+        "version": 2
+    },
+    "rallyPoints": {
+        "points": [
+        ],
+        "version": 2
+    },
+    "version": 1
+}

@@ -130,7 +130,7 @@ Launch and run Gazebo Simulation
    ```bash
    sim_vehicle.py -v Rover -f gazebo-rover --model JSON \
       --add-param-file=../gz_ws/cmra_boat.params -w \
-      -l 40.595009,-79.99974,0,0 \
+      -l 40.595009,-79.99974,0,180 \
       --out=udp:127.0.0.1:14550 --out=udp:127.0.0.1:14551
    ```
    <details>
